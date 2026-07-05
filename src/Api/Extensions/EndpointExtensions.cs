@@ -20,7 +20,7 @@ public static class EndpointExtensions
         var v2 = app.MapGroupWithVersion(2);
         DeleteImageGroupV2Endpoint.Map(v2);
 
-        var test = app.MapGroup("TestMinimalApi");
+        var test = app.MapGroup("Test");
         GetEndpoint.Map(test);
         GetOkEndpoint.Map(test);
         PostEndpoint.Map(test);
@@ -38,7 +38,7 @@ public static class EndpointExtensions
             .Build();
 
         return app
-            .MapGroup("api/v{version:apiVersion}/MinimalApi")
+            .MapGroup("api/v{version:apiVersion}")
             .WithApiVersionSet(apiVersionSet);
     }
 }
