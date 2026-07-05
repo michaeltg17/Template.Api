@@ -16,14 +16,14 @@ namespace Core.Testing.Validators
             return traceId;
         }
 
-        public static async Task ValidateNotFoundException(HttpResponseMessage response, string apiType, string entity, long id)
+        public static async Task ValidateNotFoundException(HttpResponseMessage response, string entity, long id)
         {
             var problemDetails = await response.To<ProblemDetails>();
             var traceId = ValidateTraceId(problemDetails);
 
             var expected = new ProblemDetailsBuilder()
                 .WithTraceId(traceId)
-                .WithNotFoundException(apiType, entity, id)
+                .WithNotFoundException(entity, id)
                 .Build();
 
             problemDetails.Should().BeEquivalentTo(expected);

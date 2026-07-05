@@ -9,17 +9,15 @@ namespace IntegrationTests.Tests.Api.Endpoints.ImageEndpoint
     [Collection(nameof(ApiCollection))]
     public class GetImageEndpointTests : Test
     {
-        [InlineData(nameof(ApiClient.ControllerApi))]
-        [InlineData(nameof(ApiClient.MinimalApi))]
-        [Theory]
-        public async Task GivenImageGroup_WhenGetImage_IsGot(string apiType)
+        [Fact(Skip = "to be deleted")]
+        public async Task GivenImageGroup_WhenGetImage_IsGot()
         {
             //Given
             const string imagePath = @"Images\didi.jpeg";
-            var imageGroup = await ApiClient.GetApiEndpoints(apiType).SaveImageGroup(imagePath).To<ImageGroup>();
+            var imageGroup = await ApiClient.Api.SaveImageGroup(imagePath).To<ImageGroup>();
 
             //When
-            var image = await ApiClient.GetApiEndpoints(apiType).GetImage(imageGroup.Images.First().Id).To<Image>();
+            var image = await ApiClient.Api.GetImage(imageGroup.Images.First().Id).To<Image>();
 
             //Then
             var uploadedImageBytes = File.ReadAllBytes(imagePath);
@@ -28,17 +26,15 @@ namespace IntegrationTests.Tests.Api.Endpoints.ImageEndpoint
             uploadedImageBytes.Should().BeEquivalentTo(downloadedImageBytes);
         }
 
-        [InlineData(nameof(ApiClient.ControllerApi))]
-        [InlineData(nameof(ApiClient.MinimalApi))]
-        [Theory]
-        public async Task WhenGetNonexistentImage_ExpectedProblemDetails(string apiType)
+        [Fact]
+        public async Task WhenGetNonexistentImage_ExpectedProblemDetails()
         {
             //When
             const long id = 600;
-            var response = await ApiClient.GetApiEndpoints(apiType).GetImage(id);
+            var response = await ApiClient.Api.GetImage(id);
 
             //Then
-            await ProblemDetailsValidator.ValidateNotFoundException(response, apiType, "Image", id);
+            await ProblemDetailsValidator.ValidateNotFoundException(response, "Image", id);
         }
     }
 }

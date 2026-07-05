@@ -31,10 +31,10 @@ namespace IntegrationTests.Tests.Api.Endpoints.ExportEndpoint
             ];
             const string tableName = "ImageGroups";
             const string imagePath = @"Images\didi.jpeg";
-            var imageGroup = await ApiClient.MinimalApi.SaveImageGroup(imagePath).To<ImageGroup>();
+            var imageGroup = await ApiClient.Api.SaveImageGroup(imagePath).To<ImageGroup>();
 
             //When
-            var response = await ApiClient.MinimalApi.Export(tableName);
+            var response = await ApiClient.Api.Export(tableName);
 
             //Then
             await ValidateResponse(response, tableName, imageGroupColummsOrder, [imageGroup]);
@@ -58,10 +58,10 @@ namespace IntegrationTests.Tests.Api.Endpoints.ExportEndpoint
             ];
             const string tableName = "Images";
             const string imagePath = @"Images\didi.jpeg";
-            var imageGroup = await ApiClient.MinimalApi.SaveImageGroup(imagePath).To<ImageGroup>();
+            var imageGroup = await ApiClient.Api.SaveImageGroup(imagePath).To<ImageGroup>();
 
             //When
-            var response = await ApiClient.MinimalApi.Export(tableName);
+            var response = await ApiClient.Api.Export(tableName);
 
             //Then
             await ValidateResponse(response, tableName, imageColummsOrder, imageGroup.ImagesNavigation);

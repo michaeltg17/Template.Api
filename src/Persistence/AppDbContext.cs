@@ -3,7 +3,6 @@ using Domain.Models;
 using Persistance.Interceptors;
 using Microsoft.EntityFrameworkCore;
 using Core.Domain;
-using Core.Persistence;
 
 namespace Persistence
 {
@@ -28,8 +27,6 @@ namespace Persistence
             builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
             base.OnModelCreating(builder);
         }
-
-        public Task<T> Get<T>(IQuery<T> query) => query.Execute(Database.GetDbConnection());
 
         public Task<int> Delete<T>(long id) where T : class, IIdentifiable
         {

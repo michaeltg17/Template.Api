@@ -14,7 +14,7 @@ namespace Api.Endpoints.ImageGroup
             {
                 return imageService.DeleteImageGroup(id);
             })
-            .WithMinimalApiName("DeleteImageGroupV2")
+            .WithApiName("DeleteImageGroupV2")
             .WithOpenApi();
         }
     }

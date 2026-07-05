@@ -99,9 +99,6 @@ namespace Api
             app.MapEndpoints();
 
             app
-                .UseAuthentication()
-                .UseAuthorization()
-                .UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader())
                 .UseMiddleware<SampleMiddleware>()
                 .UseMiddleware<ValidationMiddleware>();
 

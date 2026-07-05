@@ -14,7 +14,7 @@ namespace Api.Endpoints.ImageGroup
             {
                 return imageService.GetImageGroup(id, cancellationToken);
             })
-            .WithMinimalApiName("GetImageGroup")
+            .WithApiName("GetImageGroup")
             .WithOpenApi();
         }
     }

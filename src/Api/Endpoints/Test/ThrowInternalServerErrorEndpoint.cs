@@ -10,7 +10,7 @@ namespace Api.Endpoints.Test
             {
                 throw new Exception("Sensitive data");
             })
-            .WithTestMinimalApiName("ThrowInternalServerError")
+            .WithTestName("ThrowInternalServerError")
             .WithOpenApi();
         }
     }

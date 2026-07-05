@@ -12,7 +12,7 @@ namespace Api.Endpoints.Test
             {
                 return Task.CompletedTask;
             })
-            .WithTestMinimalApiName("GetOk")
+            .WithTestName("GetOk")
             .WithOpenApi()
             .AddEndpointFilter<ValidationFilter>();
         }

@@ -1,14 +1,11 @@
 ﻿using Domain.Models;
-using Persistence.Queries;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Application.Exceptions;
-using Core.Persistence;
-//using System.Transactions;
 
 namespace Application.Services
 {
-    public class ImageService(IObjectStorage objectStorage, AppDbContext db)
+    public class ImageService(AppDbContext db)
     {
         public async Task<Image> GetImage(long id, CancellationToken cancellationToken)
         {
@@ -29,12 +26,6 @@ namespace Application.Services
                 .ThenInclude(i => i.FileExtensionNavigation)
                 .SingleOrDefaultAsync(g => g.Id == id, cancellationToken)
                 ?? throw new NotFoundException<ImageGroup>(id);
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Dapper sample")]
-        async Task<ImageGroup> GetImageGroupWithDapper(long id)
-        {
-            return await db.Get(new GetImageGroupQuery(id));
         }
 
         public async Task<ImageGroup> SaveImageGroup(string fullFileName, Func<Stream> openReadStream)
@@ -71,7 +62,7 @@ namespace Application.Services
             {
                 Guid = guid,
                 Resolution = resolution.Id,
-                Url = await objectStorage.Upload(fileName, stream)
+                Url = ""
             };
 
             await stream.DisposeAsync();

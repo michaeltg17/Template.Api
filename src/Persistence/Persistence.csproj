@@ -1,7 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <UserSecretsId>b26c8021-d708-4165-8556-9cd63335d556</UserSecretsId>
-  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Dapper" />
     <PackageReference Include="Microsoft.EntityFrameworkCore " />
@@ -15,8 +12,5 @@
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\CrossCutting\CrossCutting.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Scaffold\" />
   </ItemGroup>
 </Project>

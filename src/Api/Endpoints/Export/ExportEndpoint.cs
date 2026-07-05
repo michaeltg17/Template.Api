@@ -15,7 +15,7 @@ namespace Api.Endpoints.Export
                 var file = await excelExportService.Export(tableName, cancellationToken);
                 return Results.File(file.Content, file.ContentType, file.Name);
             })
-            .WithMinimalApiName("Export")
+            .WithApiName("Export")
             .WithOpenApi();
         }
     }

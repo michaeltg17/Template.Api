@@ -12,7 +12,7 @@ namespace IntegrationTests.Tests.Api.Filters
         public async Task LogsExpectedMessages()
         {
             //When
-            await ApiClient.TestControllerApi.GetOk();
+            await ApiClient.Test.GetOk();
 
             //Then
             ValidateMessage("{filterName} started on {actionName}.");
@@ -29,7 +29,7 @@ namespace IntegrationTests.Tests.Api.Filters
                     .WithValue("SampleFilter")
                     .And
                     .WithProperty("actionName")
-                    .WithValue("Api.Controllers.TestController.GetOk (Api)");
+                    .WithValue("Test.GetOk");
             }
         }
     }

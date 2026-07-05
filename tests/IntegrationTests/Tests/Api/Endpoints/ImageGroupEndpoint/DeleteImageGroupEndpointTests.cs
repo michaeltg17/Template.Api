@@ -10,39 +10,35 @@ namespace IntegrationTests.Tests.Api.Endpoints.ImageGroupEndpoint
     [Collection(nameof(ApiCollection))]
     public class DeleteImageGroupEndpointTests : Test
     {
-        [InlineData(nameof(ApiClient.ControllerApi), 1)]
-        [InlineData(nameof(ApiClient.ControllerApi), 2)]
-        [InlineData(nameof(ApiClient.MinimalApi), 1)]
-        [InlineData(nameof(ApiClient.MinimalApi), 2)]
+        [InlineData(1)]
+        [InlineData(2)]
         [Theory]
-        public async Task GivenImageGroup_WhenDelete_IsDeleted(string apiType, int version)
+        public async Task GivenImageGroup_WhenDelete_IsDeleted(int version)
         {
             //Given
             const string imagePath = @"Images\didi.jpeg";
-            var imageGroup = await ApiClient.GetApiEndpoints(apiType).SaveImageGroup(imagePath).To<ImageGroup>();
-            var imageGroup2 = await ApiClient.GetApiEndpoints(apiType).GetImageGroup(imageGroup.Id).To<ImageGroup>();
+            var imageGroup = await ApiClient.Api.SaveImageGroup(imagePath).To<ImageGroup>();
+            var imageGroup2 = await ApiClient.Api.GetImageGroup(imageGroup.Id).To<ImageGroup>();
             imageGroup.Should().BeEquivalentTo(imageGroup2);
 
             //When
-            var deleteResponse = await ApiClient.GetApiEndpoints(apiType).DeleteImageGroup(imageGroup.Id, version);
+            var deleteResponse = await ApiClient.Api.DeleteImageGroup(imageGroup.Id, version);
 
             //Then
             deleteResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-            var getResponse = await ApiClient.GetApiEndpoints(apiType).GetImageGroup(imageGroup.Id);
+            var getResponse = await ApiClient.Api.GetImageGroup(imageGroup.Id);
             getResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
-        [InlineData(nameof(ApiClient.ControllerApi))]
-        [InlineData(nameof(ApiClient.MinimalApi))]
-        [Theory]
-        public async Task WhenDeleteNonexistentImageGroup_ExpectedProblemDetails(string apiType)
+        [Fact]
+        public async Task WhenDeleteNonexistentImageGroup_ExpectedProblemDetails()
         {
             //When
             const long id = 600;
-            var response = await ApiClient.GetApiEndpoints(apiType).DeleteImageGroup(id);
+            var response = await ApiClient.Api.DeleteImageGroup(id);
 
             //Then
-            await ProblemDetailsValidator.ValidateNotFoundException(response, apiType, "ImageGroup", id);
+            await ProblemDetailsValidator.ValidateNotFoundException(response, "ImageGroup", id);
         }
     }
 }

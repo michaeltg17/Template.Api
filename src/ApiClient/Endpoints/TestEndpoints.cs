@@ -4,21 +4,23 @@ using System.Net.Http.Json;
 
 namespace ApiClient.Endpoints
 {
-    public class TestEndpoints(HttpClient httpClient, string baseRoute)
+    public class TestEndpoints(HttpClient httpClient)
     {
+        const string BaseRoute = "/Test";
+
         public Task<HttpResponseMessage> DeleteAllTestEntities()
         {
-            return httpClient.DeleteAsync($"{baseRoute}/DeleteAllTestEntities");
+            return httpClient.DeleteAsync($"{BaseRoute}/DeleteAllTestEntities");
         }
 
         public Task<HttpResponseMessage> ThrowInternalServerError()
         {
-            return httpClient.PostAsync($"{baseRoute}/ThrowInternalServerError", null);
+            return httpClient.PostAsync($"{BaseRoute}/ThrowInternalServerError", null);
         }
 
         public Task<HttpResponseMessage> GetOk()
         {
-            return httpClient.GetAsync($"{baseRoute}/GetOk");
+            return httpClient.GetAsync($"{BaseRoute}/GetOk");
         }
 
         public Task<HttpResponseMessage> Get(long id)
@@ -28,7 +30,7 @@ namespace ApiClient.Endpoints
 
         public Task<HttpResponseMessage> Get(object id)
         {
-            return httpClient.GetAsync($"{baseRoute}/Get/{id}");
+            return httpClient.GetAsync($"{BaseRoute}/Get/{id}");
         }
 
         public Task<HttpResponseMessage> Post(long id, string name, DateTime date, TestPostRequest request)
@@ -44,7 +46,7 @@ namespace ApiClient.Endpoints
                 { nameof(date), date.ToString() }
             };
 
-            var url = $"{baseRoute}/Post/{id}" + QueryString.Create(parameters);
+            var url = $"{BaseRoute}/Post/{id}" + QueryString.Create(parameters);
 
             return httpClient.PostAsJsonAsync(url, request);
         }

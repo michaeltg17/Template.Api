@@ -18,7 +18,7 @@ namespace Api.Endpoints.Test
             {
                 return Task.CompletedTask;
             })
-            .WithTestMinimalApiName("Post")
+            .WithTestName("Post")
             .WithOpenApi()
             .AddEndpointFilter<ValidationFilter>();
         }

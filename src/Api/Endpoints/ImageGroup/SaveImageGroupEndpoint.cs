@@ -19,7 +19,7 @@ namespace Api.Endpoints.ImageGroup
                 context.Response.Headers.Location = locationUri;
                 return Results.Created(locationUri, imageGroup);
             })
-            .WithMinimalApiName("SaveImageGroup")
+            .WithApiName("SaveImageGroup")
             .WithOpenApi()
             .DisableAntiforgery();
         }

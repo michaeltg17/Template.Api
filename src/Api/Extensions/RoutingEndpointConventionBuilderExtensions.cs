@@ -2,17 +2,17 @@
 {
     public static class RoutingEndpointConventionBuilderExtensions
     {
-        public static TBuilder WithTestMinimalApiName<TBuilder>(this TBuilder builder, string endpointName) 
+        public static TBuilder WithTestName<TBuilder>(this TBuilder builder, string endpointName)
             where TBuilder : IEndpointConventionBuilder
         {
-            builder.WithName("TestMinimalApi." + endpointName);
+            builder.WithName("Test." + endpointName);
             return builder;
         }
 
-        public static TBuilder WithMinimalApiName<TBuilder>(this TBuilder builder, string endpointName)
+        public static TBuilder WithApiName<TBuilder>(this TBuilder builder, string endpointName)
             where TBuilder : IEndpointConventionBuilder
         {
-            builder.WithName("MinimalApi." + endpointName);
+            builder.WithName("Api." + endpointName);
             return builder;
         }
     }
