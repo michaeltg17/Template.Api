@@ -35,15 +35,24 @@ namespace Core.Testing.Builders
             return this;
         }
 
-        public ProblemDetailsBuilder WithValidationException(string instance)
+        public ProblemDetailsBuilder WithBadHttpRequestException()
         {
             Item.Type = "https://tools.ietf.org/html/rfc9110#section-15.5.1";
-            Item.Title = "ValidationException";
+            Item.Title = "BadHttpRequestException";
             Item.Status = (int)HttpStatusCode.BadRequest;
-            Item.Detail = "Please check the errors property for additional details.";
-            Item.Instance = instance;
-            Item.Extensions.Add("errors", null);
 
+            return this;
+        }
+
+        public ProblemDetailsBuilder WithInstance(string instance)
+        {
+            Item.Instance = instance;
+            return this;
+        }
+
+        public ProblemDetailsBuilder WithDetail(string detail)
+        {
+            Item.Detail = detail;
             return this;
         }
 
@@ -54,16 +63,6 @@ namespace Core.Testing.Builders
             Item.Status = (int)HttpStatusCode.InternalServerError;
             Item.Detail = "Internal server error. Please contact the API support.";
             Item.Instance = instance;
-
-            return this;
-        }
-
-        public ProblemDetailsBuilder WithError(string property, string error)
-        {
-            if (Item.Extensions["errors"] is not ExpandoObject) Item.Extensions["errors"] = new ExpandoObject();
-
-            var dictionary = (IDictionary<string, object?>)Item.Extensions["errors"]!;
-            dictionary.Add(property, new[] { error });
 
             return this;
         }
