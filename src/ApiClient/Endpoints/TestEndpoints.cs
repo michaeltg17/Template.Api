@@ -38,12 +38,12 @@ namespace ApiClient.Endpoints
             return Post((object)id, name, date, request);
         }
 
-        public Task<HttpResponseMessage> Post(object id, object name, object date, object? request)
+        public Task<HttpResponseMessage> Post(object id, object? name, object? date, object? request)
         {
             var parameters = new Dictionary<string, string?>
             {
-                { nameof(name), name.ToString() },
-                { nameof(date), date.ToString() }
+                { nameof(name), name?.ToString() ?? "" },
+                { nameof(date), date?.ToString() ?? "" }
             };
 
             var url = $"{BaseRoute}/Post/{id}" + QueryString.Create(parameters);
