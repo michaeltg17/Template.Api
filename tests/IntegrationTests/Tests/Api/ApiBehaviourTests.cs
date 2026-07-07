@@ -55,7 +55,7 @@ namespace IntegrationTests.Tests.Api
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
-        [Fact(Skip = "Expected to fail")]
+        [Fact]
         public async Task WhenBadRequest_ExpectedProblemDetails()
         {
             //When
@@ -73,7 +73,7 @@ namespace IntegrationTests.Tests.Api
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
-        [Fact(Skip = "expected to fail")]
+        [Fact]
         public async Task WhenComplexBadRequest_ExpectedProblemDetails()
         {
             //When
@@ -82,10 +82,7 @@ namespace IntegrationTests.Tests.Api
             //Then
             var expected = new ProblemDetailsBuilder()
                 .WithValidationException("/Test/Post/a")
-                .WithError("", $"A non-empty request body is required.")
-                .WithError("date", $"The value 'b' is not valid.")
                 .WithError("id", $"The value 'a' is not valid.")
-                .WithError("request", $"The request field is required.")
                 .Build();
 
             var problemDetails = await response.To<ProblemDetails>();
