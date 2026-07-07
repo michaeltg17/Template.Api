@@ -1,5 +1,4 @@
 ﻿using Api.Extensions;
-using Api.Filters;
 
 namespace Api.Endpoints.Test
 {
@@ -13,8 +12,7 @@ namespace Api.Endpoints.Test
                 return Task.CompletedTask;
             })
             .WithTestName("GetOk")
-            .WithOpenApi()
-            .AddEndpointFilter<ValidationFilter>();
+            .WithOpenApi();
         }
     }
 }

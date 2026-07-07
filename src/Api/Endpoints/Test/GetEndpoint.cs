@@ -1,5 +1,4 @@
 ﻿using Api.Extensions;
-using Api.Filters;
 
 namespace Api.Endpoints.Test
 {
@@ -8,14 +7,13 @@ namespace Api.Endpoints.Test
         public static void Map(IEndpointRouteBuilder app)
         {
             app.MapGet("Get/{id}", (
-                long id, 
+                long id,
                 CancellationToken cancellationToken) =>
             {
                 return Task.CompletedTask;
             })
             .WithTestName("Get")
-            .WithOpenApi()
-            .AddEndpointFilter<ValidationFilter>();
+            .WithOpenApi();
         }
     }
 }

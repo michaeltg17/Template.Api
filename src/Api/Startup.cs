@@ -1,6 +1,4 @@
-﻿using Api.Filters;
-using Api.Middlewares;
-using CrossCutting;
+﻿using CrossCutting;
 using Persistence;
 using Serilog;
 using System.Text.Json.Serialization;
@@ -33,7 +31,6 @@ namespace Api
             builder.Services
                 .AddMainDependencies()
                 .AddProblemDetails()
-                .AddFilters()
                 .AddVersioning();
 
             return builder;
@@ -86,21 +83,12 @@ namespace Api
                 .Enrich.FromLogContext();
         }
 
-        static IServiceCollection AddFilters(this IServiceCollection services)
-        {
-            return services.AddSingleton<SampleFilter>();
-        }
-
         static WebApplication Configure(this WebApplication app)
         {
             //Exception middleware first to catch exceptions
             app.UseExceptionHandler().UseStatusCodePages();
 
             app.MapEndpoints();
-
-            app
-                .UseMiddleware<SampleMiddleware>()
-                .UseMiddleware<ValidationMiddleware>();
 
             app.LogEndpoints();
 

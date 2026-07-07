@@ -1,5 +1,4 @@
 ﻿using Api.Extensions;
-using Api.Filters;
 using Api.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,13 +13,12 @@ namespace Api.Endpoints.Test
                 [FromQuery] string name,
                 [FromQuery] DateTime date,
                 [FromBody] TestPostRequest request,
-                CancellationToken cancellationToken) => 
+                CancellationToken cancellationToken) =>
             {
                 return Task.CompletedTask;
             })
             .WithTestName("Post")
-            .WithOpenApi()
-            .AddEndpointFilter<ValidationFilter>();
+            .WithOpenApi();
         }
     }
 }
