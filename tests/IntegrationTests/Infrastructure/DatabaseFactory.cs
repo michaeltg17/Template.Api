@@ -1,6 +1,7 @@
 ﻿using Core;
-using IntegrationTests.Settings;
+using Docker.DotNet;
 using Docker.DotNet.Models;
+using IntegrationTests.Settings;
 using Microsoft.Data.SqlClient;
 using Microsoft.SqlServer.Dac;
 using Testcontainers.MsSql;
@@ -46,7 +47,7 @@ namespace IntegrationTests.Infrastructure
 
         static async Task<bool> ExistsContainer()
         {
-            var client = new DockerClientConfiguration().CreateClient();
+            var client = new DockerClientBuilder().Build();
             var parameters = new ContainersListParameters() { All = true };
             var containers = await client.Containers.ListContainersAsync(parameters);
             var container = containers.SingleOrDefault(c => c.Names.Contains("/" + ContainerName));

@@ -8,20 +8,22 @@ using Persistence;
 using IntegrationTests.Extensions;
 using Serilog.Events;
 using Serilog.Sinks.InMemory;
-using Microsoft.AspNetCore.Hosting;
+using Serilog.Sinks.XUnit.Injectable;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpLogging;
 using CrossCutting.Settings;
 using IntegrationTests.Settings;
 using IntegrationTests.Infrastructure;
+using Microsoft.AspNetCore.Hosting;
+using Serilog.Sinks.XUnit.Injectable.Abstract;
 
 namespace IntegrationTests
 {
     internal class WebApplicationFactoryFixture(ITestSettings testSettings, DatabaseFactory databaseFactory)
         : WebApplicationFactory<Program>, IAsyncLifetime
     {
-        public ITestOutputHelper TestOutputHelper { get; set; } = default!;
         public InMemorySink InMemorySink { get; set; } = default!;
+        public InjectableTestOutputSink InjectableTestOutputSink { get; set; } = new();
         Database? Database { get; set; }
 
         async ValueTask IAsyncLifetime.InitializeAsync()
@@ -43,15 +45,8 @@ namespace IntegrationTests
             builder.UseSerilog((context, services, configuration) =>
             {
                 Api.Startup.ApplyCommonSerilogConfiguration(context, services, configuration);
-                //Using Map sink to fix "Only first test is logged"
-                configuration.WriteTo.Map(
-                    _ => TestOutputHelper,
-                    (_, writeTo) => writeTo.TestOutput(TestOutputHelper),
-                    sinkMapCountLimit: 1);
-                configuration.WriteTo.Map(
-                    _ => InMemorySink,
-                    (_, writeTo) => writeTo.Sink(InMemorySink),
-                    sinkMapCountLimit: 1);
+                configuration.WriteTo.Sink(InjectableTestOutputSink);
+                configuration.WriteTo.Sink(InMemorySink);
 
                 if (testSettings.EnableSqlLogging)
                 {
@@ -64,11 +59,11 @@ namespace IntegrationTests
                 services.AddHttpLogging(options =>
                     options.LoggingFields = HttpLoggingFields.RequestBody | HttpLoggingFields.ResponseBody);
                 services.AddTransient<IStartupFilter, TestStartupFilter>();
+                services.AddSingleton<IInjectableTestOutputSink>(InjectableTestOutputSink);
 
                 services.Configure<ApiSettings>(apiSettings =>
                 {
                     apiSettings.SqlServerConnectionString = Database!.ConnectionString;
-                    //apiSettings.Url = "http://localhost";
                 });
 
                 if (testSettings.EnableSqlLogging)

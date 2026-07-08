@@ -1,8 +1,10 @@
-﻿using Serilog.Sinks.InMemory;
-using Persistence;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Persistence;
+using Serilog.Sinks.InMemory;
+using Serilog.Sinks.XUnit.Injectable;
 using Xunit;
+using Xunit.v3;
 
 namespace IntegrationTests
 {
@@ -16,7 +18,7 @@ namespace IntegrationTests
 
         public void Initialize()
         {
-            WebApplicationFactoryFixture.TestOutputHelper = TestOutputHelper;
+            WebApplicationFactoryFixture.InjectableTestOutputSink.Inject(TestOutputHelper);
             WebApplicationFactoryFixture.InMemorySink = new InMemorySink();
             ApiClient = new(WebApplicationFactoryFixture.CreateClient());
 
