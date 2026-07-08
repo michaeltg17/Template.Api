@@ -10,7 +10,6 @@ namespace Api.Endpoints.Test
         {
             app.MapPost("Post/{id}", (
                 long id,
-                [FromQuery] string name,
                 [FromQuery] DateTime date,
                 [FromBody] TestPostRequest request,
                 CancellationToken cancellationToken) =>

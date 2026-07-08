@@ -33,16 +33,15 @@ namespace ApiClient.Endpoints
             return httpClient.GetAsync($"{BaseRoute}/Get/{id}");
         }
 
-        public Task<HttpResponseMessage> Post(long id, string name, DateTime date, TestPostRequest request)
+        public Task<HttpResponseMessage> Post(long id, DateTime date, TestPostRequest request)
         {
-            return Post((object)id, name, date, request);
+            return Post((object)id, date, request);
         }
 
-        public Task<HttpResponseMessage> Post(object id, object? name, object? date, object? request)
+        public Task<HttpResponseMessage> Post(object id, object? date, object? request)
         {
             var parameters = new Dictionary<string, string?>
             {
-                { nameof(name), name?.ToString() ?? "" },
                 { nameof(date), date?.ToString() ?? "" }
             };
 

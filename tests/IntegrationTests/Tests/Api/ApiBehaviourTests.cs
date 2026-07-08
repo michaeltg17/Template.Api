@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using System.Collections.Generic;
 using Xunit;
 using Core.Testing.Builders;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using System.Net;
 using ApiClient.Extensions;
 using Core.Testing.Extensions;
 using Core.Testing;
+using Api.Models.Requests;
 
 namespace IntegrationTests.Tests.Api
 {
@@ -55,15 +57,32 @@ namespace IntegrationTests.Tests.Api
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
-[Theory]
-        [InlineData("a", "y", null, null, "Failed to bind parameter \"long id\" from \"a\".")]
-        [InlineData((long)1, "y", "b", null, "Failed to bind parameter \"DateTime date\" from \"b\".")]
-        [InlineData((long)1, "y", "2020-01-01", null, "Required parameter \"TestPostRequest request\" was not provided from body.")]
-        public async Task WhenBadRequest_ExpectedProblemDetails(
-            object id, object name, object date, object? request, string expectedDetail)
+        [Fact]
+        public async Task WhenGoodPostRequest_Ok()
         {
             //When
-            var response = await ApiClient.Test.Post(id, name, date, request);
+            var response = await ApiClient.Test.Post(1L, new DateTime(2020, 1, 1), new TestPostRequest { Id2 = 2L });
+
+            //Then
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+        public static IEnumerable<object[]> BindingFailureBodyCases() =>
+[
+    new object[] { (long)1, "2020-01-01", new Dictionary<string, object?> { ["id2"] = "notanumber" }, "Failed to read parameter \"TestPostRequest request\" from the request body as JSON." },
+        ];
+
+        [Theory]
+        [InlineData("a", null, null, "Failed to bind parameter \"long id\" from \"a\".")]
+        [InlineData((long)1, "b", null, "Failed to bind parameter \"DateTime date\" from \"b\".")]
+        [InlineData((long)1, "2020-01-01", null, "Required parameter \"TestPostRequest request\" was not provided from body.")]
+        [InlineData((long)1, "2020-01-01", "x", "Failed to read parameter \"TestPostRequest request\" from the request body as JSON.")]
+        [MemberData(nameof(BindingFailureBodyCases))]
+        public async Task WhenBadRequest_ExpectedProblemDetails(
+            object id, object date, object? request, string expectedDetail)
+        {
+            //When
+            var response = await ApiClient.Test.Post(id, date, request);
 
             //Then
             var problemDetails = await response.To<ProblemDetails>();

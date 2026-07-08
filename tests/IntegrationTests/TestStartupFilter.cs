@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 
 namespace IntegrationTests;
+
 public class TestStartupFilter : IStartupFilter
 {
     public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)

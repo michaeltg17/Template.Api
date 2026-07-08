@@ -58,7 +58,7 @@ namespace IntegrationTests.Infrastructure
 
                 return true;
             }
-            
+
             return false;
         }
 

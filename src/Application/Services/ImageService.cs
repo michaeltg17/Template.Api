@@ -33,7 +33,7 @@ namespace Application.Services
             var extension = Path.GetExtension(fullFileName)[1..];
             var type = await db.ImageTypes
                 .Include(t => t.FileExtensionNavigation)
-                .SingleOrDefaultAsync(t => t.FileExtensionNavigation.Any(e => e.FileExtension == extension)) 
+                .SingleOrDefaultAsync(t => t.FileExtensionNavigation.Any(e => e.FileExtension == extension))
                 ?? throw new AppException($"Extension '{extension}' is not a valid image extension.");
 
             Path.ChangeExtension(fullFileName, type.GetDefaultFileExtension());

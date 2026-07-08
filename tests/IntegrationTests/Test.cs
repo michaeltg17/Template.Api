@@ -27,7 +27,7 @@ namespace IntegrationTests
 
         Task<int> DeleteEntitiesFromDb()
         {
-            var sql = 
+            var sql =
                 "DELETE FROM Images;" +
                 "DELETE FROM ImageGroups;";
             return DbContext.Database.ExecuteSqlRawAsync(sql);

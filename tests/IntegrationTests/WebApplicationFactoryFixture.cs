@@ -18,7 +18,7 @@ using IntegrationTests.Infrastructure;
 
 namespace IntegrationTests
 {
-    internal class WebApplicationFactoryFixture(ITestSettings testSettings, DatabaseFactory databaseFactory) 
+    internal class WebApplicationFactoryFixture(ITestSettings testSettings, DatabaseFactory databaseFactory)
         : WebApplicationFactory<Program>, IAsyncLifetime
     {
         public ITestOutputHelper TestOutputHelper { get; set; } = default!;
@@ -62,7 +62,7 @@ namespace IntegrationTests
 
             builder.ConfigureServices(services =>
             {
-                services.AddHttpLogging(options => 
+                services.AddHttpLogging(options =>
                     options.LoggingFields = HttpLoggingFields.RequestBody | HttpLoggingFields.ResponseBody);
                 services.AddTransient<IStartupFilter, TestStartupFilter>();
 

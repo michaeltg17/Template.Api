@@ -36,8 +36,8 @@ namespace Core.Testing
         }
 
         [GeneratedRegex(
-            @"^(?<version>[0-9a-f]{2})-(?<traceId>[0-9a-f]{32})-(?<parentId>[0-9a-f]{16})-(?<flags>[0-9a-f]{2})$", 
-            RegexOptions.IgnoreCase | RegexOptions.Compiled, 
+            @"^(?<version>[0-9a-f]{2})-(?<traceId>[0-9a-f]{32})-(?<parentId>[0-9a-f]{16})-(?<flags>[0-9a-f]{2})$",
+            RegexOptions.IgnoreCase | RegexOptions.Compiled,
             "en-US")]
         private static partial Regex TraceIdRegexValidator();
     }
