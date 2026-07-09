@@ -1,13 +1,3 @@
-CREATE DATABASE [Database]
-    COLLATE SQL_Latin1_General_CP1_CI_AS;
-GO
-
-USE [Database];
-GO
-
-EXEC sp_dbcmptlevel [Database], 160;
-GO
-
 CREATE TABLE Users
 (
     Id BIGINT IDENTITY(1,1) NOT NULL,

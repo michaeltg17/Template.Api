@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <PackageReference Include="Dapper" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore " />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -12,5 +12,8 @@
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\CrossCutting\CrossCutting.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\Sql\*.sql" />
   </ItemGroup>
 </Project>

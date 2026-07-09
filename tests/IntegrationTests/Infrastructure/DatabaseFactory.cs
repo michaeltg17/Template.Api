@@ -3,7 +3,8 @@ using Docker.DotNet;
 using Docker.DotNet.Models;
 using IntegrationTests.Settings;
 using Microsoft.Data.SqlClient;
-using Microsoft.SqlServer.Dac;
+using Microsoft.EntityFrameworkCore;
+using Persistence;
 using Testcontainers.MsSql;
 using Xunit.Sdk;
 using Xunit.v3;
@@ -35,11 +36,8 @@ namespace IntegrationTests.Infrastructure
                 connectionString = GetConnectionString(container);
             }
 
-            if (testSettings.ShouldDeployDacpac)
-            {
-                WriteMessage("Deploying dacpac.");
-                DeployDacpac(connectionString);
-            }
+            WriteMessage("Running migrations.");
+            await RunMigrations(connectionString);
 
             WriteMessage("Database initialized.");
             return new Database(testSettings, container) { ConnectionString = connectionString };
@@ -101,12 +99,14 @@ namespace IntegrationTests.Infrastructure
             return builder.ConnectionString;
         }
 
-        void DeployDacpac(string connectionString)
+        static async Task RunMigrations(string connectionString)
         {
-            var services = new DacServices(connectionString);
-            services.Message += (sender, e) => WriteMessage(e.Message.ToString());
-            var package = DacPackage.Load(@"Public.Database.dacpac");
-            services.Deploy(package, DatabaseName, true);
+            var options = new DbContextOptionsBuilder<AppDbContext>()
+                .UseSqlServer(connectionString, sqlOptions => sqlOptions.EnableRetryOnFailure())
+                .Options;
+
+            using var context = new AppDbContext(options);
+            await context.Database.MigrateAsync();
         }
 
         void WriteMessage(string message) => messageSink.OnMessage(new DiagnosticMessage(message));

@@ -16,6 +16,7 @@ using IntegrationTests.Settings;
 using IntegrationTests.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Serilog.Sinks.XUnit.Injectable.Abstract;
+using Microsoft.EntityFrameworkCore;
 
 namespace IntegrationTests
 {
@@ -69,7 +70,14 @@ namespace IntegrationTests
                 if (testSettings.EnableSqlLogging)
                 {
                     services.RemoveDbContextOptions<AppDbContext>();
-                    services.AddDbContext<AppDbContext>(options => options.EnableSensitiveDataLogging());
+                    services.AddDbContext<AppDbContext>((provider, builder) =>
+                    {
+                        var apiSettings = provider.GetRequiredService<IApiSettings>();
+                        builder
+                            .UseSqlServer(apiSettings.SqlServerConnectionString, sql => sql.EnableRetryOnFailure())
+                            .AddInterceptors(new Persistance.Interceptors.SetAuditInfoSaveChangesInterceptor())
+                            .EnableSensitiveDataLogging();
+                    });
                 }
             });
 
