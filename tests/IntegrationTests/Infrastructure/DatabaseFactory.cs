@@ -37,8 +37,8 @@ namespace IntegrationTests.Infrastructure
                 connectionString = GetConnectionString(container);
             }
 
-            WriteMessage("Running migrations.");
-            await RunMigrations(container.GetConnectionString());
+            WriteMessage("Migrating database.");
+            MigrateDatabase(connectionString);
 
             WriteMessage("Database initialized.");
             return new Database(testSettings, container) { ConnectionString = connectionString };
@@ -100,9 +100,9 @@ namespace IntegrationTests.Infrastructure
             return builder.ConnectionString;
         }
 
-        static async Task RunMigrations(string connectionString)
+        static void MigrateDatabase(string connectionString)
         {
-            var result = Migrator.Migrate(connectionString);
+            Migrator.Migrate(connectionString);
         }
 
         void WriteMessage(string message) => messageSink.OnMessage(new DiagnosticMessage(message));
