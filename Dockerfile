@@ -8,9 +8,8 @@ COPY Template.slnx ./
 COPY src/ src/
 RUN dotnet publish src/Api/Api.csproj -c Release -o /app
 
-# Stage 2: Runtime (alpine + docker-cli + keepassxc-cli for deployments)
-FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine
-RUN apk add --no-cache docker-cli keepassxc
+# Stage 2: Runtime
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
 COPY --from=build /app .
 
