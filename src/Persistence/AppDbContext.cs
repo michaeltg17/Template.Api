@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Core.Domain;
+﻿using Core.Domain;
+using CrossCutting.Settings;
 using Domain.Models;
+using Microsoft.EntityFrameworkCore;
+using Persistance.Interceptors;
 
 namespace Persistence
 {
-    public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+    public class AppDbContext(DbContextOptions<AppDbContext> options, IApiSettings apiSettings) : DbContext(options)
     {
         public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<ImageGroup> ImageGroups { get; set; }
@@ -15,14 +17,9 @@ namespace Persistence
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                string? migrationConnStr = AppContext.GetData("EfDatabase.MigrationConnectionString") as string
-                    ?? Environment.GetEnvironmentVariable("SQL_CONNECTION_STRING");
-
-                if (!string.IsNullOrEmpty(migrationConnStr))
-                    optionsBuilder.UseSqlServer(migrationConnStr, sql => sql.EnableRetryOnFailure());
-            }
+            optionsBuilder
+                .UseSqlServer(apiSettings.SqlServerConnectionString, options => options.EnableRetryOnFailure())
+                .AddInterceptors(new SetAuditInfoSaveChangesInterceptor());
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
