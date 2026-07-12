@@ -10,7 +10,7 @@ internal static class GetProductEndpoint
         app.MapGet("/{id:long}", static async (long id, [FromServices] ProductService productService) =>
         {
             var product = await productService.GetById(id).ConfigureAwait(false);
-            return product is { } ? Results.Ok(product) : Results.NotFound();
+            return Results.Ok(product);
         });
     }
 }

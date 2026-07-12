@@ -19,10 +19,5 @@ namespace Persistence
             builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
             base.OnModelCreating(builder);
         }
-
-        public Task<int> Delete<T>(long id) where T : Entity
-        {
-            return Set<T>().Where(e => e.Id == id).ExecuteDeleteAsync();
-        }
     }
 }

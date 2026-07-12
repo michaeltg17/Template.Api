@@ -14,7 +14,7 @@ internal static class UpdateProductEndpoint
             [FromServices] ProductService productService) =>
         {
             var product = await productService.Update(id, updateProductRequest).ConfigureAwait(false);
-            return product is { } ? Results.Ok(product) : Results.NotFound();
+            return Results.Ok(product);
         });
     }
 }

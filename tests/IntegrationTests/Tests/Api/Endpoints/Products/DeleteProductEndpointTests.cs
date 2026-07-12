@@ -11,35 +11,26 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
     public class DeleteProductEndpointTests : Test
     {
         [Fact]
-        public async Task ExistingProduct_ReturnsNoContent()
+        public async Task DeleteOk()
         {
+            //Given
             var product = new ProductBuilder().Build();
             Context.Products.Add(product);
             await Context.SaveChangesAsync();
 
+            //When
             var response = await ApiClient.DeleteProduct(product.Id);
 
+            //Then
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
-        }
-
-        [Fact]
-        public async Task ExistingProduct_RemovedFromDatabase()
-        {
-            var product = new ProductBuilder().Build();
-            Context.Products.Add(product);
-            await Context.SaveChangesAsync();
-
-            await ApiClient.DeleteProduct(product.Id);
-
             var dbProduct = await Context.Products.FindAsync(product.Id);
             dbProduct.Should().BeNull();
         }
 
         [Fact]
-        public async Task NonExistentProduct_ReturnsNoContent()
+        public async Task NonExistentProduct_ExpectedProblemDetails()
         {
             var response = await ApiClient.DeleteProduct(long.MaxValue);
-
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
         }
     }

@@ -1,3 +1,4 @@
+using Application.Exceptions;
 using Application.Models.Requests;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
@@ -7,9 +8,13 @@ namespace Application.Services
 {
     public class ProductService(AppDbContext context)
     {
-        public async Task<Product?> GetById(long id)
+        public async Task<Product> GetById(long id)
         {
-            return await context.Products.FindAsync(id).ConfigureAwait(false);
+            var product = await context.Products.FindAsync(id).ConfigureAwait(false);
+            if (product is null)
+                throw new NotFoundException<Product>(id);
+
+            return product;
         }
 
         public async Task<IEnumerable<Product>> GetAll()
@@ -34,12 +39,12 @@ namespace Application.Services
             return product;
         }
 
-        public async Task<Product?> Update(long id, UpdateProductRequest request)
+        public async Task<Product> Update(long id, UpdateProductRequest request)
         {
             ArgumentNullException.ThrowIfNull(request);
             var product = await context.Products.FindAsync(id).ConfigureAwait(false);
             if (product is null)
-                return null;
+                throw new NotFoundException<Product>(id);
 
             product.Name = request.Name;
             product.Description = request.Description;
@@ -48,13 +53,14 @@ namespace Application.Services
             return product;
         }
 
-        public async Task<bool> Delete(long id)
+        public async Task Delete(long id)
         {
-            var deleted = await context.Products
-                .Where(p => p.Id == id)
-                .ExecuteDeleteAsync()
-                .ConfigureAwait(false);
-            return deleted > 0;
+            var product = await context.Products.FindAsync(id).ConfigureAwait(false);
+            if (product is null)
+                throw new NotFoundException<Product>(id);
+
+            context.Products.Remove(product);
+            await context.SaveChangesAsync().ConfigureAwait(false);
         }
     }
 }
