@@ -65,7 +65,7 @@ namespace Api
         static WebApplication Configure(this WebApplication app)
         {
             //Exception middleware first to catch exceptions
-            app.UseExceptionHandler();
+            app.UseExceptionHandler().UseStatusCodePages();
 
             app.MapEndpoints();
 
