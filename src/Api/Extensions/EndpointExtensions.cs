@@ -8,7 +8,7 @@ public static class EndpointExtensions
 {
     public static WebApplication MapEndpoints(this WebApplication app)
     {
-        var products = app.MapGroup("Product");
+        var products = app.MapGroup("api/Products");
         GetAllProductsEndpoint.Map(products);
         GetProductEndpoint.Map(products);
         CreateProductEndpoint.Map(products);

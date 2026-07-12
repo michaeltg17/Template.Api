@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<ItemGroup>
 		<PackageReference Include="AwesomeAssertions" />
-		<PackageReference Include="ClosedXML" />
 		<PackageReference Include="coverlet.collector">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -9,7 +8,6 @@
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" />
 		<PackageReference Include="Microsoft.TestPlatform.TestHost" />
-		<PackageReference Include="MimeMapping" />
 		<PackageReference Include="Serilog.Sinks.InMemory" />
 		<PackageReference Include="Serilog.Sinks.InMemory.Assertions" />
 		<PackageReference Include="Serilog.Sinks.Map" />

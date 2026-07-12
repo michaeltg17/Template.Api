@@ -7,7 +7,7 @@ namespace ApiClient
         public HttpClient HttpClient { get; } = httpClient;
         public TestEndpoints Test { get; } = new(httpClient);
 
-        string BuildBasePath(int version = 1) => $"/api/v{version}";
+        string BuildBasePath() => "/api";
 
         public Task<HttpResponseMessage> GetAllProducts()
         {

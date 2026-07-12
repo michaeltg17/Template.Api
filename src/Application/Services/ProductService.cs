@@ -1,60 +1,60 @@
 using Application.Models.Requests;
-using System.Collections.Concurrent;
 using Domain.Models;
+using Microsoft.EntityFrameworkCore;
+using Persistence;
 
 namespace Application.Services
 {
-    public class ProductService
+    public class ProductService(AppDbContext context)
     {
-        private readonly ConcurrentDictionary<long, Product> products = new();
-        private long nextId = 1;
-
-        public Task<Product?> GetById(long id)
+        public async Task<Product?> GetById(long id)
         {
-            products.TryGetValue(id, out var product);
-            return Task.FromResult(product);
+            return await context.Products.FindAsync(id).ConfigureAwait(false);
         }
 
-        public Task<IEnumerable<Product>> GetAll()
+        public async Task<IEnumerable<Product>> GetAll()
         {
-            return Task.FromResult<IEnumerable<Product>>(products.Values);
+            return await context.Products
+                .OrderBy(p => p.Id)
+                .ToListAsync()
+                .ConfigureAwait(false);
         }
 
-        public Task<Product> Create(CreateProductRequest request)
+        public async Task<Product> Create(CreateProductRequest request)
         {
             ArgumentNullException.ThrowIfNull(request);
             var product = new Product
             {
-                Id = Interlocked.Increment(ref nextId),
                 Name = request.Name,
                 Description = request.Description,
                 Price = request.Price,
             };
-            products.TryAdd(product.Id, product);
-            return Task.FromResult(product);
+            context.Products.Add(product);
+            await context.SaveChangesAsync().ConfigureAwait(false);
+            return product;
         }
 
-        public Task<Product?> Update(long id, UpdateProductRequest request)
+        public async Task<Product?> Update(long id, UpdateProductRequest request)
         {
             ArgumentNullException.ThrowIfNull(request);
-            if (!products.TryGetValue(id, out _))
-                return Task.FromResult<Product?>(null);
+            var product = await context.Products.FindAsync(id).ConfigureAwait(false);
+            if (product is null)
+                return null;
 
-            var product = new Product
-            {
-                Id = id,
-                Name = request.Name,
-                Description = request.Description,
-                Price = request.Price,
-            };
-            products[id] = product;
-            return Task.FromResult<Product?>(product);
+            product.Name = request.Name;
+            product.Description = request.Description;
+            product.Price = request.Price;
+            await context.SaveChangesAsync().ConfigureAwait(false);
+            return product;
         }
 
-        public Task<bool> Delete(long id)
+        public async Task<bool> Delete(long id)
         {
-            var removed = products.TryRemove(id, out _);
-            return Task.FromResult(removed);
+            var deleted = await context.Products
+                .Where(p => p.Id == id)
+                .ExecuteDeleteAsync()
+                .ConfigureAwait(false);
+            return deleted > 0;
         }
     }
 }

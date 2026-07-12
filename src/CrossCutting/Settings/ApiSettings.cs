@@ -15,7 +15,5 @@
         public required string ImagesStoragePath { get; set; }
         public required string ImagesRequestPath { get; set; }
         public required string SqlServerConnectionString { get; set; }
-
-        public string ImagesUrl => Flurl.Url.Combine(Url, ImagesRequestPath);
     }
 }

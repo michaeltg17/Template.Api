@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Core.Extensions;
 using Core.Domain;
-using MoreLinq;
 
 namespace Persistance.Interceptors
 {
@@ -27,20 +26,20 @@ namespace Persistance.Interceptors
         {
             var entries = eventData.Context!.ChangeTracker.Entries();
 
-            entries.ForEach(e =>
+            foreach (var entry in entries)
             {
-                var entity = (IAudited)e.Entity;
-                if (e.State == EntityState.Added)
+                var entity = (IAudited)entry.Entity;
+                if (entry.State == EntityState.Added)
                 {
                     entity.CreatedBy = 1;
                     entity.CreatedOn = DateTime.UtcNow.Truncate(DateTimeResolution.Second);
                 }
-                else if (e.State == EntityState.Modified)
+                else if (entry.State == EntityState.Modified)
                 {
                     entity.ModifiedBy = 1;
                     entity.ModifiedOn = DateTime.UtcNow.Truncate(DateTimeResolution.Second);
                 }
-            });
+            }
         }
     }
 }

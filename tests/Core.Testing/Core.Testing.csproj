@@ -1,8 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <PackageReference Include="AutoFixture" />
-    <PackageReference Include="AutoFixture.Idioms" />
     <PackageReference Include="AwesomeAssertions" />
   </ItemGroup>
 

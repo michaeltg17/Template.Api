@@ -13,7 +13,7 @@ namespace IntegrationTests
         public ApiClient.ApiClient ApiClient { get; private set; } = default!;
         internal WebApplicationFactoryFixture WebApplicationFactoryFixture { get; set; } = default!;
         public ITestOutputHelper TestOutputHelper { get; set; } = default!;
-        AppDbContext DbContext { get; set; } = default!;
+        protected AppDbContext Context { get; set; } = default!;
         AsyncServiceScope Scope { get; set; } = default!;
 
         public void Initialize()
@@ -23,13 +23,13 @@ namespace IntegrationTests
             ApiClient = new(WebApplicationFactoryFixture.CreateClient());
 
             Scope = WebApplicationFactoryFixture.Services.CreateAsyncScope();
-            DbContext = Scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            Context = Scope.ServiceProvider.GetRequiredService<AppDbContext>();
         }
 
         Task<int> DeleteEntitiesFromDb()
         {
             var sql = "DELETE FROM Products;";
-            return DbContext.Database.ExecuteSqlRawAsync(sql);
+            return Context.Database.ExecuteSqlRawAsync(sql);
         }
 
         public async ValueTask DisposeAsync()

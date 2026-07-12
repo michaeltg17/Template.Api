@@ -6,10 +6,4 @@
     <ProjectReference Include="..\Persistence\Persistence.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MimeMapping" />
-    <PackageReference Include="SimMetrics.Net" />
-    <PackageReference Include="SpreadCheetah" />
-  </ItemGroup>
-
 </Project>
