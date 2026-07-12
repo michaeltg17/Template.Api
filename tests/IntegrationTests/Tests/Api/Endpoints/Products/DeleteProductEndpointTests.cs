@@ -7,7 +7,7 @@ using Xunit;
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
     [Collection(nameof(ApiCollection))]
-    public class DeleteProductTests : Test
+    public class DeleteProductEndpointTests : Test
     {
         [Fact]
         public async Task ExistingProduct_ReturnsNoContent()

@@ -10,7 +10,7 @@ using Xunit;
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
     [Collection(nameof(ApiCollection))]
-    public class UpdateProductTests : Test
+    public class UpdateProductEndpointTests : Test
     {
         [Fact]
         public async Task ExistingProduct_ReturnsUpdated()

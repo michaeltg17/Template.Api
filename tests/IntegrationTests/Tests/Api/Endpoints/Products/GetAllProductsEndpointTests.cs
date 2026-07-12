@@ -8,7 +8,7 @@ using Xunit;
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
     [Collection(nameof(ApiCollection))]
-    public class GetAllProductsTests : Test
+    public class GetAllProductsEndpointTests : Test
     {
         [Fact]
         public async Task EmptyList_ReturnsOk()
