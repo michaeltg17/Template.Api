@@ -1,6 +1,7 @@
 using ApiClient.Extensions;
 using Application.Models.Requests;
 using AwesomeAssertions;
+using Core.Testing.Builders;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
@@ -13,17 +14,27 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
     public class CreateProductEndpointTests : Test
     {
         [Fact]
-        public async Task ValidRequest_ReturnsCreatedProduct()
+        public async Task CreateProductOk()
         {
+            //When
             var request = new CreateProductRequest("New Product", "A description", 9.99m);
             var response = await ApiClient.CreateProduct(JsonContent.Create(request));
+            var product = await response.To<Product>();
+
+            //Then
+            var expected = new ProductBuilder()
+                .WithValues(p =>
+                {
+                    p.Id = product.Id;
+                    p.Name = request.Name;
+                    p.Description = request.Description;
+                    p.Price = request.Price;
+                })
+                .Build();
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            var product = await response.To<Product>();
-            product.Should().NotBeNull();
-            product.Name.Should().Be("New Product");
-            product.Description.Should().Be("A description");
-            product.Price.Should().Be(9.99m);
+            product.Id.Should().BeGreaterThan(0);
+            product.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
@@ -44,8 +55,18 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var product = await response.To<Product>();
 
             var dbProduct = await Context.Products.FindAsync(product.Id);
-            dbProduct.Should().NotBeNull();
-            dbProduct!.Name.Should().Be("Persisted");
+
+            var expected = new ProductBuilder()
+                .WithValues(p =>
+                {
+                    p.Id = product.Id;
+                    p.Name = request.Name;
+                    p.Description = request.Description;
+                    p.Price = request.Price;
+                })
+                .Build();
+
+            dbProduct.Should().BeEquivalentTo(expected);
         }
 
         [Fact]

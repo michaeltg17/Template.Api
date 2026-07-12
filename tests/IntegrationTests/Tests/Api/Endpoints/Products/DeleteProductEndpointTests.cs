@@ -1,4 +1,5 @@
 using AwesomeAssertions;
+using Core.Testing.Builders;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
@@ -12,7 +13,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         [Fact]
         public async Task ExistingProduct_ReturnsNoContent()
         {
-            var product = new Product { Name = "To Delete", Description = "Desc", Price = 10m };
+            var product = new ProductBuilder().Build();
             Context.Products.Add(product);
             await Context.SaveChangesAsync();
 
@@ -24,7 +25,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         [Fact]
         public async Task ExistingProduct_RemovedFromDatabase()
         {
-            var product = new Product { Name = "Removed", Description = "Desc", Price = 10m };
+            var product = new ProductBuilder().Build();
             Context.Products.Add(product);
             await Context.SaveChangesAsync();
 

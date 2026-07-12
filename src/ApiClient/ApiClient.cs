@@ -1,4 +1,6 @@
 ﻿using ApiClient.Endpoints;
+using Application.Models.Requests;
+using System.Net.Http.Json;
 
 namespace ApiClient
 {

@@ -5,7 +5,6 @@ using Serilog;
 using Xunit;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence;
-using IntegrationTests.Extensions;
 using Serilog.Events;
 using Serilog.Sinks.InMemory;
 using Serilog.Sinks.XUnit.Injectable;
@@ -68,7 +67,6 @@ namespace IntegrationTests
 
                 if (testSettings.EnableSqlLogging)
                 {
-                    services.RemoveDbContextOptions<AppDbContext>();
                     services.AddDbContext<AppDbContext>(options => options.EnableSensitiveDataLogging());
                 }
             });

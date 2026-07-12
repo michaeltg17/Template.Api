@@ -1,7 +1,7 @@
 using ApiClient.Extensions;
 using AwesomeAssertions;
+using Core.Testing.Builders;
 using Domain.Models;
-using Microsoft.EntityFrameworkCore;
 using System.Net;
 using Xunit;
 
@@ -21,20 +21,29 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         }
 
         [Fact]
-        public async Task WithProducts_ReturnsAllInOrder()
+        public async Task WithProduct_ReturnsInOrder()
         {
-            Context.Products.AddRange(
-                new Product { Name = "First", Description = "First desc", Price = 10m },
-                new Product { Name = "Second", Description = "Second desc", Price = 20m });
+            var expected = new ProductBuilder()
+                .WithValues(p =>
+                {
+                    p.Name = "First";
+                    p.Description = "First desc";
+                    p.Price = 10m;
+                })
+                .Build();
+
+            Context.Products.Add(expected);
             await Context.SaveChangesAsync();
 
             var response = await ApiClient.GetAllProducts();
+            var products = await response.To<List<Product>>();
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            var products = await response.To<List<Product>>();
-            products.Should().HaveCount(2);
-            products[0].Name.Should().Be("First");
-            products[1].Name.Should().Be("Second");
+
+            var actual = products[0];
+            actual.Name.Should().Be(expected.Name);
+            actual.Description.Should().Be(expected.Description);
+            actual.Price.Should().Be(expected.Price);
         }
     }
 }

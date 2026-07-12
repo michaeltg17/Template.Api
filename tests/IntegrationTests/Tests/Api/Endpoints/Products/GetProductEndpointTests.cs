@@ -1,10 +1,9 @@
 using ApiClient.Extensions;
-using Application.Models.Requests;
 using AwesomeAssertions;
+using Core.Testing.Builders;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
-using System.Net.Http.Json;
 using Xunit;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
@@ -15,18 +14,35 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         [Fact]
         public async Task ExistingProduct_ReturnsOk()
         {
-            var product = new Product { Name = "Test", Description = "A test product", Price = 15m };
+            var product = new ProductBuilder()
+                .WithValues(p =>
+                {
+                    p.Name = "Test";
+                    p.Description = "A test product";
+                    p.Price = 15m;
+                })
+                .Build();
+
             Context.Products.Add(product);
             await Context.SaveChangesAsync();
 
             var response = await ApiClient.GetProduct(product.Id);
+            var result = await response.To<Product>();
 
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            var result = await response.To<Product>();
-            result.Name.Should().Be("Test");
-            result.Description.Should().Be("A test product");
-            result.Price.Should().Be(15m);
-            result.Id.Should().Be(product.Id);
+            result.Id.Should().BeGreaterThan(0);
+
+            var expected = new ProductBuilder()
+                .WithValues(p =>
+                {
+                    p.Id = product.Id;
+                    p.Name = product.Name;
+                    p.Description = product.Description;
+                    p.Price = product.Price;
+                })
+                .Build();
+
+            result.Should().BeEquivalentTo(expected);
         }
 
         [Fact]

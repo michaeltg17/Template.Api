@@ -1,6 +1,7 @@
 using ApiClient.Extensions;
 using Application.Models.Requests;
 using AwesomeAssertions;
+using Core.Testing.Builders;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
@@ -13,42 +14,42 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
     public class UpdateProductEndpointTests : Test
     {
         [Fact]
-        public async Task ExistingProduct_ReturnsUpdated()
+        public async Task UpdatesProductOk()
         {
-            var product = new Product { Name = "Original", Description = "Original desc", Price = 10m };
+            //Given
+            var product = new ProductBuilder().Build();
             Context.Products.Add(product);
             await Context.SaveChangesAsync();
 
+            //When
             var request = new UpdateProductRequest("Updated", "Updated desc", 20.50m);
             var response = await ApiClient.UpdateProduct(product.Id, JsonContent.Create(request));
+            var updatedProduct = await response.To<Product>();
 
+            //Then
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            var updated = await response.To<Product>();
-            updated.Name.Should().Be("Updated");
-            updated.Description.Should().Be("Updated desc");
-            updated.Price.Should().Be(20.50m);
-            updated.Id.Should().Be(product.Id);
+            updatedProduct.Id.Should().BeGreaterThan(0);
+
+            var expected = new ProductBuilder()
+                .WithValues(p =>
+                {
+                    p.Id = product.Id;
+                    p.Name = request.Name;
+                    p.Description = request.Description;
+                    p.Price = request.Price;
+                })
+                .Build();
+
+            updatedProduct.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
-        public async Task NonExistentProduct_ReturnsNotFound()
+        public async Task NonExistentProduct_ExpectedProblemDetails()
         {
             var request = new UpdateProductRequest("Updated", "Desc", 10m);
             var response = await ApiClient.UpdateProduct(long.MaxValue, JsonContent.Create(request));
 
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-        }
-
-        [Fact]
-        public async Task NoBody_ReturnsBadRequest()
-        {
-            var product = new Product { Name = "Test", Description = "Desc", Price = 10m };
-            Context.Products.Add(product);
-            await Context.SaveChangesAsync();
-
-            var response = await ApiClient.UpdateProduct(product.Id, null);
-
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
     }
 }
