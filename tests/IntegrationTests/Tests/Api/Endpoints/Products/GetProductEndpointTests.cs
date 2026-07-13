@@ -14,14 +14,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         [Fact]
         public async Task ExistingProduct_ReturnsOk()
         {
-            var product = new ProductBuilder()
-                .WithValues(p =>
-                {
-                    p.Name = "Test";
-                    p.Description = "A test product";
-                    p.Price = 15m;
-                })
-                .Build();
+            var product = new ProductBuilder().Build();
 
             await Context.Products.AddAsync(product);
             await Context.SaveChangesAsync();

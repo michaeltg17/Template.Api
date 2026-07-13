@@ -2,10 +2,10 @@ using ApiClient.Extensions;
 using Application.Models.Requests;
 using AwesomeAssertions;
 using Core.Testing.Builders;
+using Core.Testing.Validators;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
-using System.Net.Http.Json;
 using Xunit;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
@@ -46,10 +46,12 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         [Fact]
         public async Task NonExistentProduct_ExpectedProblemDetails()
         {
+            //When
             var request = new UpdateProductRequest("Updated", "Desc", 10m);
             var response = await ApiClient.UpdateProduct(long.MaxValue, request);
 
-            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            //Then
+            await ProblemDetailsValidator.ValidateNotFoundException(response!, "Product", "Products", long.MaxValue);
         }
     }
 }

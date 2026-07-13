@@ -36,7 +36,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var response = await ApiClient.DeleteProduct(1);
 
             //Then
-            await ProblemDetailsValidator.ValidateNotFoundException(response!, "Product", "Products", 1);
+            await ProblemDetailsValidator.ValidateNotFoundException(response, "Product", "Products", 1);
         }
     }
 }

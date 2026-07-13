@@ -2,10 +2,10 @@ using ApiClient.Extensions;
 using Application.Models.Requests;
 using AwesomeAssertions;
 using Core.Testing.Builders;
+using Core.Testing.Validators;
 using Domain.Models;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using System.Net.Http.Json;
 using Xunit;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
@@ -46,6 +46,17 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         {
             var response = await ApiClient.CreateProduct(null);
 
+            var problemDetails = await response.To<ProblemDetails>();
+            var traceId = ProblemDetailsValidator.ValidateTraceId(problemDetails);
+
+            var expected = new ProblemDetailsBuilder()
+                .WithTraceId(traceId)
+                .WithBadHttpRequestException()
+                .WithInstance("/api/Products")
+                .WithDetail("Required parameter \"CreateProductRequest createProductRequest\" was not provided from body.")
+                .Build();
+
+            problemDetails.Should().BeEquivalentTo(expected);
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
     }
