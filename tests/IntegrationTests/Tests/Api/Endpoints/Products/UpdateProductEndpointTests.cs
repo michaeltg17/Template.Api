@@ -47,10 +47,10 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         {
             //When
             var request = new UpdateProductRequestBuilder().Build();
-            var response = await ApiClient.UpdateProduct(long.MaxValue, request);
+            var response = await ApiClient.UpdateProduct(5, request);
 
             //Then
-            await ProblemDetailsValidator.ValidateNotFoundException(response!, "Product", "Products", long.MaxValue);
+            await ProblemDetailsValidator.ValidateNotFoundException(response, "Product", "Products", 5);
         }
     }
 }

@@ -1,11 +1,11 @@
 using ApiClient.Extensions;
+using Application.Models.Responses;
 using AwesomeAssertions;
+using Core.Testing.Builders;
 using Core.Testing.Validators;
 using Domain.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
-using System.Text.Json;
 using Xunit;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
@@ -16,15 +16,22 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         [Fact]
         public async Task DeleteSingleOk()
         {
+            //Given
+            await CreateProducts();
+
             //When
-            var response = await ApiClient.DeleteProducts([initialProducts[1].Id]);
+            var request = new DeleteProductsRequestBuilder()
+                .WithIds([initialProducts[1].Id])
+                .Build();
+            var response = await ApiClient.DeleteProducts(request.Ids, request.IgnoreNotFound);
+            var result = await response.To<DeleteProductsResponse>();
 
             //Then
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            var body = await response.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(body)!;
-            result["deletedIds"].EnumerateArray().First().GetInt64().Should().Be(initialProducts[1].Id);
-            result["notFoundIds"].EnumerateArray().Count().Should().Be(0);
+            var expected = new DeleteProductsResponseBuilder()
+                .WithDeletedIds([initialProducts[1].Id])
+                .Build();
+            result.Should().BeEquivalentTo(expected);
 
             var dbProduct = await Context.Products.FindAsync(initialProducts[1].Id);
             dbProduct.Should().BeNull();
@@ -34,16 +41,23 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         [Fact]
         public async Task DeleteMultipleOk()
         {
+            //Given
+            await CreateProducts();
+
             //When
             var ids = new[] { initialProducts[0].Id, initialProducts[1].Id };
-            var response = await ApiClient.DeleteProducts(ids);
+            var request = new DeleteProductsRequestBuilder()
+                .WithIds(ids)
+                .Build();
+            var response = await ApiClient.DeleteProducts(request.Ids, request.IgnoreNotFound);
+            var result = await response.To<DeleteProductsResponse>();
 
             //Then
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            var body = await response.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(body)!;
-            result["deletedIds"].EnumerateArray().Select(e => e.GetInt64()).Should().BeEquivalentTo(ids);
-            result["notFoundIds"].EnumerateArray().Count().Should().Be(0);
+            var expected = new DeleteProductsResponseBuilder()
+                .WithDeletedIds(ids)
+                .Build();
+            result.Should().BeEquivalentTo(expected);
 
             var dbProducts = await Context.Products.ToListAsync();
             dbProducts.Should().HaveCount(1);
@@ -53,47 +67,61 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         [Fact]
         public async Task NonExistentProduct_ExpectedProblemDetails()
         {
+            //Given
+            await CreateProducts();
+
             //When
-            var response = await ApiClient.DeleteProducts([long.MaxValue]);
+            var response = await ApiClient.DeleteProducts([5]);
 
             //Then
-            var problemDetails = await response.To<ProblemDetails>();
-            problemDetails.Status.Should().Be((int)HttpStatusCode.NotFound);
-            problemDetails.Title.Should().Be("NotFoundManyException");
-            var notFoundIds = problemDetails.Extensions["NotFoundIds"] as List<object?>;
-            notFoundIds.Should().NotBeNull();
-            notFoundIds!.Count.Should().Be(1);
-            notFoundIds[0].Should().Be(long.MaxValue);
+            await ProblemDetailsValidator.ValidateNotFoundException(response, "Product", "Products", [5]);
         }
 
         [Fact]
         public async Task PartialNotFound_DeleteOnlyFound_OnlyExistingDeleted()
         {
+            //Given
+            await CreateProducts();
+
             //When
             var ids = new[] { initialProducts[0].Id, long.MaxValue };
-            var response = await ApiClient.DeleteProducts(ids, true);
+            var request = new DeleteProductsRequestBuilder()
+                .WithIds(ids)
+                .WithIgnoreNotFound(true)
+                .Build();
+            var response = await ApiClient.DeleteProducts(request.Ids, request.IgnoreNotFound);
+            var result = await response.To<DeleteProductsResponse>();
 
             //Then
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            var body = await response.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(body)!;
-            result["deletedIds"].EnumerateArray().First().GetInt64().Should().Be(initialProducts[0].Id);
-            result["notFoundIds"].EnumerateArray().First().GetInt64().Should().Be(long.MaxValue);
+            var expected = new DeleteProductsResponseBuilder()
+                .WithDeletedIds([initialProducts[0].Id])
+                .WithNotFoundIds([long.MaxValue])
+                .Build();
+            result.Should().BeEquivalentTo(expected);
         }
 
         [Fact]
         public async Task AllNotFound_DeleteOnlyFound_ReturnsEmpty()
         {
+            //Given
+            await CreateProducts();
+
             //When
             var ids = new[] { long.MaxValue - 1, long.MaxValue };
-            var response = await ApiClient.DeleteProducts(ids, true);
+            var request = new DeleteProductsRequestBuilder()
+                .WithIds(ids)
+                .WithIgnoreNotFound(true)
+                .Build();
+            var response = await ApiClient.DeleteProducts(request.Ids, request.IgnoreNotFound);
+            var result = await response.To<DeleteProductsResponse>();
 
             //Then
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            var body = await response.Content.ReadAsStringAsync();
-            var result = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(body)!;
-            result["deletedIds"].EnumerateArray().Count().Should().Be(0);
-            result["notFoundIds"].EnumerateArray().Select(e => e.GetInt64()).Should().BeEquivalentTo(ids);
+            var expected = new DeleteProductsResponseBuilder()
+                .WithNotFoundIds(ids)
+                .Build();
+            result.Should().BeEquivalentTo(expected);
         }
     }
 }
