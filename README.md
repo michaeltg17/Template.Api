@@ -1,4 +1,5 @@
-# dotnet-api-template
+[![CI](https://github.com/michaeltg17/Template.Api/actions/workflows/ci.yml/badge.svg)](https://github.com/michaeltg17/Template.Api/actions/workflows/ci.yml)
+# Template.Api
 
 .NET 10, ASP.NET Core Api + Tests template of my recommended architecture for a successful, dev efficient and scalable solution. 
 
