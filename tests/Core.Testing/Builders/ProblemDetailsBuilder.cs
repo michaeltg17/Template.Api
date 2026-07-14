@@ -73,5 +73,16 @@ namespace Core.Testing.Builders
 
             return this;
         }
+
+        public ProblemDetailsBuilder WithValidationException(string instance, string detail)
+        {
+            Item.Type = "https://tools.ietf.org/html/rfc9110#section-15.5.1";
+            Item.Title = "ValidationException";
+            Item.Status = (int)HttpStatusCode.BadRequest;
+            Item.Detail = detail;
+            Item.Instance = instance;
+
+            return this;
+        }
     }
 }

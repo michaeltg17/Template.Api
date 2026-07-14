@@ -22,6 +22,18 @@ namespace Core.Testing.Validators
             await ValidateNotFoundException(response, builder);
         }
 
+        public static async Task ValidateValidationException(HttpResponseMessage response, string instance, string detail)
+        {
+            var problemDetails = await response.To<ProblemDetails>();
+            var traceId = ValidateTraceId(problemDetails);
+            var expected = new ProblemDetailsBuilder()
+                .WithValidationException(instance, detail)
+                .WithTraceId(traceId)
+                .Build();
+            problemDetails.Should().BeEquivalentTo(expected);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
         public static async Task ValidateNotFoundException(HttpResponseMessage response, string entity, string route, long id)
         {
             var builder = new ProblemDetailsBuilder().WithNotFoundException(entity, route, id);

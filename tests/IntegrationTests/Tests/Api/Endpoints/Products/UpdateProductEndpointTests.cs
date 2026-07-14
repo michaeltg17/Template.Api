@@ -52,5 +52,56 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //Then
             await ProblemDetailsValidator.ValidateNotFoundException(response, "Product", "Products", 5);
         }
+
+        [Fact]
+        public async Task InvalidName_ExpectedProblemDetails()
+        {
+            //Given
+            await CreateProducts();
+
+            //When
+            var request = new UpdateProductRequestBuilder().WithName("").Build();
+            var response = await ApiClient.UpdateProduct(initialProducts[1].Id, request);
+
+            //Then
+            await ProblemDetailsValidator.ValidateValidationException(
+                response,
+                $"/api/Products/{initialProducts[1].Id}",
+                "Validation failed: \r\n -- Name: 'Name' must not be empty. Severity: Error");
+        }
+
+        [Fact]
+        public async Task InvalidDescription_ExpectedProblemDetails()
+        {
+            //Given
+            await CreateProducts();
+
+            //When
+            var request = new UpdateProductRequestBuilder().WithDescription("").Build();
+            var response = await ApiClient.UpdateProduct(initialProducts[0].Id, request);
+
+            //Then
+            await ProblemDetailsValidator.ValidateValidationException(
+                response,
+                $"/api/Products/{initialProducts[0].Id}",
+                "Validation failed: \r\n -- Description: 'Description' must not be empty. Severity: Error");
+        }
+
+        [Fact]
+        public async Task InvalidPrice_ExpectedProblemDetails()
+        {
+            //Given
+            await CreateProducts();
+
+            //When
+            var request = new UpdateProductRequestBuilder().WithPrice(0m).Build();
+            var response = await ApiClient.UpdateProduct(initialProducts[2].Id, request);
+
+            //Then
+            await ProblemDetailsValidator.ValidateValidationException(
+                response,
+                $"/api/Products/{initialProducts[2].Id}",
+                "Validation failed: \r\n -- Price: 'Price' must be greater than '0'. Severity: Error");
+        }
     }
 }

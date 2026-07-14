@@ -43,5 +43,47 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var dbProduct = await Context.Products.FindAsync(product.Id);
             dbProduct.Should().BeEquivalentTo(expected);
         }
+
+        [Fact]
+        public async Task InvalidName_ExpectedProblemDetails()
+        {
+            //When
+            var request = new CreateProductRequestBuilder().WithName("").Build();
+            var response = await ApiClient.CreateProduct(request);
+
+            //Then
+            await ProblemDetailsValidator.ValidateValidationException(
+                response,
+                "/api/Products",
+                "Validation failed: \r\n -- Name: 'Name' must not be empty. Severity: Error");
+        }
+
+        [Fact]
+        public async Task InvalidDescription_ExpectedProblemDetails()
+        {
+            //When
+            var request = new CreateProductRequestBuilder().WithDescription("").Build();
+            var response = await ApiClient.CreateProduct(request);
+
+            //Then
+            await ProblemDetailsValidator.ValidateValidationException(
+                response,
+                "/api/Products",
+                "Validation failed: \r\n -- Description: 'Description' must not be empty. Severity: Error");
+        }
+
+        [Fact]
+        public async Task InvalidPrice_ExpectedProblemDetails()
+        {
+            //When
+            var request = new CreateProductRequestBuilder().WithPrice(0m).Build();
+            var response = await ApiClient.CreateProduct(request);
+
+            //Then
+            await ProblemDetailsValidator.ValidateValidationException(
+                response,
+                "/api/Products",
+                "Validation failed: \r\n -- Price: 'Price' must be greater than '0'. Severity: Error");
+        }
     }
 }
