@@ -54,7 +54,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //Then
             await ProblemDetailsValidator.ValidateValidationException(
                 response,
-                "/api/Products",
+                BaseInstance,
                 "Validation failed: \r\n -- Name: 'Name' must not be empty. Severity: Error");
         }
 
@@ -68,7 +68,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //Then
             await ProblemDetailsValidator.ValidateValidationException(
                 response,
-                "/api/Products",
+                BaseInstance,
                 "Validation failed: \r\n -- Description: 'Description' must not be empty. Severity: Error");
         }
 
@@ -82,7 +82,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //Then
             await ProblemDetailsValidator.ValidateValidationException(
                 response,
-                "/api/Products",
+                BaseInstance,
                 "Validation failed: \r\n -- Price: 'Price' must be greater than '0'. Severity: Error");
         }
     }

@@ -10,6 +10,8 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
     public abstract class ProductsTest : Test
     {
+        protected const string BaseInstance = "/api/Products";
+
         public List<Product> initialProducts = new();
 
         public async ValueTask CreateProducts()
