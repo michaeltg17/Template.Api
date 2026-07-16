@@ -40,26 +40,32 @@ namespace Api.Extensions
         static ProblemDetailsContext BuildProblemDetailsContext(Exception exception, HttpContext httpContext)
         {
             var isInternalServerError = httpContext.Response.StatusCode == (int)HttpStatusCode.InternalServerError;
+            var isValidationException = exception is ValidationException;
 
             var detail = exception switch
             {
                 BadHttpRequestException { InnerException: JsonException jsonEx } => exception.Message + " " + jsonEx.Message,
                 BadHttpRequestException => exception.Message,
                 _ when isInternalServerError => "Internal server error. Please contact the API support.",
+                _ when isValidationException => "One or more validation errors occurred.",
                 _ => exception!.Message
             };
 
             var problemDetails = new ProblemDetails
             {
-                Title = isInternalServerError ? "InternalServerError" : exception!.GetType().GetNameWithoutGenericArity(),
+                Type = isValidationException ? "https://tools.ietf.org/html/rfc9110#section-15.5.1" : null,
+                Title = isInternalServerError ? "InternalServerError" : exception.GetType().GetNameWithoutGenericArity(),
                 Detail = detail,
                 Status = httpContext.Response.StatusCode,
                 Instance = httpContext.Request.Path,
                 Extensions = new Dictionary<string, object?>()
             };
 
-            if (exception is NotFoundException notFound)
-                problemDetails.Extensions["NotFoundIds"] = notFound.IdsNotFound;
+            if (exception is ValidationException validationException)
+                problemDetails.Extensions["errors"] = validationException.Errors.ToValidationProblemErrors();
+
+            if (exception is NotFoundException notFoundException)
+                problemDetails.Extensions["NotFoundIds"] = notFoundException.NotFoundIds;
 
             return new ProblemDetailsContext
             {
