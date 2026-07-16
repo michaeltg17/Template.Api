@@ -22,12 +22,12 @@ namespace Core.Testing.Validators
             await ValidateNotFoundException(response, builder);
         }
 
-        public static async Task ValidateValidationException(HttpResponseMessage response, string instance, string detail)
+        public static async Task ValidateValidationException(HttpResponseMessage response, string instance, IDictionary<string, string[]> expectedErrors)
         {
             var problemDetails = await response.To<ProblemDetails>();
             var traceId = ValidateTraceId(problemDetails);
             var expected = new ProblemDetailsBuilder()
-                .WithValidationException(instance, detail)
+                .WithValidationException(instance, expectedErrors)
                 .WithTraceId(traceId)
                 .Build();
             problemDetails.Should().BeEquivalentTo(expected);

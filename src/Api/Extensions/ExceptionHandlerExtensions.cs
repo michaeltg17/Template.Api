@@ -65,7 +65,7 @@ namespace Api.Extensions
                 problemDetails.Extensions["errors"] = validationException.Errors.ToValidationProblemErrors();
 
             if (exception is NotFoundException notFoundException)
-                problemDetails.Extensions["NotFoundIds"] = notFoundException.NotFoundIds;
+                problemDetails.Extensions["notFoundIds"] = notFoundException.NotFoundIds;
 
             return new ProblemDetailsContext
             {

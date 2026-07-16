@@ -55,45 +55,22 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         }
 
         [Fact]
-        public async Task InvalidName_ExpectedProblemDetails()
+        public async Task AllPropertiesInvalid_ExpectedProblemDetails()
         {
             //When
-            var request = new CreateProductRequestBuilder().WithName("").Build();
+            var request = new CreateProductRequestBuilder().WithName("").WithDescription("").WithPrice(0m).Build();
             var response = await ApiClient.CreateProduct(request);
 
             //Then
             await ProblemDetailsValidator.ValidateValidationException(
                 response,
                 BaseInstance,
-                "Validation failed: \r\n -- Name: 'Name' must not be empty. Severity: Error");
-        }
-
-        [Fact]
-        public async Task InvalidDescription_ExpectedProblemDetails()
-        {
-            //When
-            var request = new CreateProductRequestBuilder().WithDescription("").Build();
-            var response = await ApiClient.CreateProduct(request);
-
-            //Then
-            await ProblemDetailsValidator.ValidateValidationException(
-                response,
-                BaseInstance,
-                "Validation failed: \r\n -- Description: 'Description' must not be empty. Severity: Error");
-        }
-
-        [Fact]
-        public async Task InvalidPrice_ExpectedProblemDetails()
-        {
-            //When
-            var request = new CreateProductRequestBuilder().WithPrice(0m).Build();
-            var response = await ApiClient.CreateProduct(request);
-
-            //Then
-            await ProblemDetailsValidator.ValidateValidationException(
-                response,
-                BaseInstance,
-                "Validation failed: \r\n -- Price: 'Price' must be greater than '0'. Severity: Error");
+                new Dictionary<string, string[]>
+                {
+                    { "Name", ["'Name' must not be empty."] },
+                    { "Description", ["'Description' must not be empty."] },
+                    { "Price", ["'Price' must be greater than '0'."] }
+                });
         }
     }
 }

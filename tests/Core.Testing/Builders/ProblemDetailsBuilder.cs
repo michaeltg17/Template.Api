@@ -30,7 +30,7 @@ namespace Core.Testing.Builders
             Item.Status = (int)HttpStatusCode.NotFound;
             Item.Detail = $"The following ids '{string.Join(", ", ids)}' were not found for entity '{entity}'.";
             Item.Instance = $"/api/{route}";
-            Item.Extensions["NotFoundIds"] = ids;
+            Item.Extensions["notFoundIds"] = ids;
 
             return this;
         }
@@ -74,13 +74,14 @@ namespace Core.Testing.Builders
             return this;
         }
 
-        public ProblemDetailsBuilder WithValidationException(string instance, string detail)
+        public ProblemDetailsBuilder WithValidationException(string instance, IDictionary<string, string[]> errors)
         {
             Item.Type = "https://tools.ietf.org/html/rfc9110#section-15.5.1";
             Item.Title = "ValidationException";
             Item.Status = (int)HttpStatusCode.BadRequest;
-            Item.Detail = detail;
+            Item.Detail = "One or more validation errors occurred.";
             Item.Instance = instance;
+            Item.Extensions["errors"] = errors;
 
             return this;
         }

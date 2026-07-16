@@ -65,54 +65,25 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         }
 
         [Fact]
-        public async Task InvalidName_ExpectedProblemDetails()
+        public async Task AllPropertiesInvalid_ExpectedProblemDetails()
         {
             //Given
             await CreateProducts();
 
             //When
-            var request = new UpdateProductRequestBuilder().WithName("").Build();
-            var response = await ApiClient.UpdateProduct(initialProducts[1].Id, request);
-
-            //Then
-            await ProblemDetailsValidator.ValidateValidationException(
-                response,
-                $"{BaseInstance}/{initialProducts[1].Id}",
-                "Validation failed: \r\n -- Name: 'Name' must not be empty. Severity: Error");
-        }
-
-        [Fact]
-        public async Task InvalidDescription_ExpectedProblemDetails()
-        {
-            //Given
-            await CreateProducts();
-
-            //When
-            var request = new UpdateProductRequestBuilder().WithDescription("").Build();
+            var request = new UpdateProductRequestBuilder().WithName("").WithDescription("").WithPrice(0m).Build();
             var response = await ApiClient.UpdateProduct(initialProducts[0].Id, request);
 
             //Then
             await ProblemDetailsValidator.ValidateValidationException(
                 response,
                 $"{BaseInstance}/{initialProducts[0].Id}",
-                "Validation failed: \r\n -- Description: 'Description' must not be empty. Severity: Error");
-        }
-
-        [Fact]
-        public async Task InvalidPrice_ExpectedProblemDetails()
-        {
-            //Given
-            await CreateProducts();
-
-            //When
-            var request = new UpdateProductRequestBuilder().WithPrice(0m).Build();
-            var response = await ApiClient.UpdateProduct(initialProducts[2].Id, request);
-
-            //Then
-            await ProblemDetailsValidator.ValidateValidationException(
-                response,
-                $"{BaseInstance}/{initialProducts[2].Id}",
-                "Validation failed: \r\n -- Price: 'Price' must be greater than '0'. Severity: Error");
+                new Dictionary<string, string[]>
+                {
+                    { "Name", ["'Name' must not be empty."] },
+                    { "Description", ["'Description' must not be empty."] },
+                    { "Price", ["'Price' must be greater than '0'."] }
+                });
         }
     }
 }
