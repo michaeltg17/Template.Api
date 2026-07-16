@@ -9,7 +9,7 @@ using Xunit;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
-    [Collection(nameof(ApiCollection))]
+    [Collection(nameof(DevelopmentApiCollection))]
     public class GetProductEndpointTests : ProductsTest
     {
         [Fact]

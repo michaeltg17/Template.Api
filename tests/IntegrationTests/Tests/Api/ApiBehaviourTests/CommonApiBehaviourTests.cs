@@ -1,4 +1,4 @@
-﻿using Api.Models.Requests;
+using Api.Models.Requests;
 using ApiClient.Extensions;
 using AwesomeAssertions;
 using Core.Testing;
@@ -10,31 +10,9 @@ using Xunit;
 
 namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 {
-    [Collection(nameof(ApiCollection))]
-    public class ApiBehaviourTests : Test
+    [Collection(nameof(DevelopmentApiCollection))]
+    public class CommonApiBehaviourTests : Test
     {
-        [Fact]
-        public async Task InternalServerError_ExpectedProblemDetails()
-        {
-            //When
-            var response = await ApiClient.Test.ThrowInternalServerError();
-
-            //Then
-            var problemDetails = await response.To<ProblemDetails>();
-            var traceId = ProblemDetailsValidator.ValidateTraceId(problemDetails);
-
-            var expected = new ProblemDetailsBuilder()
-                .WithTraceId(traceId)
-                .WithInternalServerError("/Test/ThrowInternalServerError")
-                .Build();
-
-            var responseAsString = (await response.Content.ReadAsStringAsync()).ToLowerInvariant();
-            responseAsString.Should().NotContain("Sensitive data".ToLowerInvariant());
-            responseAsString.Should().NotContain("Exception".ToLowerInvariant());
-            problemDetails.Should().BeEquivalentTo(expected);
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
-        }
-
         [Fact]
         public async Task NonexistentRoute_ExpectedProblemDetails()
         {

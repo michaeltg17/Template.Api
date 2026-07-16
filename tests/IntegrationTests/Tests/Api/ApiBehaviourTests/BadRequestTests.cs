@@ -9,7 +9,7 @@ using ApiClient.Extensions;
 
 namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 {
-    [Collection(nameof(ApiCollection))]
+    [Collection(nameof(DevelopmentApiCollection))]
     public class BadRequestTests : Test
     {
         public class BadRequestCase

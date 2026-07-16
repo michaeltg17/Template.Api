@@ -18,7 +18,10 @@ using Serilog.Sinks.XUnit.Injectable.Abstract;
 
 namespace IntegrationTests
 {
-    internal class WebApplicationFactoryFixture(ITestSettings testSettings, DatabaseFactory databaseFactory)
+    internal abstract class WebApplicationFactoryFixture(
+        ITestSettings testSettings,
+        DatabaseFactory databaseFactory,
+        string environment)
         : WebApplicationFactory<Program>, IAsyncLifetime
     {
         public InMemorySink InMemorySink { get; set; } = default!;
@@ -41,6 +44,8 @@ namespace IntegrationTests
 
         protected override IHost CreateHost(IHostBuilder builder)
         {
+            builder.UseEnvironment(environment);
+
             builder.UseSerilog((context, services, configuration) =>
             {
                 Api.Startup.ApplyCommonSerilogConfiguration(context, services, configuration);

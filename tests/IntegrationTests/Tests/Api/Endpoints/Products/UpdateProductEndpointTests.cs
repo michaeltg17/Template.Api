@@ -12,7 +12,7 @@ using Serilog.Sinks.InMemory.Assertions;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
-    [Collection(nameof(ApiCollection))]
+    [Collection(nameof(DevelopmentApiCollection))]
     public class UpdateProductEndpointTests : ProductsTest
     {
         [Fact]

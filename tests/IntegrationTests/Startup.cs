@@ -13,7 +13,8 @@ namespace IntegrationTests
         public static void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<BeforeAfterTest, BeforeAfterTestConfiguration>();
-            services.AddSingleton<WebApplicationFactoryFixture>();
+            services.AddSingleton<ProductionWebApplicationFactoryFixture>();
+            services.AddSingleton<DevelopmentWebApplicationFactoryFixture>();
             services.AddSingleton<DatabaseFactory>();
         }
 

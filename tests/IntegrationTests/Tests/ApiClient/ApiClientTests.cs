@@ -8,7 +8,7 @@ using Core.Testing.Validators;
 
 namespace IntegrationTests.Tests.ApiClient
 {
-    [Collection(nameof(ApiCollection))]
+    [Collection(nameof(DevelopmentApiCollection))]
     public class ApiClientTests : Test
     {
         [Fact]

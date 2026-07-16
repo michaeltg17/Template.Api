@@ -1,4 +1,4 @@
-﻿using Xunit;
+using Xunit;
 
 namespace IntegrationTests;
 
@@ -7,7 +7,7 @@ namespace IntegrationTests;
 /// to be the place to apply [CollectionDefinition] and all the
 /// ICollectionFixture interfaces.
 /// </summary>
-[CollectionDefinition(nameof(ApiCollection))]
-public class ApiCollection : ICollectionFixture<WebApplicationFactoryFixture>
+[CollectionDefinition(nameof(DevelopmentApiCollection))]
+public class DevelopmentApiCollection : ICollectionFixture<DevelopmentWebApplicationFactoryFixture>
 {
 }

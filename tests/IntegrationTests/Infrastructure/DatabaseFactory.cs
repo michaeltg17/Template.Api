@@ -8,39 +8,50 @@ using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Testcontainers.MsSql;
 using Xunit;
+using Microsoft.Extensions.Hosting;
 
 namespace IntegrationTests.Infrastructure
 {
     internal class DatabaseFactory(ITestSettings testSettings)
     {
+        static readonly SemaphoreSlim @lock = new(1, 1);
         const string DatabaseName = "Database";
         const string ContainerName = "IntegrationTestsSqlServer";
         const int HostPort = 50000;
 
         public async Task<Database> Create()
         {
-            WriteMessage("Initializing database.");
+            await @lock.WaitAsync();
 
-            WriteMessage("Using existing container if exists.");
-            string connectionString;
-            MsSqlContainer? container = default;
-            if (await ExistsContainer())
+            try
             {
-                connectionString = GetConnectionString();
+                WriteMessage("Initializing database.");
+
+                WriteMessage("Using existing container if exists.");
+                string connectionString;
+                MsSqlContainer? container = default;
+                if (await ExistsContainer())
+                {
+                    connectionString = GetConnectionString();
+                }
+                else
+                {
+                    WriteMessage("Does not exist. Creating new container.");
+                    container = await CreateContainer();
+                    WriteMessage("Container created.");
+                    connectionString = GetConnectionString(container);
+                }
+
+                WriteMessage("Migrating database.");
+                MigrateDatabase(connectionString);
+
+                WriteMessage("Database initialized.");
+                return new Database(testSettings, container) { ConnectionString = connectionString };
             }
-            else
+            finally
             {
-                WriteMessage("Does not exist. Creating new container.");
-                container = await CreateContainer();
-                WriteMessage("Container created.");
-                connectionString = GetConnectionString(container);
+                @lock.Release();
             }
-
-            WriteMessage("Migrating database.");
-            MigrateDatabase(connectionString);
-
-            WriteMessage("Database initialized.");
-            return new Database(testSettings, container) { ConnectionString = connectionString };
         }
 
         static async Task<bool> ExistsContainer()
@@ -63,7 +74,7 @@ namespace IntegrationTests.Infrastructure
         async Task<MsSqlContainer> CreateContainer()
         {
             var sqlServerContainer = new MsSqlBuilder("mcr.microsoft.com/mssql/server:2022-latest")
-                .WithName(ContainerName)
+                .WithName(ContainerName!)
                 .WithPortBinding(HostPort, 1433)
                 .WithCleanUp(!testSettings.KeepAliveDatabase)
                 .WithAutoRemove(!testSettings.KeepAliveDatabase)
@@ -79,9 +90,9 @@ namespace IntegrationTests.Infrastructure
 
         static string GetConnectionString(MsSqlContainer? container = null)
         {
-            if (DockerHost == "localhost")
+            if (DockerHost == "localhost" && container != null)
             {
-                return container!.GetConnectionString();
+                return container.GetConnectionString();
             }
 
             var builder = new SqlConnectionStringBuilder()
