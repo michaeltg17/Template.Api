@@ -14,7 +14,7 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
     public class ProductionApiBehaviourTests : Test
     {
         [Fact]
-        public async Task InternalServerError_HidesSensitiveDetails()
+        public async Task InternalServerError_HidesSensitiveData()
         {
             //When
             var response = await ApiClient.Test.ThrowInternalServerError();
