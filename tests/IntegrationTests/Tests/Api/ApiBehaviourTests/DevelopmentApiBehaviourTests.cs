@@ -14,7 +14,7 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
     public class DevelopmentApiBehaviourTests : Test
     {
         [Fact]
-        public async Task InternalServerError_ExposesSensitiveDetails()
+        public async Task InternalServerError_ExposesSensitiveData()
         {
             //When
             var response = await ApiClient.Test.ThrowInternalServerError();
@@ -25,7 +25,7 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 
             var expected = new ProblemDetailsBuilder()
                 .WithTraceId(traceId)
-                .WithInternalServerErrorDevelopment("/Test/ThrowInternalServerError")
+                .WithInternalServerError("/Test/ThrowInternalServerError")
                 .Build();
 
             var responseContent = await response.Content.ReadAsStringAsync();

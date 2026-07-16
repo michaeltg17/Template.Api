@@ -25,7 +25,7 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 
             var expected = new ProblemDetailsBuilder()
                 .WithTraceId(traceId)
-                .WithInternalServerError("/Test/ThrowInternalServerError")
+                .WithHiddenInternalServerError("/Test/ThrowInternalServerError")
                 .Build();
 
             var responseAsString = (await response.Content.ReadAsStringAsync()).ToLowerInvariant();
