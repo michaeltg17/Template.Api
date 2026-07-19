@@ -10,29 +10,16 @@ namespace Core.Testing.Validators
 {
     public static class ProblemDetailsValidator
     {
-        public static async Task ValidateNotFoundException(HttpResponseMessage response, string entity, string route, long[] ids)
+        public static async Task ValidateNotAllFoundException(HttpResponseMessage response, string entity, string route, long[] ids)
         {
-            var builder = new ProblemDetailsBuilder().WithNotFoundException(entity, route, ids);
-            await ValidateNotFoundException(response, builder);
+            var builder = new ProblemDetailsBuilder().WithNotAllFoundException(entity, route, ids);
+            await ValidateCommon(response, builder);
         }
 
         public static async Task ValidateNotFoundException(HttpResponseMessage response, string entity, string route, long id)
         {
             var builder = new ProblemDetailsBuilder().WithNotFoundException(entity, route, id);
-            await ValidateNotFoundException(response, builder);
-        }
-
-        private static async Task ValidateNotFoundException(HttpResponseMessage response, ProblemDetailsBuilder builder)
-        {
-            var problemDetails = await response.To<ProblemDetails>();
-            TraceIdValidator.IsValid(problemDetails.TraceId!).Should().BeTrue();
-
-            var expected = builder
-                .WithTraceId(problemDetails.TraceId!)
-                .Build();
-
-            problemDetails.Should().BeEquivalentTo(expected);
-            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            await ValidateCommon(response, builder);
         }
 
         public static async Task ValidateValidationException(
@@ -48,6 +35,19 @@ namespace Core.Testing.Validators
                 .Build();
             problemDetails.Should().BeEquivalentTo(expected);
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        static async Task ValidateCommon(HttpResponseMessage response, ProblemDetailsBuilder builder)
+        {
+            var problemDetails = await response.To<ProblemDetails>();
+            TraceIdValidator.IsValid(problemDetails.TraceId!).Should().BeTrue();
+
+            var expected = builder
+                .WithTraceId(problemDetails.TraceId!)
+                .Build();
+
+            problemDetails.Should().BeEquivalentTo(expected);
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
     }
 }

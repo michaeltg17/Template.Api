@@ -23,10 +23,10 @@ namespace Core.Testing.Builders
             return this;
         }
 
-        public ProblemDetailsBuilder WithNotFoundException(string entity, string route, long[] ids)
+        public ProblemDetailsBuilder WithNotAllFoundException(string entity, string route, long[] ids)
         {
             Item.Type = "https://tools.ietf.org/html/rfc9110#section-15.5.5";
-            Item.Title = "NotFoundException";
+            Item.Title = "NotAllFoundException";
             Item.Status = (int)HttpStatusCode.NotFound;
             Item.Detail = $"The following ids '{string.Join(", ", ids)}' were not found for entity '{entity}'.";
             Item.Instance = $"/api/{route}";
@@ -37,8 +37,12 @@ namespace Core.Testing.Builders
 
         public ProblemDetailsBuilder WithNotFoundException(string entity, string route, long id)
         {
-            WithNotFoundException(entity, route, [id]);
+            Item.Type = "https://tools.ietf.org/html/rfc9110#section-15.5.5";
+            Item.Title = "NotFoundException";
+            Item.Status = (int)HttpStatusCode.NotFound;
+            Item.Detail = $"{entity} with id '{id}' was not found.";
             Item.Instance = $"/api/{route}/{id}";
+
             return this;
         }
 

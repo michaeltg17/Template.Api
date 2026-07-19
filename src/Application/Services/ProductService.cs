@@ -16,7 +16,7 @@ namespace Application.Services
         {
             var product = await context.Products.FindAsync(id).ConfigureAwait(false);
             if (product is null)
-                throw new NotFoundException<Product>([id]);
+                throw new NotFoundException<Product>(id);
 
             return product;
         }
@@ -49,7 +49,7 @@ namespace Application.Services
             ArgumentNullException.ThrowIfNull(request);
             var product = await context.Products.FindAsync(id).ConfigureAwait(false);
             if (product is null)
-                throw new NotFoundException<Product>([id]);
+                throw new NotFoundException<Product>(id);
 
             product.Name = request.Name;
             product.Description = request.Description;
@@ -71,7 +71,7 @@ namespace Application.Services
             var notFoundIds = request.Ids.Except(foundIds).ToArray();
 
             if (!request.IgnoreNotFound && notFoundIds.Length > 0)
-                throw new NotFoundException<Product>(notFoundIds);
+                throw new NotAllFoundException<Product>(notFoundIds);
 
             if (products.Count > 0)
             {

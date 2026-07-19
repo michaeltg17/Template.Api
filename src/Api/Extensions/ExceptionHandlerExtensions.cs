@@ -28,6 +28,7 @@ namespace Api.Extensions
                     BadHttpRequestException => (int)HttpStatusCode.BadRequest,
                     ValidationException => (int)HttpStatusCode.BadRequest,
                     NotFoundException => (int)HttpStatusCode.NotFound,
+                    NotAllFoundException => (int)HttpStatusCode.NotFound,
                     AppException => (int)HttpStatusCode.BadRequest,
                     _ => (int)HttpStatusCode.InternalServerError,
                 };
@@ -66,8 +67,8 @@ namespace Api.Extensions
             if (exception is ValidationException validationException)
                 problemDetails.Extensions["errors"] = validationException.Errors.ToValidationProblemErrors();
 
-            if (exception is NotFoundException notFoundException)
-                problemDetails.Extensions["notFoundIds"] = notFoundException.NotFoundIds;
+            if (exception is NotAllFoundException notAllFoundException)
+                problemDetails.Extensions["notFoundIds"] = notAllFoundException.NotFoundIds;
 
             if (isInternalServerError && isDevelopment)
                 problemDetails.Extensions["exception"] = exception.ToString();
