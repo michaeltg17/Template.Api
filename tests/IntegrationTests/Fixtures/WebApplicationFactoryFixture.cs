@@ -24,7 +24,7 @@ namespace IntegrationTests.Fixtures
         string environment)
         : WebApplicationFactory<Program>, IAsyncLifetime
     {
-        public InMemorySink InMemorySink { get; set; } = default!;
+        public InMemorySink InMemorySink { get; } = new();
         public InjectableTestOutputSink InjectableTestOutputSink { get; set; } = new();
         Database? Database { get; set; }
 
