@@ -77,11 +77,11 @@ namespace Api
 
         static WebApplication UseObjectStorage(this WebApplication app)
         {
-            var apiSettings = app.Services.GetRequiredService<IApiSettings>();
+            var templateSettings = app.Services.GetRequiredService<ITemplateSettings>();
             app.UseStaticFiles(new StaticFileOptions
             {
-                RequestPath = apiSettings.ImagesRequestPath,
-                FileProvider = new PhysicalFileProvider(apiSettings.ImagesStoragePath)
+                RequestPath = templateSettings.ImagesRequestPath,
+                FileProvider = new PhysicalFileProvider(templateSettings.ImagesStoragePath)
             });
 
             return app;

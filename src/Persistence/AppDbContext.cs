@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Persistence
 {
-    public class AppDbContext(DbContextOptions<AppDbContext> options, IApiSettings apiSettings) : DbContext(options)
+    public class AppDbContext(DbContextOptions<AppDbContext> options, ITemplateSettings templateSettings) : DbContext(options)
     {
         public virtual DbSet<Product> Products { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
-                .UseSqlServer(apiSettings.SqlServerConnectionString, options => options.EnableRetryOnFailure());
+                .UseSqlServer(templateSettings.SqlServerConnectionString, options => options.EnableRetryOnFailure());
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

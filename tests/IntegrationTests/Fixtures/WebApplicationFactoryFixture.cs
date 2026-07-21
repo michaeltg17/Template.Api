@@ -70,9 +70,9 @@ namespace IntegrationTests.Fixtures
                 services.AddTransient<IStartupFilter, TestStartupFilter>();
                 services.AddSingleton<IInjectableTestOutputSink>(InjectableTestOutputSink);
 
-                services.Configure<ApiSettings>(apiSettings =>
+                services.Configure<TemplateSettings>(templateSettings =>
                 {
-                    apiSettings.SqlServerConnectionString = Database!.ConnectionString;
+                    templateSettings.SqlServerConnectionString = Database!.ConnectionString;
                 });
 
                 if (testSettings.EnableSqlLogging)

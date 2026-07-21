@@ -1,14 +1,16 @@
-using System.IO;
-using FluentValidation;
 using Application.Exceptions;
 using Application.Models.Requests;
 using Application.Models.Responses;
 using CrossCutting.Logging;
 using CrossCutting.Settings;
+
+using System.IO;
+using FluentValidation;
+
 using Microsoft.EntityFrameworkCore;
+
 using Microsoft.Extensions.Logging;
 using Persistence;
-using Application.Models;
 using Domain.Models;
 
 namespace Application.Services
@@ -17,12 +19,8 @@ namespace Application.Services
         AppDbContext context,
         IValidator<Product> validator,
         ILogger<ProductService> logger,
-        IApiSettings apiSettings)
+        ITemplateSettings templateSettings)
     {
-        //This to settings
-        private const long MaxImageSizeBytes = 25 * 1024 * 1024;
-        private static readonly HashSet<string> AllowedExtensions = [".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp", ".tif", ".tiff", ".avif", ".svg"];
-
         public async Task<Product> GetById(long id)
         {
             var product = await context.Products.FindAsync(id).ConfigureAwait(false);
@@ -131,10 +129,10 @@ namespace Application.Services
             if (!AllowedExtensions.Contains(extension))
                 throw new TemplateException("Invalid image format. Allowed: jpg, jpeg, png, gif, webp, bmp, tif, tiff, avif, svg");
 
-            Directory.CreateDirectory(apiSettings.ImagesStoragePath);
+            Directory.CreateDirectory(templateSettings.ImagesStoragePath);
 
             var safeFileName = $"{productId}{extension}";
-            var fullPath = Path.Combine(apiSettings.ImagesStoragePath, safeFileName);
+            var fullPath = Path.Combine(templateSettings.ImagesStoragePath, safeFileName);
 
             await File.WriteAllBytesAsync(fullPath, imageData).ConfigureAwait(false);
 
@@ -144,15 +142,15 @@ namespace Application.Services
         void DeleteImage(long productId)
         {
             //Build product image to delete, same as in the buildimageurl func
-            var fullPath = Path.Combine(apiSettings.ImagesStoragePath, "");
+            var fullPath = Path.Combine(templateSettings.ImagesStoragePath, "");
             File.Delete(fullPath);
         }
 
         string? BuildImageUrl(long productId)
         {
             //Build url with furl + find file with this format productId.allowedextension, and return it if exists otherwise null
-            var url = apiSettings.Url.TrimEnd('/');
-            var requestPath = apiSettings.ImagesRequestPath.TrimEnd('/');
+            var url = templateSettings.ApiUrl.TrimEnd('/');
+            var requestPath = templateSettings.ImagesRequestPath.TrimEnd('/');
             return $"{url}{requestPath}/{productId}";
         }
     }
