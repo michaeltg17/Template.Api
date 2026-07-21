@@ -3,12 +3,8 @@ using Application.Models.Requests;
 using Application.Models.Responses;
 using CrossCutting.Logging;
 using CrossCutting.Settings;
-
-using System.IO;
 using FluentValidation;
-
 using Microsoft.EntityFrameworkCore;
-
 using Microsoft.Extensions.Logging;
 using Persistence;
 using Domain.Models;
@@ -122,12 +118,12 @@ namespace Application.Services
 
         async Task<string> SaveImage(long productId, byte[] imageData, string? fileName)
         {
-            if (imageData.Length > MaxImageSizeBytes)
-                throw new TemplateException("Image size exceeds the 25MB limit.");
+            if (imageData.Length > templateSettings.MaxImageSizeMb * 1024L * 1024)
+                throw new TemplateException($"Image size exceeds the {templateSettings.MaxImageSizeMb}MB limit.");
 
             var extension = fileName != null ? Path.GetExtension(fileName).ToLowerInvariant() : ".png";
-            if (!AllowedExtensions.Contains(extension))
-                throw new TemplateException("Invalid image format. Allowed: jpg, jpeg, png, gif, webp, bmp, tif, tiff, avif, svg");
+            if (!templateSettings.AllowedImageExtensions.Contains(extension))
+                throw new TemplateException("Invalid image format. Allowed formats are: jpg, jpeg, png, gif, webp, bmp, tif, tiff, avif, svg");
 
             Directory.CreateDirectory(templateSettings.ImagesStoragePath);
 
@@ -139,19 +135,35 @@ namespace Application.Services
             return safeFileName;
         }
 
+        string? FindImageFile(long productId, bool throwIfNotFound = true)
+        {
+            var foundFile = Directory.EnumerateFiles(
+                templateSettings.ImagesStoragePath,
+                $"{productId}.*")
+                .SingleOrDefault(f => 
+                    templateSettings.AllowedImageExtensions.Contains(Path.GetExtension(f).ToLowerInvariant()));
+
+            return throwIfNotFound && foundFile is null
+                ? throw new TemplateException("Expected product with id '{}' to have an image to be deleted.")
+                : foundFile;
+        }
+
         void DeleteImage(long productId)
         {
-            //Build product image to delete, same as in the buildimageurl func
-            var fullPath = Path.Combine(templateSettings.ImagesStoragePath, "");
+            var fullPath = FindImageFile(productId, throwIfNotFound: true)!;
             File.Delete(fullPath);
         }
 
         string? BuildImageUrl(long productId)
         {
-            //Build url with furl + find file with this format productId.allowedextension, and return it if exists otherwise null
+            var foundFile = FindImageFile(productId, throwIfNotFound: false);
+            if (foundFile is null)
+                return null;
+
+            var fileName = Path.GetFileName(foundFile);
             var url = templateSettings.ApiUrl.TrimEnd('/');
             var requestPath = templateSettings.ImagesRequestPath.TrimEnd('/');
-            return $"{url}{requestPath}/{productId}";
+            return $"{url}{requestPath}/{fileName}";
         }
     }
 }
