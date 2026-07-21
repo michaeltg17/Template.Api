@@ -20,7 +20,7 @@ namespace IntegrationTests
         public virtual ValueTask Initialize()
         {
             WebApplicationFactoryFixture.InjectableTestOutputSink.Inject(TestOutputHelper);
-            WebApplicationFactoryFixture.InMemorySink = new InMemorySink();
+            ClearInMemorySink(WebApplicationFactoryFixture.InMemorySink);
             ApiClient = new(WebApplicationFactoryFixture.CreateClient());
 
             Scope = WebApplicationFactoryFixture.Services.CreateAsyncScope();
@@ -44,6 +44,13 @@ namespace IntegrationTests
         public ValueTask InitializeAsync()
         {
             return ValueTask.CompletedTask;
+        }
+
+        static void ClearInMemorySink(Serilog.Sinks.InMemory.InMemorySink sink)
+        {
+            var field = typeof(Serilog.Sinks.InMemory.InMemorySink)
+                .GetField("_logEvents", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            field?.SetValue(sink, new System.Collections.Generic.List<Serilog.Events.LogEvent>());
         }
     }
 }
