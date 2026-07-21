@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Persistence;
 using Domain.Models;
+using Flurl;
 
 namespace Application.Services
 {
@@ -123,7 +124,7 @@ namespace Application.Services
 
             var extension = fileName != null ? Path.GetExtension(fileName).ToLowerInvariant() : ".png";
             if (!templateSettings.AllowedImageExtensions.Contains(extension))
-                throw new TemplateException("Invalid image format. Allowed formats are: jpg, jpeg, png, gif, webp, bmp, tif, tiff, avif, svg");
+                throw new TemplateException($"Invalid image format. Allowed formats are: {string.Join(", ", templateSettings.AllowedImageExtensions.Select(e => e.TrimStart('.')))}");
 
             Directory.CreateDirectory(templateSettings.ImagesStoragePath);
 
@@ -140,11 +141,10 @@ namespace Application.Services
             var foundFile = Directory.EnumerateFiles(
                 templateSettings.ImagesStoragePath,
                 $"{productId}.*")
-                .SingleOrDefault(f => 
-                    templateSettings.AllowedImageExtensions.Contains(Path.GetExtension(f).ToLowerInvariant()));
+                .SingleOrDefault(f => templateSettings.AllowedImageExtensions.Contains(Path.GetExtension(f).ToLowerInvariant()));
 
             return throwIfNotFound && foundFile is null
-                ? throw new TemplateException("Expected product with id '{}' to have an image to be deleted.")
+                ? throw new TemplateException($"Expected product with id '{productId}' to have an image to be deleted.")
                 : foundFile;
         }
 
@@ -161,9 +161,7 @@ namespace Application.Services
                 return null;
 
             var fileName = Path.GetFileName(foundFile);
-            var url = templateSettings.ApiUrl.TrimEnd('/');
-            var requestPath = templateSettings.ImagesRequestPath.TrimEnd('/');
-            return $"{url}{requestPath}/{fileName}";
+            return Url.Combine(templateSettings.ApiUrl, templateSettings.ImagesRequestPath, fileName);
         }
     }
 }
