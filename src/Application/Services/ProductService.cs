@@ -117,21 +117,22 @@ namespace Application.Services
             return new DeleteProductsResponse([.. foundIds], notFoundIds);
         }
 
-        async Task<string> SaveImage(long productId, byte[] imageData, string? fileName)
+        async Task<string> SaveImage(long productId, byte[] data, string fileName)
         {
-            if (imageData.Length > templateSettings.MaxImageSizeMb * 1024L * 1024)
-                throw new TemplateException($"Image size exceeds the {templateSettings.MaxImageSizeMb}MB limit.");
+            if (data.Length > templateSettings.MaxImageSizeMb * 1024L * 1024)
+                throw new TemplateException($"Image size exceeds the '{templateSettings.MaxImageSizeMb}' MB limit.");
 
-            var extension = fileName != null ? Path.GetExtension(fileName).ToLowerInvariant() : ".png";
+            var extension = Path.GetExtension(fileName).ToLowerInvariant();
             if (!templateSettings.AllowedImageExtensions.Contains(extension))
-                throw new TemplateException($"Invalid image format. Allowed formats are: {string.Join(", ", templateSettings.AllowedImageExtensions.Select(e => e.TrimStart('.')))}");
-
-            Directory.CreateDirectory(templateSettings.ImagesStoragePath);
+            {
+                var extensions = string.Join(", ", templateSettings.AllowedImageExtensions.Select(e => e.TrimStart('.')));
+                throw new TemplateException($"Invalid image with extension '{extension}'. Allowed extensions are: {extensions}");
+            }
 
             var safeFileName = $"{productId}{extension}";
             var fullPath = Path.Combine(templateSettings.ImagesStoragePath, safeFileName);
 
-            await File.WriteAllBytesAsync(fullPath, imageData).ConfigureAwait(false);
+            await File.WriteAllBytesAsync(fullPath, data).ConfigureAwait(false);
 
             return safeFileName;
         }

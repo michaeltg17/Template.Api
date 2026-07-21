@@ -18,7 +18,7 @@ namespace Core.Testing.Builders
                 Name = name,
                 Description = description,
                 Price = price,
-                ImageData = File.ReadAllBytes(@"Images\didi.jpeg"),
+                ImageData = File.ReadAllBytes("Images/didi.jpeg"),
                 ImageFileName = "didi.jpeg"
             };
         }

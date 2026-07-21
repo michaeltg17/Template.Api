@@ -4,7 +4,6 @@
     "Template.Api": {
       "commandName": "Project",
       "launchBrowser": false,
-      "launchUrl": "swagger", //https://localhost:5001/swagger/index.html
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

@@ -11,6 +11,7 @@ namespace CrossCutting
             services
                 .AddOptions<TemplateSettings>()
                 .BindConfiguration(ITemplateSettings.Section)
+                .PostConfigure(settings => settings.ImagesStoragePath = settings.ImagesStoragePath.Replace("%TEMP%", Path.GetTempPath()))
                 .ValidateOnStart();
 
             services.AddSingleton<IValidateOptions<TemplateSettings>, TemplateSettingsValidator>();
