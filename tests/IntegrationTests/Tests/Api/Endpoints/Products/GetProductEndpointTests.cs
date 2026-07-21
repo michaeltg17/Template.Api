@@ -44,7 +44,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var productImage = await ApiClient.HttpClient.GetByteArrayAsync(
                 new Uri(product.ImageUrl!),
                 TestContext.Current.CancellationToken);
-            productImage.Should().BeEquivalentTo(Image);
+            productImage.Should().BeEquivalentTo(InitialImage);
         }
 
         [Fact]

@@ -21,28 +21,37 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         {
             //Given
             await CreateProducts();
-            var product = initialProducts[1];
+            var initialProduct = initialProducts[1];
 
             //When
             var request = new UpdateProductRequestBuilder().Build();
-            var response = await ApiClient.UpdateProduct(product.Id, request);
+            var response = await ApiClient.UpdateProduct(initialProduct.Id, request);
             var updatedProduct = await response.To<Product>();
 
-            //Then
+            //Then: expected product
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             updatedProduct.Id.Should().BeGreaterThan(0);
 
             var expected = new ProductBuilder()
                 .WithValues(p =>
                 {
-                    p.Id = product.Id;
+                    p.Id = initialProduct.Id;
                     p.Name = request.Name;
                     p.Description = request.Description;
                     p.Price = request.Price;
+                    p.ImageUrl = updatedProduct.ImageUrl;
                 })
                 .Build();
 
             updatedProduct.Should().BeEquivalentTo(expected);
+            var updatedProductImage = await ApiClient.HttpClient.GetByteArrayAsync(
+                new Uri(updatedProduct.ImageUrl!),
+                TestContext.Current.CancellationToken);
+            updatedProductImage.Should().BeEquivalentTo(Image2);
+
+            //Then: expected product in db
+            var dbProduct = await Context.Products.FindAsync(updatedProduct.Id);
+            dbProduct.Should().BeEquivalentTo(expected, o => o.Excluding(p => p.ImageUrl));
 
             //Then: expected logging
             WebApplicationFactoryFixture.InMemorySink
@@ -51,7 +60,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .Appearing().Once()
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("id")
-                .WithValue(product.Id);
+                .WithValue(initialProduct.Id);
         }
 
         [Fact]

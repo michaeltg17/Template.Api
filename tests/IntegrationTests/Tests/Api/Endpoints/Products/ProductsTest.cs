@@ -12,8 +12,8 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
     public abstract class ProductsTest : Test
     {
         protected const string BaseInstance = "/api/Products";
-        protected const string ImageFileName = "didi.jpeg";
-        protected static byte[] Image = File.ReadAllBytes(ImageFileName);
+        protected static byte[] InitialImage = File.ReadAllBytes("Images/didi.jpeg");
+        protected static byte[] Image2 = File.ReadAllBytes("Images/didi2.jpg");
 
         public List<Product> initialProducts = new();
 
@@ -34,7 +34,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             exceptIds ??= Array.Empty<long>();
             var dbProducts = await Context.Products.ToListAsync();
             var expectedProducts = initialProducts.Where(p => !exceptIds.Contains(p.Id)).ToList();
-            dbProducts.Should().BeEquivalentTo(expectedProducts);
+            dbProducts.Should().BeEquivalentTo(expectedProducts, o => o.Excluding(p => p.ImageUrl));
         }
     }
 }

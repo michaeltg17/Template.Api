@@ -17,7 +17,9 @@ namespace Core.Testing.Builders
             {
                 Name = name,
                 Description = description,
-                Price = price
+                Price = price,
+                ImageData = File.ReadAllBytes("Images/didi2.jpg"),
+                ImageFileName = "didi2.jpg"
             };
         }
 

@@ -34,16 +34,21 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                     p.Name = request.Name;
                     p.Description = request.Description;
                     p.Price = request.Price;
+                    p.ImageUrl = product.ImageUrl;
                 })
                 .Build();
 
             response.StatusCode.Should().Be(HttpStatusCode.Created);
             product.Id.Should().BeGreaterThan(0);
             product.Should().BeEquivalentTo(expected);
+            var productImage = await ApiClient.HttpClient.GetByteArrayAsync(
+                new Uri(product.ImageUrl!),
+                TestContext.Current.CancellationToken);
+            productImage.Should().BeEquivalentTo(InitialImage);
 
             //Then: expected product in db
             var dbProduct = await Context.Products.FindAsync(product.Id);
-            dbProduct.Should().BeEquivalentTo(expected);
+            dbProduct.Should().BeEquivalentTo(expected, o => o.Excluding(p => p.ImageUrl));
 
             //Then: expected logging
             WebApplicationFactoryFixture.InMemorySink
