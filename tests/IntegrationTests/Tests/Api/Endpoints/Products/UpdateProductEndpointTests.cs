@@ -61,6 +61,9 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("id")
                 .WithValue(initialProduct.Id);
+
+            //Then: initial products are the same
+            await ValidateCommonExpectations(3, [updatedProduct.Id]);
         }
 
         [Fact]

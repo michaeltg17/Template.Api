@@ -20,6 +20,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         public async Task CreateProductOk()
         {
             //Given
+            await CreateProducts();
             var request = new CreateProductRequestBuilder().Build();
 
             //When
@@ -54,10 +55,13 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
                 .HaveMessage("Product with id '{id}' created successfully.")
-                .Appearing().Once()
+                .Appearing().Times(4)
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("id")
-                .WithValue(product.Id);
+                .WithValues([.. initialProducts.Select(p => p.Id), product.Id]);
+
+            //Then: initial products are the same
+            await ValidateCommonExpectations(4, [product.Id]);
         }
 
         [Fact]

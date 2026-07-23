@@ -34,7 +34,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var expected = new DeleteProductsResponse([product.Id], []);
             result.Should().BeEquivalentTo(expected);
-            await ValidateInitialProductsAreTheSame([product.Id]);
+            await ValidateCommonExpectations(2, [product.Id]);
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var expected = new DeleteProductsResponse(ids, []);
             result.Should().BeEquivalentTo(expected);
-            await ValidateInitialProductsAreTheSame(ids);
+            await ValidateCommonExpectations(1, ids);
 
             //Then: expected logging
             WebApplicationFactoryFixture.InMemorySink
@@ -96,7 +96,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var expected = new DeleteProductsResponse([existingId], [notFoundId]);
             result.Should().BeEquivalentTo(expected);
-            await ValidateInitialProductsAreTheSame([existingId]);
+            await ValidateCommonExpectations(2, [existingId]);
         }
 
         [Fact]
@@ -115,7 +115,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var expected = new DeleteProductsResponse([], ids);
             result.Should().BeEquivalentTo(expected);
-            await ValidateInitialProductsAreTheSame();
+            await ValidateCommonExpectations(3);
         }
     }
 }
