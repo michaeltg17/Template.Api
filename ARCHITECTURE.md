@@ -45,8 +45,6 @@ Console app dbup-based SQL migration runner.
 
 I prefer raw sql rather than efcore migrations with its own language (or even with raw sql). I think dbup is better.
 
-## Tests
-
 ### Core.Testing
 
 Shared test utilities: builders and validators.
