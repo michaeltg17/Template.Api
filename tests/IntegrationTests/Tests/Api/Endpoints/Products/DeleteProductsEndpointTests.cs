@@ -56,13 +56,10 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             await ValidateInitialProductsAreTheSame(ids);
 
             //Then: expected logging
-            WebApplicationFactoryFixture.InMemorySink
-                .Should()
-                .HaveMessage("Products with ids '{ids}' deleted successfully.")
-                .Appearing().Once()
-                .WithLevel(LogEventLevel.Information)
-                .WithProperty("ids")
-                .WithValue($"[{ids[0]}, {ids[1]}]");
+            LogEvents.HaveExactlyOneMessage(
+                "Products with ids '{ids}' deleted successfully.",
+                LogEventLevel.Information,
+                "ids", $"[{ids[0]}, {ids[1]}]");
         }
 
         [Fact]

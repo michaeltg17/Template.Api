@@ -51,13 +51,10 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             dbProduct.Should().BeEquivalentTo(expected, o => o.Excluding(p => p.ImageUrl));
 
             //Then: expected logging
-            WebApplicationFactoryFixture.InMemorySink
-                .Should()
-                .HaveMessage("Product with id '{id}' created successfully.")
-                .Appearing().Once()
-                .WithLevel(LogEventLevel.Information)
-                .WithProperty("id")
-                .WithValue(product.Id);
+            LogEvents.HaveExactlyOneMessage(
+                "Product with id '{id}' created successfully.",
+                LogEventLevel.Information,
+                "id", product.Id);
         }
 
         [Fact]
