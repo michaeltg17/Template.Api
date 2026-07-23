@@ -29,11 +29,22 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //When
             var response = await ApiClient.DeleteProducts(request);
 
-            //Then
+            //Then: expected response
             var result = await response.To<DeleteProductsResponse>();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var expected = new DeleteProductsResponse([product.Id], []);
             result.Should().BeEquivalentTo(expected);
+
+            //Then: expected logging
+            WebApplicationFactoryFixture.InMemorySink
+                .Should()
+                .HaveMessage("Products with ids '{ids}' deleted successfully.")
+                .Appearing().Once()
+                .WithLevel(LogEventLevel.Information)
+                .WithProperty("ids")
+                .WithValue(product.Id);
+
+            //Then: common expectations
             await ValidateCommonExpectations(2, [product.Id]);
         }
 
@@ -48,12 +59,11 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //When
             var response = await ApiClient.DeleteProducts(request);
 
-            //Then
+            //Then: expected response
             var result = await response.To<DeleteProductsResponse>();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var expected = new DeleteProductsResponse(ids, []);
             result.Should().BeEquivalentTo(expected);
-            await ValidateCommonExpectations(1, ids);
 
             //Then: expected logging
             WebApplicationFactoryFixture.InMemorySink
@@ -63,6 +73,9 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("ids")
                 .WithValue($"[{ids[0]}, {ids[1]}]");
+
+            //Then: common expectations
+            await ValidateCommonExpectations(1, ids);
         }
 
         [Fact]
@@ -91,11 +104,22 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //When
             var response = await ApiClient.DeleteProducts(request);
 
-            //Then
+            //Then: expected response
             var result = await response.To<DeleteProductsResponse>();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var expected = new DeleteProductsResponse([existingId], [notFoundId]);
             result.Should().BeEquivalentTo(expected);
+
+            //Then: expected logging
+            WebApplicationFactoryFixture.InMemorySink
+                .Should()
+                .HaveMessage("Products with ids '{ids}' deleted successfully.")
+                .Appearing().Once()
+                .WithLevel(LogEventLevel.Information)
+                .WithProperty("ids")
+                .WithValue(existingId);
+
+            //Then: common expectations
             await ValidateCommonExpectations(2, [existingId]);
         }
 
@@ -110,11 +134,18 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //When
             var response = await ApiClient.DeleteProducts(request);
 
-            //Then
+            //Then: expected response
             var result = await response.To<DeleteProductsResponse>();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var expected = new DeleteProductsResponse([], ids);
             result.Should().BeEquivalentTo(expected);
+
+            //Then: expected logging
+            WebApplicationFactoryFixture.InMemorySink
+                .Should()
+                .NotHaveMessage("Products with ids '{ids}' deleted successfully.");
+
+            //Then: common expectations
             await ValidateCommonExpectations(3);
         }
     }

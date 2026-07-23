@@ -60,7 +60,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .WithProperty("id")
                 .WithValues([.. initialProducts.Select(p => p.Id), product.Id]);
 
-            //Then: initial products are the same
+            //Then
             await ValidateCommonExpectations(4, [product.Id]);
         }
 
