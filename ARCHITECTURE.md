@@ -1,6 +1,6 @@
 # Architecture
 
-### Api
+## Api
 
 ASP.NET Core minimal API with endpoints organized by resource.
 
@@ -15,51 +15,51 @@ Exception to ProblemDetails.
 
 Antiforgery disabled but should be enabled in prod app.
 
-### ApiClient
+## ApiClient
 
 Client for the Api itself. A nuget can be created from this project. But mainly used for testing.
 
-### Application
+## Application
 
 All the core business logic goes here. Domain is anemic.
 
-### Core
+## Core
 
 Builder pattern and helpers that can be used in all projects.
 
-### CrossCutting
+## CrossCutting
 
 Shared concerns: logging and settings mainly.
 
-### Domain
+## Domain
 
 Anemic domain entities and validators.
 
-### Persistence
+## Persistence
 
 EF Core DbContext, configurations, and data access.
 
-### Persistence.Migrations
+## Persistence.Migrations
 
 Console app dbup-based SQL migration runner.
 
 I prefer raw sql rather than efcore migrations with its own language (or even with raw sql). I think dbup is better.
 
-### Core.Testing
+## Core.Testing
 
 Shared test utilities: builders and validators.
 
-### UnitTests
+## UnitTests
 
 Isolated unit tests with no mocking. If you have to mock, probably, you needed an integration test.
 
-### IntegrationTests
+## IntegrationTests
 
 Mostly real API env tests. WebApplicationFactory + Testcontainers.MsSql.
 
 This should be enough for testing almost everything.
 
-### FunctionalTests
+## FunctionalTests
 
 Tests a running API, local or deployed.
 
