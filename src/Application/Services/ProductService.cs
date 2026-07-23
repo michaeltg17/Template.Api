@@ -112,7 +112,10 @@ namespace Application.Services
                 }
             }
 
-            logger.LogProductsDeleted(foundIds);
+            if (foundIds.Count > 0)
+            {
+                logger.LogProductsDeleted(foundIds);
+            }
 
             return new DeleteProductsResponse([.. foundIds], notFoundIds);
         }

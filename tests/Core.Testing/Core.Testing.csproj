@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <PackageReference Include="AwesomeAssertions" />
+    <PackageReference Include="Serilog.Sinks.InMemory.Assertions" />
   </ItemGroup>
 
   <ItemGroup>

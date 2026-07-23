@@ -69,12 +69,23 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         [Fact]
         public async Task NoProduct_ExpectedProblemDetails()
         {
+            //Given
+            await CreateProducts();
+
             //When
             var request = new UpdateProductRequestBuilder().Build();
             var response = await ApiClient.UpdateProduct(5, request);
 
-            //Then
+            //Then: product not found
             await ProblemDetailsValidator.ValidateNotFoundException(response, "Product", "Products", 5);
+
+            //Then: expected no logging
+            WebApplicationFactoryFixture.InMemorySink
+                .Should()
+                .NotHaveMessage("Product with id '{id}' updated successfully.");
+
+            //Then: common expectations
+            await ValidateCommonExpectations(3);
         }
 
         [Fact]
@@ -87,7 +98,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var request = new UpdateProductRequestBuilder().WithName("").WithDescription("").WithPrice(0m).Build();
             var response = await ApiClient.UpdateProduct(initialProducts[0].Id, request);
 
-            //Then
+            //Then: validation exception
             await ProblemDetailsValidator.ValidateValidationException(
                 response,
                 $"{BaseInstance}/{initialProducts[0].Id}",
@@ -97,6 +108,14 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                     { "description", ["'description' must not be empty."] },
                     { "price", ["'price' must be greater than '0'."] }
                 });
+
+            //Then: expected no logging
+            WebApplicationFactoryFixture.InMemorySink
+                .Should()
+                .NotHaveMessage("Product with id '{id}' updated successfully.");
+
+            //Then: common expectations
+            await ValidateCommonExpectations(3);
         }
     }
 }

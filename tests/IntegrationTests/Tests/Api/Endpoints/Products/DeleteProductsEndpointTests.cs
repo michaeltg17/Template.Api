@@ -3,6 +3,7 @@ using Application.Models.Requests;
 using Application.Models.Responses;
 using AwesomeAssertions;
 using Core.Testing.Builders;
+using Core.Testing.Extensions;
 using Core.Testing.Validators;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
@@ -42,7 +43,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .Appearing().Once()
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("ids")
-                .WithValue(product.Id);
+                .WithValue([product.Id]);
 
             //Then: common expectations
             await ValidateCommonExpectations(2, [product.Id]);
@@ -66,13 +67,13 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             result.Should().BeEquivalentTo(expected);
 
             //Then: expected logging
-            WebApplicationFactoryFixture.InMemorySink
+            LogEventPropertyAssertionExtensions.WithValue(WebApplicationFactoryFixture.InMemorySink
                 .Should()
                 .HaveMessage("Products with ids '{ids}' deleted successfully.")
                 .Appearing().Once()
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("ids")
-                .WithValue($"[{ids[0]}, {ids[1]}]");
+, ids);
 
             //Then: common expectations
             await ValidateCommonExpectations(1, ids);
@@ -117,7 +118,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .Appearing().Once()
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("ids")
-                .WithValue(existingId);
+                .WithValue([existingId]);
 
             //Then: common expectations
             await ValidateCommonExpectations(2, [existingId]);

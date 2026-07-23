@@ -45,16 +45,25 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 new Uri(product.ImageUrl!),
                 TestContext.Current.CancellationToken);
             productImage.Should().BeEquivalentTo(InitialImage);
+
+            //Then: common expectations
+            await ValidateCommonExpectations(3);
         }
 
         [Fact]
         public async Task NoProduct_ExpectedProblemDetails()
         {
-            //When
-            var response = await ApiClient.GetProduct(1);
+            //Given
+            await CreateProducts();
 
-            //Then
-            await ProblemDetailsValidator.ValidateNotFoundException(response, "Product", "Products", 1);
+            //When
+            var response = await ApiClient.GetProduct(4);
+
+            //Then: product not found
+            await ProblemDetailsValidator.ValidateNotFoundException(response, "Product", "Products", 4);
+
+            //Then: common expectations
+            await ValidateCommonExpectations(3);
         }
     }
 }

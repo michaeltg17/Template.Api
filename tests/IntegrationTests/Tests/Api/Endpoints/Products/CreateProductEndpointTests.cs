@@ -60,13 +60,16 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .WithProperty("id")
                 .WithValues([.. initialProducts.Select(p => p.Id), product.Id]);
 
-            //Then
+            //Then: common expectations
             await ValidateCommonExpectations(4, [product.Id]);
         }
 
         [Fact]
         public async Task AllPropertiesInvalid_ExpectedProblemDetails()
         {
+            //Given
+            await CreateProducts();
+
             //When
             var request = new CreateProductRequestBuilder().WithName("").WithDescription("").WithPrice(0m).Build();
             var response = await ApiClient.CreateProduct(request);
@@ -81,6 +84,18 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                     { "description", ["'description' must not be empty."] },
                     { "price", ["'price' must be greater than '0'."] }
                 });
+
+            //Then: expected logging
+            WebApplicationFactoryFixture.InMemorySink
+                .Should()
+                .HaveMessage("Product with id '{id}' created successfully.")
+                .Appearing().Times(3)
+                .WithLevel(LogEventLevel.Information)
+                .WithProperty("id")
+                .WithValues([.. initialProducts.Select(p => p.Id)]);
+
+            //Then: common expectations
+            await ValidateCommonExpectations(3);
         }
     }
 }
