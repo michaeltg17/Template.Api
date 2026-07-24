@@ -6,11 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Application.Features.Products.Models.Requests;
 using Application.Features.Products.Models.Responses;
-using Application.Features.Products.Logging;
 
 namespace Application.Features.Products.Actions;
 
-public class DeleteProductsCommand(
+public partial class DeleteProductsCommand(
     AppDbContext context,
     ProductService productService,
     IValidator<DeleteProductsRequest> deleteRequestValidator,
@@ -44,9 +43,12 @@ public class DeleteProductsCommand(
 
         if (foundIds.Count > 0)
         {
-            logger.LogProductsDeleted(foundIds);
+            LogProductsDeleted(foundIds);
         }
 
         return new DeleteProductsResponse([.. foundIds], notFoundIds);
     }
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Products with ids '{ids}' deleted successfully.")]
+    public partial void LogProductsDeleted(IEnumerable<long> ids);
 }
