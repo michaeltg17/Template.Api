@@ -1,6 +1,5 @@
 using ApiClient.Extensions;
-using Application.Models.Requests;
-using Application.Models.Responses;
+using Application.Features.Products.Models.Requests;
 using AwesomeAssertions;
 using Core.Testing.Builders;
 using Core.Testing.Extensions;
@@ -13,6 +12,7 @@ using System.Net;
 using Xunit;
 using Serilog.Sinks.InMemory.Assertions;
 using IntegrationTests.Collections;
+using Application.Features.Products.Models.Responses;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {

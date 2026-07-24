@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Application.Models.Requests;
 using Application.Exceptions;
-using CrossCutting.Logging;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using Application.Features.Products.Models.Requests;
+using Application.Features.Products.Logging;
 
 namespace Application.Features.Products;
 

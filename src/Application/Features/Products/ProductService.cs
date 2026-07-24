@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Http;
-using Application.Models.Requests;
 using Application.Exceptions;
 using CrossCutting.Settings;
 using FluentValidation;
 using FluentValidation.Results;
 using Domain.Models;
 using Flurl;
+using Application.Features.Products.Models.Requests;
 
 namespace Application.Features.Products
 {

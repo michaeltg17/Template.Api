@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace CrossCutting.Logging
+namespace Application.Features.Products.Logging
 {
     public static partial class ILoggerExtensions
     {

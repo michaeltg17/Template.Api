@@ -1,12 +1,12 @@
 using Microsoft.Extensions.Logging;
-using Application.Models.Requests;
-using Application.Models.Responses;
 using Application.Exceptions;
-using CrossCutting.Logging;
 using FluentValidation;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using Application.Features.Products.Models.Requests;
+using Application.Features.Products.Models.Responses;
+using Application.Features.Products.Logging;
 
 namespace Application.Features.Products;
 
