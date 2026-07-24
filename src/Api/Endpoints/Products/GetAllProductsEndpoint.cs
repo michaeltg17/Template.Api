@@ -1,4 +1,4 @@
-using Application.Services;
+using Application.Features.Products;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Endpoints.Products;
@@ -7,9 +7,9 @@ internal static class GetAllProductsEndpoint
 {
     public static void Map(IEndpointRouteBuilder app)
     {
-        app.MapGet("/", static async (ProductService productService) =>
+        app.MapGet("/", static async (GetAllProductsQuery getAllProductsQuery) =>
         {
-            var products = await productService.GetAll().ConfigureAwait(false);
+            var products = await getAllProductsQuery.Execute().ConfigureAwait(false);
             return Results.Ok(products);
         });
     }

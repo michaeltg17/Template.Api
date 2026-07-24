@@ -1,5 +1,5 @@
+using Application.Features.Products;
 using Application.Models.Requests;
-using Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Endpoints.Products;
@@ -10,9 +10,9 @@ internal static class DeleteProductsEndpoint
     {
         app.MapDelete("/", static async (
             [FromBody] DeleteProductsRequest request,
-            ProductService productService) =>
+            DeleteProductsCommand deleteProductsCommand) =>
         {
-            var response = await productService.Delete(request).ConfigureAwait(false);
+            var response = await deleteProductsCommand.Execute(request).ConfigureAwait(false);
             return Results.Ok(response);
         });
     }

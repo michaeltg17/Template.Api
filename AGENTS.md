@@ -89,8 +89,14 @@
 │   │   │   │   └── DeleteProductsRequest.cs
 │   │   │   └── Responses/
 │   │   │       └── DeleteProductsResponse.cs
-│   │   └── Services/
-│   │       └── ProductService.cs
+│   │   └── Features/
+│   │       └── Products/
+│   │           ├── ProductService.cs          # internal base: image ops, validation
+│   │           ├── GetProductByIdQuery.cs     # read: single product
+│   │           ├── GetAllProductsQuery.cs    # read: all products
+│   │           ├── CreateProductCommand.cs   # write: create product
+│   │           ├── UpdateProductCommand.cs   # write: update product
+│   │           └── DeleteProductsCommand.cs  # write: delete multiple
 │   ├── Core/                       # builder pattern and helpers
 │   │   ├── Core.csproj
 │   │   ├── Builders/
