@@ -1,5 +1,5 @@
 using Application.Features.Products;
-using Application.Features.Products.Models.Requests;
+using Application.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Endpoints.Products;

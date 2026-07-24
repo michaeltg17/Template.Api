@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Application.Models.Requests;
+using CrossCutting.Logging;
 using Domain.Models;
 using Persistence;
-using Application.Features.Products.Models.Requests;
-using Application.Features.Products.Logging;
 
 namespace Application.Features.Products;
 
