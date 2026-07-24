@@ -5,6 +5,8 @@
 
 Full description of the architecture there: [ARCHITECTURE.md](https://github.com/michaeltg17/Template.Api/blob/main/ARCHITECTURE.md)
 
+Built with the help of local AI using https://github.com/michaeltg17/best-model-dual-3090 and [OpenCode](https://github.com/anomalyco/opencode).
+
 ## Tech stack
 API:
 - ASP.NET Core
@@ -25,4 +27,5 @@ Tests:
 
 CI/CD:
 - CI in docker with ci.sh that runs in GitHub Actions and can also be run locally.
-- CI does Build + Tests + Coverage + Docker image push to ghcr
+- CI does Build + Tests + Coverage + if main, Docker image push to ghcr.
+- dev branch for continuous fast development which is then merged to main for stable versions.

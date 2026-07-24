@@ -11,7 +11,7 @@ namespace Domain
     {
         public static IServiceCollection AddDomainDependencies(this IServiceCollection services)
         {
-            services.AddValidatorsFromAssemblies([Assembly.GetExecutingAssembly()]);
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             return services;
         }

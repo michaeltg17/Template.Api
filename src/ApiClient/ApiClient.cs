@@ -1,7 +1,7 @@
-﻿using Application.Models.Requests;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using ApiClient.Endpoints;
 using Microsoft.AspNetCore.Http;
+using Application.Features.Products.Models.Requests;
 
 namespace ApiClient
 {

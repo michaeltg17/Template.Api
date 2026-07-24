@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace Application.Models.Requests;
+namespace Application.Features.Products.Models.Requests;
 
 public record CreateProductRequest
 {

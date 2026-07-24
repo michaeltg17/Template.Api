@@ -1,5 +1,5 @@
 using ApiClient.Extensions;
-using Application.Models.Requests;
+using Application.Features.Products.Models.Requests;
 using AwesomeAssertions;
 using Core.Testing.Builders;
 using Core.Testing.Validators;

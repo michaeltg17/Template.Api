@@ -2,9 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq.Expressions;
 using System.Reflection;
-using Application.Services;
-using Application.Validators;
-using Domain.Validators;
+using Application.Features.Products;
 
 namespace Application
 {
@@ -12,8 +10,13 @@ namespace Application
     {
         public static IServiceCollection AddApplicationDependencies(this IServiceCollection services)
         {
-            services.AddValidatorsFromAssemblies([Assembly.GetExecutingAssembly()]);
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddScoped<ProductService>();
+            services.AddScoped<GetProductByIdQuery>();
+            services.AddScoped<GetAllProductsQuery>();
+            services.AddScoped<CreateProductCommand>();
+            services.AddScoped<UpdateProductCommand>();
+            services.AddScoped<DeleteProductsCommand>();
 
             return services;
         }

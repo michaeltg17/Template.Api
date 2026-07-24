@@ -1,6 +1,6 @@
-using Application.Services;
-using Application.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
+using Application.Features.Products;
+using Application.Features.Products.Models.Requests;
 
 namespace Api.Endpoints.Products;
 
@@ -11,9 +11,9 @@ internal static class UpdateProductEndpoint
         app.MapPut("/{id:long}", static async (
             long id,
             [FromForm] UpdateProductRequest request,
-            ProductService productService) =>
+            UpdateProductCommand updateProductCommand) =>
         {
-            var product = await productService.Update(id, request).ConfigureAwait(false);
+            var product = await updateProductCommand.Execute(id, request).ConfigureAwait(false);
             return Results.Ok(product);
         });
     }

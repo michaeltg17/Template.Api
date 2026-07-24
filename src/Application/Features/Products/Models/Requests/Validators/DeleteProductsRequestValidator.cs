@@ -1,7 +1,7 @@
-using Application.Models.Requests;
+using Application.Features.Products.Models.Requests;
 using FluentValidation;
 
-namespace Application.Validators;
+namespace Application.Features.Products.Models.Requests.Validators;
 
 public sealed class DeleteProductsRequestValidator : AbstractValidator<DeleteProductsRequest>
 {

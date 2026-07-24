@@ -1,10 +1,10 @@
 using System.Linq.Expressions;
-using Application.Models.Requests;
-using Application.Validators;
+using Application.Features.Products.Models.Requests;
+using Application.Features.Products.Models.Requests.Validators;
 using FluentValidation.TestHelper;
 using Xunit;
 
-namespace UnitTests.Application.Validators;
+namespace UnitTests.Application.Features.Products.Models.Requests.Validators;
 
 public sealed class DeleteProductsRequestValidatorTests
 {

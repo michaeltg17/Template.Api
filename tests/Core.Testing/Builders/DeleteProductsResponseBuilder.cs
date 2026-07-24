@@ -1,4 +1,4 @@
-using Application.Models.Responses;
+using Application.Features.Products.Models.Responses;
 using Core.Builders;
 
 namespace Core.Testing.Builders
