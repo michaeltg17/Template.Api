@@ -2,8 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq.Expressions;
 using System.Reflection;
-using Application.Validators;
-using Domain.Validators;
 using Application.Features.Products;
 
 namespace Application
