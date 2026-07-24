@@ -1,4 +1,4 @@
-using Application.Features.Products;
+using Application.Features.Products.Actions;
 using Application.Features.Products.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
 

@@ -2,7 +2,7 @@
 
 namespace Application.Features.Products.Logging
 {
-    public static partial class ILoggerExtensions
+    public static partial class ProductActionsLogging
     {
         [LoggerMessage(EventId = 1, Level = LogLevel.Information, Message = "Product with id '{id}' created successfully.")]
         public static partial void LogProductCreated(this ILogger logger, long id);

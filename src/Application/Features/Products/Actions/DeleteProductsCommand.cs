@@ -8,7 +8,7 @@ using Application.Features.Products.Models.Requests;
 using Application.Features.Products.Models.Responses;
 using Application.Features.Products.Logging;
 
-namespace Application.Features.Products;
+namespace Application.Features.Products.Actions;
 
 public class DeleteProductsCommand(
     AppDbContext context,

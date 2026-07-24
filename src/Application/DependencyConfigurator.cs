@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq.Expressions;
 using System.Reflection;
-using Application.Features.Products;
+using Application.Features.Products.Actions;
 
 namespace Application
 {

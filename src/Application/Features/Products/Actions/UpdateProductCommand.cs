@@ -7,7 +7,7 @@ using Persistence;
 using Application.Features.Products.Models.Requests;
 using Application.Features.Products.Logging;
 
-namespace Application.Features.Products;
+namespace Application.Features.Products.Actions;
 
 public class UpdateProductCommand(
     AppDbContext context,

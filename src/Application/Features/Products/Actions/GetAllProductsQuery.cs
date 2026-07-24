@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Domain.Models;
 using Persistence;
 
-namespace Application.Features.Products;
+namespace Application.Features.Products.Actions;
 
 public class GetAllProductsQuery(AppDbContext context, ProductService productService)
 {

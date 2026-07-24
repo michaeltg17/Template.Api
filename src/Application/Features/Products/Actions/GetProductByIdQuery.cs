@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Features.Products
+namespace Application.Features.Products.Actions
 {
     public class GetProductByIdQuery(AppDbContext context, ProductService productService)
     {
