@@ -1,5 +1,6 @@
 ﻿using CrossCutting.Settings;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
 namespace CrossCutting
@@ -14,7 +15,14 @@ namespace CrossCutting
 
             services.AddSingleton<IValidateOptions<TemplateSettings>, TemplateSettingsValidator>();
 
-            services.AddSingleton<ITemplateSettings>(provider => provider.GetRequiredService<IOptions<TemplateSettings>>().Value);
+            services.AddSingleton<ITemplateSettings>(services =>
+            {
+                var settings = services.GetRequiredService<IOptions<TemplateSettings>>().Value;
+                var contentPath = services.GetRequiredService<IHostEnvironment>().ContentRootPath;
+                settings.ImagesStoragePath = Path.Combine(contentPath, "images");
+                Directory.CreateDirectory(settings.ImagesStoragePath);
+                return settings;
+            });
 
             return services;
         }

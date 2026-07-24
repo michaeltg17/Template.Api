@@ -11,20 +11,6 @@ namespace CrossCutting.Settings
             if (string.IsNullOrWhiteSpace(templateSettings.ApiUrl))
                 validationErrors.Add($"The '{nameof(templateSettings.ApiUrl)}' setting is required");
 
-            if (string.IsNullOrWhiteSpace(templateSettings.ImagesStoragePath))
-                validationErrors.Add($"The '{nameof(templateSettings.ImagesStoragePath)}' setting is required");
-            else
-            {
-                try
-                {
-                    Directory.CreateDirectory(templateSettings.ImagesStoragePath);
-                }
-                catch (Exception exception)
-                {
-                    validationErrors.Add(exception.ToString());
-                }
-            }
-
             if (string.IsNullOrWhiteSpace(templateSettings.ImagesRequestPath))
                 validationErrors.Add($"The '{nameof(templateSettings.ImagesRequestPath)}' setting is required");
 
