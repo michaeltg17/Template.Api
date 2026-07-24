@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Linq.Expressions;
 using System.Reflection;
 using Application.Services;
+using Application.Validators;
 using Domain.Validators;
 
 namespace Application
@@ -11,7 +12,7 @@ namespace Application
     {
         public static IServiceCollection AddApplicationDependencies(this IServiceCollection services)
         {
-            services.AddValidatorsFromAssemblyContaining<ProductValidator>();
+            services.AddValidatorsFromAssemblies([Assembly.GetExecutingAssembly()]);
             services.AddScoped<ProductService>();
 
             return services;

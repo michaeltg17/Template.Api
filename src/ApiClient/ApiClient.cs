@@ -1,6 +1,7 @@
 ﻿using Application.Models.Requests;
 using System.Net.Http.Json;
 using ApiClient.Endpoints;
+using Microsoft.AspNetCore.Http;
 
 namespace ApiClient
 {
@@ -36,10 +37,9 @@ namespace ApiClient
                 { new StringContent(request.Price.ToString()), "price" }
             };
 
-            if (request.ImageData != null)
+            if (request.Image != null)
             {
-                var fileName = request.ImageFileName ?? "image.png";
-                content.Add(new ByteArrayContent(request.ImageData), "image", fileName);
+                content.Add(new StreamContent(request.Image.OpenReadStream()), "image", request.Image.FileName);
             }
 
             return await httpClient.PostAsync($"{BasePath}/Products", content).ConfigureAwait(false);
@@ -59,10 +59,9 @@ namespace ApiClient
                 { new StringContent(request.Price.ToString()), "price" }
             };
 
-            if (request.ImageData != null)
+            if (request.Image != null)
             {
-                var fileName = request.ImageFileName ?? "image.png";
-                content.Add(new ByteArrayContent(request.ImageData), "image", fileName);
+                content.Add(new StreamContent(request.Image.OpenReadStream()), "image", request.Image.FileName);
             }
 
             return await httpClient.PutAsync($"{BasePath}/Products/{id}", content).ConfigureAwait(false);

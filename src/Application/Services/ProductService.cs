@@ -1,9 +1,11 @@
 using Application.Exceptions;
+using Microsoft.AspNetCore.Http;
 using Application.Models.Requests;
 using Application.Models.Responses;
 using CrossCutting.Logging;
 using CrossCutting.Settings;
 using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Persistence;
@@ -14,16 +16,16 @@ namespace Application.Services
 {
     public class ProductService(
         AppDbContext context,
-        IValidator<Product> validator,
+        IValidator<Product> productValidator,
+        IValidator<CreateProductRequest> requestValidator,
+        IValidator<DeleteProductsRequest> deleteRequestValidator,
         ILogger<ProductService> logger,
         ITemplateSettings templateSettings)
     {
         public async Task<Product> GetById(long id)
         {
-            var product = await context.Products.FindAsync(id).ConfigureAwait(false);
-            if (product is null)
-                throw new NotFoundException<Product>(id);
-
+            var product = await context.Products.FindAsync(id).ConfigureAwait(false)
+                ?? throw new NotFoundException<Product>(id);
             product.ImageUrl = BuildImageUrl(product.Id);
             return product;
         }
@@ -43,20 +45,14 @@ namespace Application.Services
         public async Task<Product> Create(CreateProductRequest request)
         {
             ArgumentNullException.ThrowIfNull(request);
-            var product = new Product
-            {
-                Name = request.Name,
-                Description = request.Description,
-                Price = request.Price
-            };
-            validator.ValidateAndThrow(product);
+            var product = GetValidatedProductOrThrow(request);
 
             await context.Products.AddAsync(product).ConfigureAwait(false);
             await context.SaveChangesAsync().ConfigureAwait(false);
 
-            if (request.ImageFileName != null)
+            if (request.Image != null)
             {
-                await SaveImage(product.Id, request.ImageData!, request.ImageFileName)
+                await SaveImage(product.Id, request.Image)
                     .ConfigureAwait(false);
             }
 
@@ -68,18 +64,15 @@ namespace Application.Services
         public async Task<Product> Update(long id, UpdateProductRequest request)
         {
             ArgumentNullException.ThrowIfNull(request);
-            var product = await context.Products.FindAsync(id).ConfigureAwait(false)
+            var existing = await context.Products.FindAsync(id).ConfigureAwait(false)
                 ?? throw new NotFoundException<Product>(id);
 
-            product.Name = request.Name;
-            product.Description = request.Description;
-            product.Price = request.Price;
-            validator.ValidateAndThrow(product);
+            var product = GetValidatedProductOrThrow(request, existing);
 
-            if (request.ImageFileName != null)
+            if (request.Image != null)
             {
                 DeleteImage(product.Id);
-                await SaveImage(id, request.ImageData!, request.ImageFileName).ConfigureAwait(false);
+                await SaveImage(id, request.Image).ConfigureAwait(false);
             }
 
             await context.SaveChangesAsync().ConfigureAwait(false);
@@ -91,6 +84,8 @@ namespace Application.Services
         public async Task<DeleteProductsResponse> Delete(DeleteProductsRequest request)
         {
             ArgumentNullException.ThrowIfNull(request);
+            await deleteRequestValidator.ValidateAndThrowAsync(request).ConfigureAwait(false);
+
             var products = await context.Products
                 .Where(p => request.Ids.Contains(p.Id))
                 .ToListAsync()
@@ -120,32 +115,24 @@ namespace Application.Services
             return new DeleteProductsResponse([.. foundIds], notFoundIds);
         }
 
-        async Task<string> SaveImage(long productId, byte[] data, string fileName)
+        async Task<string> SaveImage(long productId, IFormFile image)
         {
-            if (data.Length > templateSettings.MaxImageSizeMb * 1024L * 1024)
-                throw new TemplateException($"Image size exceeds the '{templateSettings.MaxImageSizeMb}' MB limit.");
-
-            var extension = Path.GetExtension(fileName).ToLowerInvariant();
-            if (!templateSettings.AllowedImageExtensions.Contains(extension))
-            {
-                var extensions = string.Join(", ", templateSettings.AllowedImageExtensions.Select(e => e.TrimStart('.')));
-                throw new TemplateException($"Invalid image with extension '{extension}'. Allowed extensions are: {extensions}");
-            }
-
+            var extension = Path.GetExtension(image.FileName);
             var safeFileName = $"{productId}{extension}";
             var fullPath = Path.Combine(templateSettings.ImagesStoragePath, safeFileName);
 
-            await File.WriteAllBytesAsync(fullPath, data).ConfigureAwait(false);
+            using var stream = File.Create(fullPath);
+            await image.CopyToAsync(stream).ConfigureAwait(false);
 
             return safeFileName;
         }
 
         string? FindImageFile(long productId, bool throwIfNotFound = true)
         {
-            var foundFile = Directory.EnumerateFiles(
-                templateSettings.ImagesStoragePath,
-                $"{productId}.*")
-                .SingleOrDefault(f => templateSettings.AllowedImageExtensions.Contains(Path.GetExtension(f).ToLowerInvariant()));
+            var foundFile =
+                Directory.EnumerateFiles(templateSettings.ImagesStoragePath, $"{productId}.*")
+                .SingleOrDefault(f => templateSettings.AllowedImageExtensions
+                    .Contains(Path.GetExtension(f), StringComparer.InvariantCultureIgnoreCase));
 
             return throwIfNotFound && foundFile is null
                 ? throw new TemplateException($"Expected product with id '{productId}' to have an image to be deleted.")
@@ -166,6 +153,22 @@ namespace Application.Services
 
             var fileName = Path.GetFileName(foundFile);
             return Url.Combine(templateSettings.ApiUrl, templateSettings.ImagesRequestPath, fileName);
+        }
+
+        Product GetValidatedProductOrThrow(CreateProductRequest request, Product? existing = null)
+        {
+            var product = existing ?? new Product();
+            product.Name = request.Name;
+            product.Description = request.Description;
+            product.Price = request.Price;
+
+            var requestResult = requestValidator.Validate(request);
+            var productResult = productValidator.Validate(product);
+
+            var failures = new List<ValidationFailure>();
+            if (!requestResult.IsValid) failures.AddRange(requestResult.Errors);
+            if (!productResult.IsValid) failures.AddRange(productResult.Errors);
+            return failures.Count > 0 ? throw new ValidationException(failures) : product;
         }
     }
 }

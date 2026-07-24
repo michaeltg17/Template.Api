@@ -5,6 +5,7 @@ using CrossCutting.Settings;
 using Microsoft.Extensions.FileProviders;
 using Persistence;
 using Serilog;
+using Domain;
 
 namespace Api
 {
@@ -39,6 +40,7 @@ namespace Api
         {
             return services
                 .AddApplicationDependencies()
+                .AddDomainDependencies()
                 .AddCrossCuttingDependencies()
                 .AddPersistanceDependencies();
         }

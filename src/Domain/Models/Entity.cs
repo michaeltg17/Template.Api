@@ -1,6 +1,6 @@
 ﻿namespace Domain.Models
 {
-    public abstract record Entity
+    public abstract class Entity
     {
         public long Id { get; set; }
     }

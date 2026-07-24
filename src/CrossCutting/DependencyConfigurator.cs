@@ -9,10 +9,8 @@ namespace CrossCutting
         public static IServiceCollection AddCrossCuttingDependencies(this IServiceCollection services)
         {
             services
-                .AddOptions<TemplateSettings>()
-                .BindConfiguration(ITemplateSettings.Section)
-                .PostConfigure(settings => settings.ImagesStoragePath = settings.ImagesStoragePath.Replace("%TEMP%", Path.GetTempPath()))
-                .ValidateOnStart();
+                .AddOptionsWithValidateOnStart<TemplateSettings>()
+                .BindConfiguration(ITemplateSettings.Section);
 
             services.AddSingleton<IValidateOptions<TemplateSettings>, TemplateSettingsValidator>();
 

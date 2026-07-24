@@ -21,12 +21,11 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
 
         public async ValueTask CreateProducts()
         {
-            var request = new CreateProductRequestBuilder().Build();
             var tasks = new[]
             {
-                ApiClient.CreateProduct(request).To<Product>(),
-                ApiClient.CreateProduct(request).To<Product>(),
-                ApiClient.CreateProduct(request).To<Product>()
+                ApiClient.CreateProduct(new CreateProductRequestBuilder().Build()).To<Product>(),
+                ApiClient.CreateProduct(new CreateProductRequestBuilder().Build()).To<Product>(),
+                ApiClient.CreateProduct(new CreateProductRequestBuilder().Build()).To<Product>()
             };
             initialProducts.AddRange((await Task.WhenAll(tasks)).OrderBy(p => p.Id));
         }
@@ -48,10 +47,10 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             foreach (var product in productsToValidate)
             {
                 var imageFile = imageFiles.SingleOrDefault(f => Path.GetFileNameWithoutExtension(f) == product.Id.ToString());
-                imageFile.Should().NotBeNull($"image file for product {product.Id} should exist");
+                imageFile.Should().NotBeNull($"image file for product with id '{product.Id}' should exist");
 
                 var imageContent = File.ReadAllBytes(imageFile!);
-                imageContent.Should().BeEquivalentTo(InitialImage, $"image content for product {product.Id} should match");
+                imageContent.Should().BeEquivalentTo(InitialImage, $"image content for product with id '{product.Id}' should match");
             }
 
             //Expected same image files and products count

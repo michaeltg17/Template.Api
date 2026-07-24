@@ -1,5 +1,6 @@
 using Application.Models.Requests;
 using Core.Builders;
+using Microsoft.AspNetCore.Http;
 
 namespace Core.Testing.Builders
 {
@@ -13,13 +14,13 @@ namespace Core.Testing.Builders
 
         public UpdateProductRequestBuilder()
         {
+            var imageBytes = File.ReadAllBytes("Images/didi2.jpg");
             Item = new UpdateProductRequest
             {
                 Name = name,
                 Description = description,
                 Price = price,
-                ImageData = File.ReadAllBytes("Images/didi2.jpg"),
-                ImageFileName = "didi2.jpg"
+                Image = new FormFile(new MemoryStream(imageBytes), 0, imageBytes.Length, "image", "didi2.jpg")
             };
         }
 
