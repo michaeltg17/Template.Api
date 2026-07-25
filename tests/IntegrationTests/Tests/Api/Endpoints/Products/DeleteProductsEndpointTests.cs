@@ -45,6 +45,9 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .WithProperty("ids")
                 .WithValue([product.Id]);
 
+            //Then: expected image delete
+            ImageMockServer.VerifyDelete($"{product.Id}.jpeg");
+
             //Then: common expectations
             await ValidateCommonExpectations(2, [product.Id]);
         }
@@ -73,7 +76,11 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .Appearing().Once()
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("ids")
-, ids);
+                , ids);
+
+            //Then: expected image deletes
+            ImageMockServer.VerifyDelete($"{ids[0]}.jpeg");
+            ImageMockServer.VerifyDelete($"{ids[1]}.jpeg");
 
             //Then: common expectations
             await ValidateCommonExpectations(1, ids);
@@ -119,6 +126,9 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("ids")
                 .WithValue([existingId]);
+
+            //Then: expected image delete (only existing product)
+            ImageMockServer.VerifyDelete($"{existingId}.jpeg");
 
             //Then: common expectations
             await ValidateCommonExpectations(2, [existingId]);

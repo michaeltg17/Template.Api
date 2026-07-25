@@ -7,7 +7,6 @@ using IntegrationTests.Collections;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using Xunit;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
@@ -45,6 +44,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 new Uri(product.ImageUrl!),
                 TestContext.Current.CancellationToken);
             productImage.Should().BeEquivalentTo(InitialImage);
+            ImageMockServer.VerifyDownload($"{initialProduct.Id}.jpeg");
 
             //Then: common expectations
             await ValidateCommonExpectations(3);

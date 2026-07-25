@@ -27,10 +27,11 @@ namespace IntegrationTests.Fixtures
         public InMemorySink InMemorySink { get; } = new();
         public InjectableTestOutputSink InjectableTestOutputSink { get; set; } = new();
         Database? Database { get; set; }
+        public ImageApiMock ImageApiMock { get; private set; } = new();
 
         async ValueTask IAsyncLifetime.InitializeAsync()
         {
-            Database = await databaseFactory.Create();
+            Database = await databaseFactory.Create().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -73,6 +74,8 @@ namespace IntegrationTests.Fixtures
                 services.Configure<TemplateSettings>(templateSettings =>
                 {
                     templateSettings.SqlServerConnectionString = Database!.ConnectionString;
+                    templateSettings.ImageApiUrl = ImageApiMock!.BaseUrl;
+                    templateSettings.ImageApiKey = "test-api-key";
                 });
 
                 if (testSettings.EnableSqlLogging)
@@ -86,6 +89,7 @@ namespace IntegrationTests.Fixtures
 
         public async new Task DisposeAsync()
         {
+            ImageApiMock?.Dispose();
             if (Database != null) await Database.DisposeAsync();
             await base.DisposeAsync();
         }

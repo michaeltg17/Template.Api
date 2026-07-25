@@ -22,6 +22,7 @@ namespace IntegrationTests
         {
             WebApplicationFactoryFixture.InjectableTestOutputSink.Inject(TestOutputHelper);
             ClearInMemorySink(WebApplicationFactoryFixture.InMemorySink);
+            WebApplicationFactoryFixture.ImageApiMock!.Reset();
             ApiClient = new(WebApplicationFactoryFixture.CreateClient());
 
             Scope = WebApplicationFactoryFixture.Services.CreateAsyncScope();

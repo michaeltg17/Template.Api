@@ -42,10 +42,12 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             response.StatusCode.Should().Be(HttpStatusCode.Created);
             product.Id.Should().BeGreaterThan(0);
             product.Should().BeEquivalentTo(expected);
+            ImageMockServer.VerifyUploadAndStore($"{product.Id}.jpeg", InitialImage);
             var productImage = await ApiClient.HttpClient.GetByteArrayAsync(
                 new Uri(product.ImageUrl!),
                 TestContext.Current.CancellationToken);
             productImage.Should().BeEquivalentTo(InitialImage);
+            ImageMockServer.VerifyDownload($"{product.Id}.jpeg");
 
             //Then: expected product in db
             var dbProduct = await Context.Products.FindAsync(product.Id);

@@ -1,10 +1,9 @@
 ﻿using ApiClient.Extensions;
 using AwesomeAssertions;
 using Core.Testing.Builders;
-using CrossCutting.Settings;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using IntegrationTests.Infrastructure;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -18,6 +17,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         protected static byte[] Image2 = File.ReadAllBytes("Images/didi2.jpg");
 
         public List<Product> initialProducts = new();
+        protected ImageApiMock ImageMockServer => WebApplicationFactoryFixture.ImageApiMock;
 
         public async ValueTask CreateProducts()
         {
@@ -40,21 +40,12 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             dbProducts.Where(p => !exceptIds.Contains(p.Id)).Should().BeEquivalentTo(productsToValidate, o => o.Excluding(p => p.ImageUrl));
             dbProducts.Count.Should().Be(totalProductsCount);
 
-            //Expected image files
-            var settings = WebApplicationFactoryFixture.Services.GetRequiredService<ITemplateSettings>();
-            var imageFiles = Directory.GetFiles(settings.ImagesStoragePath);
-
+            //Expected image uploads
             foreach (var product in productsToValidate)
             {
-                var imageFile = imageFiles.SingleOrDefault(f => Path.GetFileNameWithoutExtension(f) == product.Id.ToString());
-                imageFile.Should().NotBeNull($"image file for product with id '{product.Id}' should exist");
-
-                var imageContent = File.ReadAllBytes(imageFile!);
-                imageContent.Should().BeEquivalentTo(InitialImage, $"image content for product with id '{product.Id}' should match");
+                var imageBytes = ImageMockServer.VerifyUploadAndStore($"{product.Id}.jpeg", InitialImage);
+                imageBytes.Should().BeEquivalentTo(InitialImage, $"uploaded image for product '{product.Id}' should match initial image");
             }
-
-            //Expected same image files and products count
-            imageFiles.Length.Should().Be(totalProductsCount, "image count should match expected products count");
         }
     }
 }
