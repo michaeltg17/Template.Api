@@ -34,5 +34,19 @@ namespace Application.Features.Images
 
             return await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
         }
+
+        public async Task DeleteAsync(string name)
+        {
+            using var request = new HttpRequestMessage(HttpMethod.Delete, $"api/v1/images/{Uri.EscapeDataString(name)}");
+            request.Headers.Add("X-Api-Key", settings.ImageApiKey);
+
+            var response = await httpClient.SendAsync(request).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public string BuildUrl(string name)
+        {
+            return $"{settings.ImageApiUrl}/api/v1/images/{Uri.EscapeDataString(name)}";
+        }
     }
 }

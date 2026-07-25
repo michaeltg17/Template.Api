@@ -13,7 +13,7 @@ public class GetAllProductsQuery(AppDbContext context, ProductService productSer
             .ConfigureAwait(false);
 
         foreach (var product in products)
-            product.ImageUrl = productService.BuildImageUrl(product.Id);
+            product.ImageUrl = productService.BuildImageUrl(product.ImageName);
 
         return products;
     }

@@ -21,10 +21,12 @@ public partial class CreateProductCommand(
 
         if (request.Image != null)
         {
-            await productService.SaveImage(product.Id, request.Image).ConfigureAwait(false);
+            var imageName = await productService.SaveImage(product.Id, request.Image)
+                .ConfigureAwait(false);
+            product.ImageName = imageName;
+            product.ImageUrl = productService.BuildImageUrl(imageName);
         }
 
-        product.ImageUrl = productService.BuildImageUrl(product.Id);
         LogProductCreated(product.Id);
         return product;
     }

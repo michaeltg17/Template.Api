@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Http;
-using Application.Exceptions;
-using CrossCutting.Settings;
 using FluentValidation;
 using FluentValidation.Results;
 using Domain.Models;
-using Flurl;
+using Application.Features.Images;
 using Application.Features.Products.Models.Requests;
 
 namespace Application.Features.Products.Actions
@@ -12,46 +10,29 @@ namespace Application.Features.Products.Actions
     public class ProductService(
         IValidator<Product> productValidator,
         IValidator<CreateProductRequest> requestValidator,
-        ITemplateSettings templateSettings)
+        ImageService imageService)
     {
-        internal async Task<string> SaveImage(long productId, IFormFile image)
+        internal async Task<string?> SaveImage(long productId, IFormFile image)
         {
             var extension = Path.GetExtension(image.FileName);
-            var safeFileName = $"{productId}{extension}";
-            var fullPath = Path.Combine(templateSettings.ImagesStoragePath, safeFileName);
+            var imageFileName = $"{productId}{extension}";
 
-            using var stream = File.Create(fullPath);
-            await image.CopyToAsync(stream).ConfigureAwait(false);
+            using var stream = image.OpenReadStream();
+            await imageService.UploadAsync(imageFileName, stream, image.ContentType)
+                .ConfigureAwait(false);
 
-            return safeFileName;
+            return imageFileName;
         }
 
-        string? FindImageFile(long productId, bool throwIfNotFound = true)
+        internal async Task DeleteImage(string? imageName)
         {
-            var foundFile =
-                Directory.EnumerateFiles(templateSettings.ImagesStoragePath, $"{productId}.*")
-                .SingleOrDefault(f => templateSettings.AllowedImageExtensions
-                    .Contains(Path.GetExtension(f), StringComparer.InvariantCultureIgnoreCase));
-
-            return throwIfNotFound && foundFile is null
-                ? throw new TemplateException($"Expected product with id '{productId}' to have an image to be deleted.")
-                : foundFile;
+            if (imageName is not null)
+                await imageService.DeleteAsync(imageName).ConfigureAwait(false);
         }
 
-        internal void DeleteImage(long productId)
+        internal string? BuildImageUrl(string? imageName)
         {
-            var fullPath = FindImageFile(productId, throwIfNotFound: true)!;
-            File.Delete(fullPath);
-        }
-
-        internal string? BuildImageUrl(long productId)
-        {
-            var foundFile = FindImageFile(productId, throwIfNotFound: false);
-            if (foundFile is null)
-                return null;
-
-            var fileName = Path.GetFileName(foundFile);
-            return Url.Combine(templateSettings.ApiUrl, templateSettings.ImagesRequestPath, fileName);
+            return imageName is not null ? imageService.BuildUrl(imageName) : null;
         }
 
         internal Product GetValidatedProductOrThrow(CreateProductRequest request, Product? existing = null)

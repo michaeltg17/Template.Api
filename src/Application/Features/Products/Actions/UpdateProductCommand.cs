@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Application.Exceptions;
 using Domain.Models;
@@ -23,12 +22,21 @@ public partial class UpdateProductCommand(
 
         if (request.Image != null)
         {
-            productService.DeleteImage(product.Id);
-            await productService.SaveImage(id, request.Image).ConfigureAwait(false);
+            string? oldImageName = existing.ImageName;
+
+            var newImageName = await productService.SaveImage(product.Id, request.Image)
+                .ConfigureAwait(false);
+
+            if (oldImageName != newImageName)
+            {
+                await productService.DeleteImage(oldImageName).ConfigureAwait(false);
+            }
+
+            product.ImageName = newImageName;
+            product.ImageUrl = productService.BuildImageUrl(newImageName);
         }
 
         await context.SaveChangesAsync().ConfigureAwait(false);
-        product.ImageUrl = productService.BuildImageUrl(product.Id);
         LogProductUpdated(product.Id);
         return product;
     }
