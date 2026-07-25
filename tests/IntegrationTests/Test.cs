@@ -35,20 +35,9 @@ namespace IntegrationTests
             return Context.Database.ExecuteSqlRawAsync(sql);
         }
 
-        void ClearImages()
-        {
-            var settings = Scope.ServiceProvider.GetRequiredService<ITemplateSettings>();
-            if (Directory.Exists(settings.ImagesStoragePath))
-            {
-                Directory.Delete(settings.ImagesStoragePath, true);
-                Directory.CreateDirectory(settings.ImagesStoragePath);
-            }
-        }
-
         public async ValueTask DisposeAsync()
         {
             await DeleteEntitiesFromDb();
-            ClearImages();
             await Scope.DisposeAsync();
             WebApplicationFactoryFixture.FlushLogger();
         }

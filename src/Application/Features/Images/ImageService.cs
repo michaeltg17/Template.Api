@@ -1,0 +1,38 @@
+using System.Net.Http.Headers;
+
+namespace Application.Features.Images
+{
+    public class ImageService(HttpClient httpClient, CrossCutting.Settings.ITemplateSettings settings)
+    {
+        public async Task UploadAsync(string name, Stream content, string contentType)
+        {
+            var requestContent = new StreamContent(content)
+            {
+                Headers =
+                {
+                    ContentType = new MediaTypeHeaderValue(contentType)
+                }
+            };
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, $"api/v1/images/{Uri.EscapeDataString(name)}")
+            {
+                Content = requestContent
+            };
+            request.Headers.Add("X-Api-Key", settings.ImageApiKey);
+
+            var response = await httpClient.SendAsync(request).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task<byte[]> GetAsync(string name)
+        {
+            using var request = new HttpRequestMessage(HttpMethod.Get, $"api/v1/images/{Uri.EscapeDataString(name)}");
+            request.Headers.Add("X-Api-Key", settings.ImageApiKey);
+
+            var response = await httpClient.SendAsync(request).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+        }
+    }
+}

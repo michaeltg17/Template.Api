@@ -70,21 +70,7 @@ namespace Api
             //Exception middleware first to catch exceptions
             app.UseExceptionHandler().UseStatusCodePages();
 
-            app.UseObjectStorage();
-
             app.MapEndpoints();
-
-            return app;
-        }
-
-        static WebApplication UseObjectStorage(this WebApplication app)
-        {
-            var templateSettings = app.Services.GetRequiredService<ITemplateSettings>();
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                RequestPath = templateSettings.ImagesRequestPath,
-                FileProvider = new PhysicalFileProvider(templateSettings.ImagesStoragePath)
-            });
 
             return app;
         }
