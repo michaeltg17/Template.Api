@@ -46,7 +46,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .WithValue([product.Id]);
 
             //Then: expected image delete
-            ImageMockServer.VerifyDelete($"{product.Id}.jpeg");
+            ImageApiMock.VerifyDelete($"{product.Id}.jpeg");
 
             //Then: common expectations
             await ValidateCommonExpectations(2, [product.Id]);
@@ -79,8 +79,8 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 , ids);
 
             //Then: expected image deletes
-            ImageMockServer.VerifyDelete($"{ids[0]}.jpeg");
-            ImageMockServer.VerifyDelete($"{ids[1]}.jpeg");
+            ImageApiMock.VerifyDelete($"{ids[0]}.jpeg");
+            ImageApiMock.VerifyDelete($"{ids[1]}.jpeg");
 
             //Then: common expectations
             await ValidateCommonExpectations(1, ids);
@@ -128,7 +128,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .WithValue([existingId]);
 
             //Then: expected image delete (only existing product)
-            ImageMockServer.VerifyDelete($"{existingId}.jpeg");
+            ImageApiMock.VerifyDelete($"{existingId}.jpeg");
 
             //Then: common expectations
             await ValidateCommonExpectations(2, [existingId]);

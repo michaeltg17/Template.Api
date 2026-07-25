@@ -35,19 +35,24 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                     p.Name = request.Name;
                     p.Description = request.Description;
                     p.Price = request.Price;
+                    p.ImageName = product.ImageName;
                     p.ImageUrl = product.ImageUrl;
                 })
                 .Build();
 
             response.StatusCode.Should().Be(HttpStatusCode.Created);
             product.Id.Should().BeGreaterThan(0);
-            product.Should().BeEquivalentTo(expected);
-            ImageMockServer.VerifyUploadAndStore($"{product.Id}.jpeg", InitialImage);
-            var productImage = await ApiClient.HttpClient.GetByteArrayAsync(
-                new Uri(product.ImageUrl!),
-                TestContext.Current.CancellationToken);
+
+            //Verify uploads and register GET stubs before downloading
+            foreach (var p in initialProducts)
+                ImageApiMock.VerifyUploadAndStore($"{p.Id}.jpeg", InitialImage);
+            ImageApiMock.VerifyUploadAndStore($"{product.Id}.jpeg", InitialImage);
+
+            var productImageUrl = $"{ImageApiMock.Url}/api/v1/images/{product.Id}.jpeg";
+            var productImage = await ImageHttpClient.GetByteArrayAsync(productImageUrl);
             productImage.Should().BeEquivalentTo(InitialImage);
-            ImageMockServer.VerifyDownload($"{product.Id}.jpeg");
+            ImageApiMock.VerifyDownload($"{product.Id}.jpeg");
+            product.Should().BeEquivalentTo(expected);
 
             //Then: expected product in db
             var dbProduct = await Context.Products.FindAsync(product.Id);

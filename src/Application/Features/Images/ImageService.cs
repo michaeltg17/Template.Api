@@ -1,16 +1,18 @@
+using CrossCutting.Settings;
 using System.Net.Http.Headers;
 
 namespace Application.Features.Images
 {
-    public class ImageService(HttpClient httpClient, CrossCutting.Settings.ITemplateSettings settings)
+    public class ImageService(HttpClient httpClient, ITemplateSettings settings)
     {
         public async Task UploadAsync(string name, Stream content, string contentType)
         {
+            var contentTypeWithValue = string.IsNullOrWhiteSpace(contentType) ? "application/octet-stream" : contentType;
             var requestContent = new StreamContent(content)
             {
                 Headers =
                 {
-                    ContentType = new MediaTypeHeaderValue(contentType)
+                    ContentType = new MediaTypeHeaderValue(contentTypeWithValue)
                 }
             };
 

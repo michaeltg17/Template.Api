@@ -32,24 +32,24 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             updatedProduct.Id.Should().BeGreaterThan(0);
 
-            var expected = new ProductBuilder()
+var expected = new ProductBuilder()
                 .WithValues(p =>
                 {
                     p.Id = initialProduct.Id;
                     p.Name = request.Name;
                     p.Description = request.Description;
                     p.Price = request.Price;
+                    p.ImageName = updatedProduct.ImageName;
                     p.ImageUrl = updatedProduct.ImageUrl;
                 })
                 .Build();
 
             updatedProduct.Should().BeEquivalentTo(expected);
-            ImageMockServer.VerifyUploadAndStore($"{updatedProduct.Id}.jpg", Image2);
-            var updatedProductImage = await ApiClient.HttpClient.GetByteArrayAsync(
-                new Uri(updatedProduct.ImageUrl!),
-                TestContext.Current.CancellationToken);
+            ImageApiMock.VerifyUploadAndStore($"{updatedProduct.Id}.jpg", Image2);
+            var updatedProductImageUrl = $"{ImageApiMock.Url}/api/v1/images/{updatedProduct.Id}.jpg";
+            var updatedProductImage = await ImageHttpClient.GetByteArrayAsync(updatedProductImageUrl);
             updatedProductImage.Should().BeEquivalentTo(Image2);
-            ImageMockServer.VerifyDownload($"{updatedProduct.Id}.jpg");
+            ImageApiMock.VerifyDownload($"{updatedProduct.Id}.jpg");
 
             //Then: expected product in db
             var dbProduct = await Context.Products.FindAsync(updatedProduct.Id);

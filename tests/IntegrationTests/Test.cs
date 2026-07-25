@@ -1,34 +1,37 @@
 ﻿using CrossCutting.Settings;
-using IntegrationTests.Fixtures;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Persistence;
-using Serilog.Sinks.InMemory;
+        using IntegrationTests.Fixtures;
+        using Microsoft.EntityFrameworkCore;
+        using Microsoft.Extensions.DependencyInjection;
+        using Persistence;
+        using Serilog.Sinks.InMemory;
 using Serilog.Sinks.XUnit.Injectable;
-using Xunit;
-using Xunit.v3;
+        using Xunit;
+        using Xunit.v3;
 
-namespace IntegrationTests
-{
-    public abstract class Test : IAsyncLifetime
-    {
-        public ApiClient.ApiClient ApiClient { get; private set; } = default!;
-        internal WebApplicationFactoryFixture WebApplicationFactoryFixture { get; set; } = default!;
-        public ITestOutputHelper TestOutputHelper { get; set; } = default!;
-        protected AppDbContext Context { get; set; } = default!;
-        AsyncServiceScope Scope { get; set; } = default!;
-
-        public virtual ValueTask Initialize()
+        namespace IntegrationTests
         {
-            WebApplicationFactoryFixture.InjectableTestOutputSink.Inject(TestOutputHelper);
-            ClearInMemorySink(WebApplicationFactoryFixture.InMemorySink);
-            WebApplicationFactoryFixture.ImageApiMock!.Reset();
-            ApiClient = new(WebApplicationFactoryFixture.CreateClient());
+            public abstract class Test : IAsyncLifetime
+            {
+                public ApiClient.ApiClient ApiClient { get; private set; } = default!;
+                internal WebApplicationFactoryFixture WebApplicationFactoryFixture { get; set; } = default!;
+                public ITestOutputHelper TestOutputHelper { get; set; } = default!;
+                protected AppDbContext Context { get; set; } = default!;
+                AsyncServiceScope Scope { get; set; } = default!;
 
-            Scope = WebApplicationFactoryFixture.Services.CreateAsyncScope();
-            Context = Scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            return ValueTask.CompletedTask;
-        }
+                public virtual ValueTask Initialize()
+                {
+                    WebApplicationFactoryFixture.InjectableTestOutputSink.Inject(TestOutputHelper);
+                    ClearInMemorySink(WebApplicationFactoryFixture.InMemorySink);
+                    WebApplicationFactoryFixture.ImageApiMock!.Reset();
+                    ApiClient = new(WebApplicationFactoryFixture.CreateClient());
+
+                    Scope = WebApplicationFactoryFixture.Services.CreateAsyncScope();
+                    Context = Scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                    ImageHttpClient = Scope.ServiceProvider.GetRequiredService<IHttpClientFactory>().CreateClient();
+                    return ValueTask.CompletedTask;
+                }
+
+                protected HttpClient ImageHttpClient { get; private set; } = default!;
 
         Task<int> DeleteEntitiesFromDb()
         {

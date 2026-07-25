@@ -17,7 +17,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         protected static byte[] Image2 = File.ReadAllBytes("Images/didi2.jpg");
 
         public List<Product> initialProducts = new();
-        protected ImageApiMock ImageMockServer => WebApplicationFactoryFixture.ImageApiMock;
+        internal ImageApiMock ImageApiMock => WebApplicationFactoryFixture.ImageApiMock;
 
         public async ValueTask CreateProducts()
         {
@@ -43,7 +43,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //Expected image uploads
             foreach (var product in productsToValidate)
             {
-                var imageBytes = ImageMockServer.VerifyUploadAndStore($"{product.Id}.jpeg", InitialImage);
+                var imageBytes = ImageApiMock.VerifyUploadAndStore($"{product.Id}.jpeg", InitialImage);
                 imageBytes.Should().BeEquivalentTo(InitialImage, $"uploaded image for product '{product.Id}' should match initial image");
             }
         }

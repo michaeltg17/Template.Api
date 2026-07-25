@@ -16,9 +16,6 @@ public partial class CreateProductCommand(
         ArgumentNullException.ThrowIfNull(request);
         var product = productService.GetValidatedProductOrThrow(request);
 
-        await context.Products.AddAsync(product).ConfigureAwait(false);
-        await context.SaveChangesAsync().ConfigureAwait(false);
-
         if (request.Image != null)
         {
             var imageName = await productService.SaveImage(product.Id, request.Image)
@@ -26,6 +23,9 @@ public partial class CreateProductCommand(
             product.ImageName = imageName;
             product.ImageUrl = productService.BuildImageUrl(imageName);
         }
+
+        await context.Products.AddAsync(product).ConfigureAwait(false);
+        await context.SaveChangesAsync().ConfigureAwait(false);
 
         LogProductCreated(product.Id);
         return product;

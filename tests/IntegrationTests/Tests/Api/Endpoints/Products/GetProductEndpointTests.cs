@@ -27,24 +27,27 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var product = await response.To<Product>();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var expected = new ProductBuilder()
+var expected = new ProductBuilder()
                 .WithValues(p =>
                 {
                     p.Id = initialProduct.Id;
                     p.Name = initialProduct.Name;
                     p.Description = initialProduct.Description;
                     p.Price = initialProduct.Price;
+                    p.ImageName = product.ImageName;
                     p.ImageUrl = product.ImageUrl;
                 })
                 .Build();
 
             product.Id.Should().BeGreaterThan(0);
             product.Should().BeEquivalentTo(expected);
-            var productImage = await ApiClient.HttpClient.GetByteArrayAsync(
-                new Uri(product.ImageUrl!),
-                TestContext.Current.CancellationToken);
+
+            //Verify uploads and register GET stub
+            ImageApiMock.VerifyUploadAndStore($"{initialProduct.Id}.jpeg", InitialImage);
+            var productImageUrl = $"{ImageApiMock.Url}/api/v1/images/{initialProduct.Id}.jpeg";
+            var productImage = await ImageHttpClient.GetByteArrayAsync(productImageUrl);
             productImage.Should().BeEquivalentTo(InitialImage);
-            ImageMockServer.VerifyDownload($"{initialProduct.Id}.jpeg");
+            ImageApiMock.VerifyDownload($"{initialProduct.Id}.jpeg");
 
             //Then: common expectations
             await ValidateCommonExpectations(3);

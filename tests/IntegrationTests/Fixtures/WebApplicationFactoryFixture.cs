@@ -27,7 +27,7 @@ namespace IntegrationTests.Fixtures
         public InMemorySink InMemorySink { get; } = new();
         public InjectableTestOutputSink InjectableTestOutputSink { get; set; } = new();
         Database? Database { get; set; }
-        public ImageApiMock ImageApiMock { get; private set; } = new();
+        internal ImageApiMock ImageApiMock { get; private set; } = new();
 
         async ValueTask IAsyncLifetime.InitializeAsync()
         {
@@ -74,7 +74,7 @@ namespace IntegrationTests.Fixtures
                 services.Configure<TemplateSettings>(templateSettings =>
                 {
                     templateSettings.SqlServerConnectionString = Database!.ConnectionString;
-                    templateSettings.ImageApiUrl = ImageApiMock!.BaseUrl;
+                    templateSettings.ImageApiUrl = ImageApiMock!.Url;
                     templateSettings.ImageApiKey = "test-api-key";
                 });
 
