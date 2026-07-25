@@ -75,7 +75,7 @@ namespace IntegrationTests.Fixtures
                 {
                     templateSettings.SqlServerConnectionString = Database!.ConnectionString;
                     templateSettings.ImageApiUrl = ImageApiMock!.Url;
-                    templateSettings.ImageApiKey = "test-api-key";
+                    templateSettings.ImageApiKey = Test.ApiKey;
                 });
 
                 if (testSettings.EnableSqlLogging)
@@ -89,7 +89,7 @@ namespace IntegrationTests.Fixtures
 
         public async new Task DisposeAsync()
         {
-            ImageApiMock?.Dispose();
+            ImageApiMock?.Server.Dispose();
             if (Database != null) await Database.DisposeAsync();
             await base.DisposeAsync();
         }

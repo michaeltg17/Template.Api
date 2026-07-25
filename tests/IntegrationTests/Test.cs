@@ -12,6 +12,8 @@ using Serilog.Sinks.XUnit.Injectable;
         {
             public abstract class Test : IAsyncLifetime
             {
+        public const string ApiKey = "test-api-key";
+
                 public ApiClient.ApiClient ApiClient { get; private set; } = default!;
                 internal WebApplicationFactoryFixture WebApplicationFactoryFixture { get; set; } = default!;
                 public ITestOutputHelper TestOutputHelper { get; set; } = default!;
@@ -22,7 +24,7 @@ using Serilog.Sinks.XUnit.Injectable;
                 {
                     WebApplicationFactoryFixture.InjectableTestOutputSink.Inject(TestOutputHelper);
                     ClearInMemorySink(WebApplicationFactoryFixture.InMemorySink);
-                    WebApplicationFactoryFixture.ImageApiMock!.Reset();
+                    WebApplicationFactoryFixture.ImageApiMock!.Server.ResetLogEntries();
                     ApiClient = new(WebApplicationFactoryFixture.CreateClient());
 
                     Scope = WebApplicationFactoryFixture.Services.CreateAsyncScope();

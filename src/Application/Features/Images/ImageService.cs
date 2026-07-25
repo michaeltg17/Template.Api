@@ -5,6 +5,8 @@ namespace Application.Features.Images
 {
     public class ImageService(HttpClient httpClient, ITemplateSettings settings)
     {
+        public const string ImageApiKeyHeaderName = "X-Api-Key";
+
         public async Task UploadAsync(string name, Stream content, string contentType)
         {
             var contentTypeWithValue = string.IsNullOrWhiteSpace(contentType) ? "application/octet-stream" : contentType;
@@ -20,7 +22,7 @@ namespace Application.Features.Images
             {
                 Content = requestContent
             };
-            request.Headers.Add("X-Api-Key", settings.ImageApiKey);
+            request.Headers.Add(ImageApiKeyHeaderName, settings.ImageApiKey);
 
             var response = await httpClient.SendAsync(request).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
