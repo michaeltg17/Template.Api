@@ -7,7 +7,7 @@ using Domain.Models;
 using Flurl;
 using Application.Features.Products.Models.Requests;
 
-namespace Application.Features.Products
+namespace Application.Features.Products.Actions
 {
     public class ProductService(
         IValidator<Product> productValidator,

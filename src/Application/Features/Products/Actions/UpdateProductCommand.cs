@@ -5,11 +5,10 @@ using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Application.Features.Products.Models.Requests;
-using Application.Features.Products.Logging;
 
-namespace Application.Features.Products;
+namespace Application.Features.Products.Actions;
 
-public class UpdateProductCommand(
+public partial class UpdateProductCommand(
     AppDbContext context,
     ProductService productService,
     ILogger<UpdateProductCommand> logger)
@@ -30,7 +29,10 @@ public class UpdateProductCommand(
 
         await context.SaveChangesAsync().ConfigureAwait(false);
         product.ImageUrl = productService.BuildImageUrl(product.Id);
-        logger.LogProductUpdated(product.Id);
+        LogProductUpdated(product.Id);
         return product;
     }
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Product with id '{id}' updated successfully.")]
+    public partial void LogProductUpdated(long id);
 }

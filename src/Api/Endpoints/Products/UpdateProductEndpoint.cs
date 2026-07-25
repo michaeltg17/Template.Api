@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Application.Features.Products;
 using Application.Features.Products.Models.Requests;
+using Application.Features.Products.Actions;
 
 namespace Api.Endpoints.Products;
 

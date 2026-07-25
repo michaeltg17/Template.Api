@@ -3,11 +3,10 @@ using Microsoft.Extensions.Logging;
 using Domain.Models;
 using Persistence;
 using Application.Features.Products.Models.Requests;
-using Application.Features.Products.Logging;
 
-namespace Application.Features.Products;
+namespace Application.Features.Products.Actions;
 
-public class CreateProductCommand(
+public partial class CreateProductCommand(
     AppDbContext context,
     ProductService productService,
     ILogger<CreateProductCommand> logger)
@@ -26,7 +25,10 @@ public class CreateProductCommand(
         }
 
         product.ImageUrl = productService.BuildImageUrl(product.Id);
-        logger.LogProductCreated(product.Id);
+        LogProductCreated(product.Id);
         return product;
     }
+
+    [LoggerMessage(Level = LogLevel.Information, Message = "Product with id '{id}' created successfully.")]
+    public partial void LogProductCreated(long id);
 }
