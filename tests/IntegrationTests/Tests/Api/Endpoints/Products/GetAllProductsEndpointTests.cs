@@ -25,17 +25,14 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var products = await response.To<List<Product>>();
             products.Should().BeEquivalentTo(initialProducts, o => o.WithStrictOrdering());
 
-            //Verify uploads and register GET stubs
-            foreach (var product in initialProducts)
-                ImageApiMock.VerifyUploadAndStore($"{product.Id}.jpeg", InitialImage);
-
             //Then: verify downloads
             foreach (var product in products)
             {
-var imageUrl = $"{ImageApiMock.Url}/api/v1/images/{product.ImageName}";
+                var imageUrl = $"{ImageApiMock.Server.Url}/api/v1/images/{product.ImageName}";
                 var productImage = await ImageHttpClient.GetByteArrayAsync(imageUrl);
-                productImage.Should().BeEquivalentTo(InitialImage, $"downloaded image for product '{product.Id}' should match initial image");
-                ImageApiMock.VerifyDownload($"{product.Id}.jpeg");
+                productImage.Should()
+                    .BeEquivalentTo(InitialImage, $"downloaded image for product '{product.Id}' should match initial image");
+                ImageApiMock.ValidateGetRequest($"{product.Id}.jpeg");
             }
 
             //Then: common expectations

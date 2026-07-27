@@ -43,7 +43,7 @@ var expected = new ProductBuilder()
             product.Should().BeEquivalentTo(expected);
 
             //Verify uploads and register GET stub
-            ImageApiMock.VerifyUploadAndStore($"{initialProduct.Id}.jpeg", InitialImage);
+            ImageApiMock.ValidatePostAndRegisterGet($"{initialProduct.Id}.jpeg", InitialImage);
             var productImageUrl = $"{ImageApiMock.Url}/api/v1/images/{initialProduct.Id}.jpeg";
             var productImage = await ImageHttpClient.GetByteArrayAsync(productImageUrl);
             productImage.Should().BeEquivalentTo(InitialImage);

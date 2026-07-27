@@ -14,16 +14,11 @@ namespace IntegrationTests.Infrastructure
 
         public ImageApiMock()
         {
-            Server = WireMockServer.Start(new WireMockServerSettings
-            {
-                StartAdminInterface = false
-            });
-            SetupStubs();
+            Server = WireMockServer.Start();
+            SetMocks();
         }
 
-        public string Url => Server.Urls[0];
-
-        void SetupStubs()
+        void SetMocks()
         {
             Server
                 .Given(Request.Create()
@@ -42,9 +37,11 @@ namespace IntegrationTests.Infrastructure
                     .WithStatusCode(200));
         }
 
-        // Verifies an upload request was received, returns the uploaded bytes for assertions.
-        // Also registers a GET stub to return those bytes for subsequent download validation.
-        public byte[] VerifyUploadAndStore(string imageName, byte[] expectedBody)
+        /// <summary>
+        /// Validates a post request was received and returns the uploaded bytes.
+        /// Also sets a GET mock to get those images.
+        /// </summary>
+        public byte[] ValidatePostAndRegisterGet(string imageName, byte[] expectedBody)
         {
             var logEntries = Server.LogEntries;
             var uploadEntry = logEntries
@@ -60,20 +57,23 @@ namespace IntegrationTests.Infrastructure
             uploadedBody.Should().NotBeNull("uploaded body should not be null");
             uploadedBody.Should().BeEquivalentTo(expectedBody, "uploaded body should match expected bytes");
 
-            // Register GET stub to return these bytes
+            SetGetMock(imageName, uploadedBody);
+
+            return uploadedBody;
+        }
+
+        public void SetGetMock(string imageName, byte[] imageData)
+        {
             Server
                 .Given(Request.Create()
                     .WithPath($"/api/v1/images/{imageName}")
                     .UsingGet())
                 .RespondWith(Response.Create()
                     .WithStatusCode(200)
-                    .WithBody(uploadedBody));
-
-            return uploadedBody;
+                    .WithBody(imageData));
         }
 
-        // Verifies a download request was made to this image
-        public void VerifyDownload(string imageName)
+        public void ValidateGetRequest(string imageName)
         {
             var logEntries = Server.LogEntries;
             var downloadEntries = logEntries
@@ -81,11 +81,10 @@ namespace IntegrationTests.Infrastructure
                            e.RequestMessage.Method == "GET" &&
                            e.RequestMessage.Path == $"/api/v1/images/{imageName}");
 
-            downloadEntries.Should().NotBeEmpty($"download of '{imageName}' should have occurred");
+            downloadEntries.Should().NotBeEmpty($"get of '{imageName}' should have occurred");
         }
 
-        // Verifies a delete request was made to this image
-        public void VerifyDelete(string imageName)
+        public void ValidateDeleteRequest(string imageName)
         {
             var logEntries = Server.LogEntries;
             var deleteEntries = logEntries

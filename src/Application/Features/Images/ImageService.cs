@@ -6,8 +6,9 @@ namespace Application.Features.Images
     public class ImageService(HttpClient httpClient, ITemplateSettings settings)
     {
         public const string ImageApiKeyHeaderName = "X-Api-Key";
+        public const string ApiPath = "images";
 
-        public async Task UploadAsync(string name, Stream content, string contentType)
+        public async Task Upload(string imageName, Stream content, string contentType)
         {
             var contentTypeWithValue = string.IsNullOrWhiteSpace(contentType) ? "application/octet-stream" : contentType;
             var requestContent = new StreamContent(content)
@@ -18,7 +19,7 @@ namespace Application.Features.Images
                 }
             };
 
-            using var request = new HttpRequestMessage(HttpMethod.Post, $"api/v1/images/{Uri.EscapeDataString(name)}")
+            using var request = new HttpRequestMessage(HttpMethod.Post, BuildUrl(imageName))
             {
                 Content = requestContent
             };
@@ -28,9 +29,9 @@ namespace Application.Features.Images
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task<byte[]> GetAsync(string name)
+        public async Task<byte[]> Get(string imageName)
         {
-            using var request = new HttpRequestMessage(HttpMethod.Get, $"api/v1/images/{Uri.EscapeDataString(name)}");
+            using var request = new HttpRequestMessage(HttpMethod.Get, BuildUrl(imageName));
             request.Headers.Add("X-Api-Key", settings.ImageApiKey);
 
             var response = await httpClient.SendAsync(request).ConfigureAwait(false);
@@ -39,18 +40,23 @@ namespace Application.Features.Images
             return await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
         }
 
-        public async Task DeleteAsync(string name)
+        public async Task Delete(string imageName)
         {
-            using var request = new HttpRequestMessage(HttpMethod.Delete, $"api/v1/images/{Uri.EscapeDataString(name)}");
+            using var request = new HttpRequestMessage(HttpMethod.Delete, BuildUrl(imageName));
             request.Headers.Add("X-Api-Key", settings.ImageApiKey);
 
             var response = await httpClient.SendAsync(request).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
         }
 
-        public string BuildUrl(string name)
+        public Uri BuildUrl(string imageName)
         {
-            return $"{settings.ImageApiUrl}/api/v1/images/{Uri.EscapeDataString(name)}";
+            return BuildUrl(settings.ImageApiUrl, imageName);
+        }
+
+        public static Uri BuildUrl(Uri apiUrl, string imageName)
+        {
+            return new Uri(apiUrl, $"{ApiPath}/{imageName}");
         }
     }
 }

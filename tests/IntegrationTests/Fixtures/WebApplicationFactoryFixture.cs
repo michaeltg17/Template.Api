@@ -74,7 +74,7 @@ namespace IntegrationTests.Fixtures
                 services.Configure<TemplateSettings>(templateSettings =>
                 {
                     templateSettings.SqlServerConnectionString = Database!.ConnectionString;
-                    templateSettings.ImageApiUrl = ImageApiMock!.Url;
+                    templateSettings.ImageApiUrl = ImageApiMock!.Server.Url!;
                     templateSettings.ImageApiKey = Test.ApiKey;
                 });
 

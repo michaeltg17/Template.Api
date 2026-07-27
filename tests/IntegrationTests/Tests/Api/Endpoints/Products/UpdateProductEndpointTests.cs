@@ -45,7 +45,7 @@ var expected = new ProductBuilder()
                 .Build();
 
             updatedProduct.Should().BeEquivalentTo(expected);
-            ImageApiMock.VerifyUploadAndStore($"{updatedProduct.Id}.jpg", Image2);
+            ImageApiMock.ValidatePostAndRegisterGet($"{updatedProduct.Id}.jpg", Image2);
             var updatedProductImageUrl = $"{ImageApiMock.Url}/api/v1/images/{updatedProduct.Id}.jpg";
             var updatedProductImage = await ImageHttpClient.GetByteArrayAsync(updatedProductImageUrl);
             updatedProductImage.Should().BeEquivalentTo(Image2);

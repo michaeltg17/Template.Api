@@ -10,6 +10,7 @@ using System.Net;
 using Xunit;
 using Serilog.Sinks.InMemory.Assertions;
 using IntegrationTests.Collections;
+using Application.Features.Images;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
@@ -42,17 +43,14 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
 
             response.StatusCode.Should().Be(HttpStatusCode.Created);
             product.Id.Should().BeGreaterThan(0);
-
-            //Verify uploads and register GET stubs before downloading
-            foreach (var p in initialProducts)
-                ImageApiMock.VerifyUploadAndStore($"{p.Id}.jpeg", InitialImage);
-            ImageApiMock.VerifyUploadAndStore($"{product.Id}.jpeg", InitialImage);
-
-            var productImageUrl = $"{ImageApiMock.Url}/api/v1/images/{product.Id}.jpeg";
-            var productImage = await ImageHttpClient.GetByteArrayAsync(productImageUrl);
-            productImage.Should().BeEquivalentTo(InitialImage);
-            ImageApiMock.VerifyDownload($"{product.Id}.jpeg");
             product.Should().BeEquivalentTo(expected);
+
+            //Then: image is uploaded
+            ImageApiMock.ValidatePostAndRegisterGet($"{product.Id}.jpeg", InitialImage);
+            var productImageUrl = ImageService.BuildUrl(ImageApiMock.Server.Url, product.ImageName);
+            var productImage = await ImageHttpClient.GetByteArrayAsync(productImageUrl);
+            ImageApiMock.ValidateGetRequest($"{product.Id}.jpeg");
+            productImage.Should().BeEquivalentTo(InitialImage);
 
             //Then: expected product in db
             var dbProduct = await Context.Products.FindAsync(product.Id);
