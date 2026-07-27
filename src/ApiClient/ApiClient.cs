@@ -2,6 +2,7 @@
 using ApiClient.Endpoints;
 using Microsoft.AspNetCore.Http;
 using Application.Features.Products.Models.Requests;
+using Api.Extensions;
 
 namespace ApiClient
 {
@@ -11,7 +12,7 @@ namespace ApiClient
 
         public TestEndpoints Test { get; } = new(httpClient);
 
-        const string BasePath = "/api";
+        const string BasePath = EndpointExtensions.BasePath;
 
         public Task<HttpResponseMessage> GetAllProducts()
         {

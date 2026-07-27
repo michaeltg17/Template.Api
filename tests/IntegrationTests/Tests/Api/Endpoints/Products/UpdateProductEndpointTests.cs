@@ -10,6 +10,8 @@ using System.Net;
 using Xunit;
 using Serilog.Sinks.InMemory.Assertions;
 using IntegrationTests.Collections;
+using Application.Features.Images;
+using IntegrationTests.Extensions;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
@@ -32,7 +34,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             updatedProduct.Id.Should().BeGreaterThan(0);
 
-var expected = new ProductBuilder()
+            var expected = new ProductBuilder()
                 .WithValues(p =>
                 {
                     p.Id = initialProduct.Id;
@@ -45,11 +47,11 @@ var expected = new ProductBuilder()
                 .Build();
 
             updatedProduct.Should().BeEquivalentTo(expected);
-            ImageApiMock.ValidatePostAndRegisterGet($"{updatedProduct.Id}.jpg", Image2);
-            var updatedProductImageUrl = $"{ImageApiMock.Url}/api/v1/images/{updatedProduct.Id}.jpg";
+            ImageApiMock.ValidatePostAndSetGetMock($"{updatedProduct.Id}.jpg", Image2);
+            var updatedProductImageUrl = ImageService.BuildUrl(ImageApiMock.Server.Uri, updatedProduct.ImageName!);
             var updatedProductImage = await ImageHttpClient.GetByteArrayAsync(updatedProductImageUrl);
             updatedProductImage.Should().BeEquivalentTo(Image2);
-            ImageApiMock.VerifyDownload($"{updatedProduct.Id}.jpg");
+            ImageApiMock.ValidateGetRequest($"{updatedProduct.Id}.jpg");
 
             //Then: expected product in db
             var dbProduct = await Context.Products.FindAsync(updatedProduct.Id);
@@ -79,7 +81,7 @@ var expected = new ProductBuilder()
             var response = await ApiClient.UpdateProduct(5, request);
 
             //Then: product not found
-            await ProblemDetailsValidator.ValidateNotFoundException(response, "Product", "Products", 5);
+            await ProblemDetailsValidator.ValidateNotFoundException(response, nameof(Product), BaseInstance, 5);
 
             //Then: expected no logging
             WebApplicationFactoryFixture.InMemorySink

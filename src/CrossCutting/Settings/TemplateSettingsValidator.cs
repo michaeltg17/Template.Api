@@ -11,7 +11,7 @@ namespace CrossCutting.Settings
             if (string.IsNullOrWhiteSpace(templateSettings.SqlServerConnectionString))
                 validationErrors.Add($"The '{nameof(templateSettings.SqlServerConnectionString)}' setting is required");
 
-            if (string.IsNullOrWhiteSpace(templateSettings.ImageApiUrl))
+            if (templateSettings.ImageApiUrl is null or { IsAbsoluteUri: false })
                 validationErrors.Add($"The '{nameof(templateSettings.ImageApiUrl)}' setting is required");
 
             if (string.IsNullOrWhiteSpace(templateSettings.ImageApiKey))

@@ -37,14 +37,23 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
 
         public async Task ValidateCommonExpectations(int totalProductsCount, IEnumerable<long>? exceptIds = null)
         {
-            var productsToValidate = exceptIds == null
-                ? initialProducts
-                : [.. initialProducts.Where(p => !exceptIds.Contains(p.Id))];
-
             //Expected products in db
             var dbProducts = await Context.Products.ToListAsync();
-            dbProducts.Where(p => !exceptIds.Contains(p.Id))
-                .Should().BeEquivalentTo(productsToValidate, o => o.Excluding(p => p.ImageUrl));
+
+            if (exceptIds == null)
+            {
+                dbProducts.Should().BeEquivalentTo(initialProducts, o => o.Excluding(p => p.ImageUrl));
+            }
+            else
+            {
+                dbProducts
+                    .Where(p => !exceptIds.Contains(p.Id))
+                    .Should()
+                    .BeEquivalentTo(
+                        initialProducts.Where(p => !exceptIds.Contains(p.Id)),
+                        o => o.Excluding(p => p.ImageUrl));
+            }
+
             dbProducts.Count.Should().Be(totalProductsCount);
         }
     }

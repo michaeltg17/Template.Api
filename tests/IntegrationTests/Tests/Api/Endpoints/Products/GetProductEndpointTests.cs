@@ -1,9 +1,11 @@
 using ApiClient.Extensions;
+using Application.Features.Images;
 using AwesomeAssertions;
 using Core.Testing.Builders;
 using Core.Testing.Validators;
 using Domain.Models;
 using IntegrationTests.Collections;
+using IntegrationTests.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using Xunit;
@@ -25,9 +27,8 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
 
             //Then
             var product = await response.To<Product>();
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-var expected = new ProductBuilder()
+            var expected = new ProductBuilder()
                 .WithValues(p =>
                 {
                     p.Id = initialProduct.Id;
@@ -39,15 +40,16 @@ var expected = new ProductBuilder()
                 })
                 .Build();
 
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             product.Id.Should().BeGreaterThan(0);
             product.Should().BeEquivalentTo(expected);
 
             //Verify uploads and register GET stub
-            ImageApiMock.ValidatePostAndRegisterGet($"{initialProduct.Id}.jpeg", InitialImage);
-            var productImageUrl = $"{ImageApiMock.Url}/api/v1/images/{initialProduct.Id}.jpeg";
+            ImageApiMock.ValidatePostAndSetGetMock(initialProduct.ImageName, InitialImage);
+            var productImageUrl = ImageService.BuildUrl(ImageApiMock.Server.Uri, product.ImageName!);
             var productImage = await ImageHttpClient.GetByteArrayAsync(productImageUrl);
             productImage.Should().BeEquivalentTo(InitialImage);
-            ImageApiMock.VerifyDownload($"{initialProduct.Id}.jpeg");
+            ImageApiMock.ValidateGetRequest(initialProduct.ImageName);
 
             //Then: common expectations
             await ValidateCommonExpectations(3);
@@ -63,7 +65,7 @@ var expected = new ProductBuilder()
             var response = await ApiClient.GetProduct(4);
 
             //Then: product not found
-            await ProblemDetailsValidator.ValidateNotFoundException(response, "Product", "Products", 4);
+            await ProblemDetailsValidator.ValidateNotFoundException(response, nameof(Product), BaseInstance, 4);
 
             //Then: common expectations
             await ValidateCommonExpectations(3);

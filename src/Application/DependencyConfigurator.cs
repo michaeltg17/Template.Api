@@ -21,7 +21,7 @@ namespace Application
             services.AddHttpClient<ImageService>((sp, client) =>
             {
                 var settings = sp.GetRequiredService<CrossCutting.Settings.ITemplateSettings>();
-                client.BaseAddress = new Uri(settings.ImageApiUrl);
+                client.BaseAddress = settings.ImageApiUrl;
             });
 
             return services;

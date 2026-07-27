@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Application.Features.Products.Models.Requests;
 using Application.Features.Products.Actions;
+using Api.Extensions;
 
 namespace Api.Endpoints.Products;
 
@@ -13,7 +14,7 @@ internal static class CreateProductEndpoint
             CreateProductCommand createProductCommand) =>
         {
             var product = await createProductCommand.Execute(request).ConfigureAwait(false);
-            return Results.Created($"/api/Products/{product.Id}", product);
+            return Results.Created($"{EndpointExtensions.ProductsPath}/{product.Id}", product);
         });
     }
 }

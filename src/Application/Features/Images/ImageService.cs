@@ -58,5 +58,10 @@ namespace Application.Features.Images
         {
             return new Uri(apiUrl, $"{ApiPath}/{imageName}");
         }
+
+        public static string BuildPathUrl(string imageName)
+        {
+            return $"/{ApiPath}/{imageName}";
+        }
     }
 }

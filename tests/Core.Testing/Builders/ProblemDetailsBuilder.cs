@@ -1,4 +1,5 @@
-﻿using Core.Builders;
+﻿using Api.Extensions;
+using Core.Builders;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -23,25 +24,25 @@ namespace Core.Testing.Builders
             return this;
         }
 
-        public ProblemDetailsBuilder WithNotAllFoundException(string entity, string route, long[] ids)
+        public ProblemDetailsBuilder WithNotAllFoundException(string entity, string baseInstance, long[] ids)
         {
             Item.Type = "https://tools.ietf.org/html/rfc9110#section-15.5.5";
             Item.Title = "NotAllFoundException";
             Item.Status = (int)HttpStatusCode.NotFound;
             Item.Detail = $"The following ids '{string.Join(", ", ids)}' were not found for entity '{entity}'.";
-            Item.Instance = $"/api/{route}";
+            Item.Instance = baseInstance;
             Item.Extensions["notFoundIds"] = ids;
 
             return this;
         }
 
-        public ProblemDetailsBuilder WithNotFoundException(string entity, string route, long id)
+        public ProblemDetailsBuilder WithNotFoundException(string entity, string baseInstance, long id)
         {
             Item.Type = "https://tools.ietf.org/html/rfc9110#section-15.5.5";
             Item.Title = "NotFoundException";
             Item.Status = (int)HttpStatusCode.NotFound;
             Item.Detail = $"{entity} with id '{id}' was not found.";
-            Item.Instance = $"/api/{route}/{id}";
+            Item.Instance = $"{baseInstance}/{id}";
 
             return this;
         }

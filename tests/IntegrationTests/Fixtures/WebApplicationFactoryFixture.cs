@@ -15,6 +15,7 @@ using IntegrationTests.Settings;
 using IntegrationTests.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Serilog.Sinks.XUnit.Injectable.Abstract;
+using IntegrationTests.Extensions;
 
 namespace IntegrationTests.Fixtures
 {
@@ -74,7 +75,7 @@ namespace IntegrationTests.Fixtures
                 services.Configure<TemplateSettings>(templateSettings =>
                 {
                     templateSettings.SqlServerConnectionString = Database!.ConnectionString;
-                    templateSettings.ImageApiUrl = ImageApiMock!.Server.Url!;
+                    templateSettings.ImageApiUrl = ImageApiMock!.Server.Uri;
                     templateSettings.ImageApiKey = Test.ApiKey;
                 });
 

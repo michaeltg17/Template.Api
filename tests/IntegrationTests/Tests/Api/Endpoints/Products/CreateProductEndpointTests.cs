@@ -11,6 +11,7 @@ using Xunit;
 using Serilog.Sinks.InMemory.Assertions;
 using IntegrationTests.Collections;
 using Application.Features.Images;
+using IntegrationTests.Extensions;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
@@ -46,10 +47,12 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             product.Should().BeEquivalentTo(expected);
 
             //Then: image is uploaded
-            ImageApiMock.ValidatePostAndRegisterGet($"{product.Id}.jpeg", InitialImage);
-            var productImageUrl = ImageService.BuildUrl(ImageApiMock.Server.Url, product.ImageName);
-            var productImage = await ImageHttpClient.GetByteArrayAsync(productImageUrl);
-            ImageApiMock.ValidateGetRequest($"{product.Id}.jpeg");
+            ImageApiMock.ValidatePostAndSetGetMock(product.ImageName!, InitialImage);
+            var productImageUrl = ImageService.BuildUrl(ImageApiMock.Server.Uri, product.ImageName!);
+            var productImage = await ImageHttpClient
+                .GetByteArrayAsync(productImageUrl, TestContext.Current.CancellationToken)
+                .ConfigureAwait(true);
+            ImageApiMock.ValidateGetRequest(product.ImageName!);
             productImage.Should().BeEquivalentTo(InitialImage);
 
             //Then: expected product in db

@@ -18,7 +18,7 @@ namespace Application.Features.Products.Actions
             var imageFileName = $"{productId}{extension}";
 
             using var stream = image.OpenReadStream();
-            await imageService.UploadAsync(imageFileName, stream, image.ContentType)
+            await imageService.Upload(imageFileName, stream, image.ContentType)
                 .ConfigureAwait(false);
 
             return imageFileName;
@@ -27,10 +27,10 @@ namespace Application.Features.Products.Actions
         internal async Task DeleteImage(string? imageName)
         {
             if (imageName is not null)
-                await imageService.DeleteAsync(imageName).ConfigureAwait(false);
+                await imageService.Delete(imageName).ConfigureAwait(false);
         }
 
-        internal string? BuildImageUrl(string? imageName)
+        internal Uri? BuildImageUrl(string? imageName)
         {
             return imageName is not null ? imageService.BuildUrl(imageName) : null;
         }

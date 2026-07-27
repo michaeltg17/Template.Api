@@ -11,16 +11,16 @@ namespace Core.Testing.Validators
     public static class ProblemDetailsValidator
     {
         public static async Task ValidateNotAllFoundException(
-            HttpResponseMessage response, string entity, string route, long[] ids)
+            HttpResponseMessage response, string entity, string baseInstance, long[] ids)
         {
-            var builder = new ProblemDetailsBuilder().WithNotAllFoundException(entity, route, ids);
+            var builder = new ProblemDetailsBuilder().WithNotAllFoundException(entity, baseInstance, ids);
             await ValidateCommon(response, builder, HttpStatusCode.NotFound);
         }
 
         public static async Task ValidateNotFoundException(
-            HttpResponseMessage response, string entity, string route, long id)
+            HttpResponseMessage response, string entity, string baseInstance, long id)
         {
-            var builder = new ProblemDetailsBuilder().WithNotFoundException(entity, route, id);
+            var builder = new ProblemDetailsBuilder().WithNotFoundException(entity, baseInstance, id);
             await ValidateCommon(response, builder, HttpStatusCode.NotFound);
         }
 
