@@ -33,13 +33,9 @@ namespace IntegrationTests.Fixtures
             Database = await databaseFactory.Create();
         }
 
-        /// <summary>
-        /// To be called at the end of each test so that logs from previous test doesn't get mixed with the next one.
-        /// </summary>
-        public static void FlushLogger()
+        public void FlushLogger()
         {
-            //Not the best but too hard to do it in another way.
-            Thread.Sleep(10);
+            Thread.Sleep(600);
         }
 
         protected override IHost CreateHost(IHostBuilder builder)
@@ -51,11 +47,7 @@ namespace IntegrationTests.Fixtures
                 Api.Startup.ApplyCommonSerilogConfiguration(context, services, configuration);
                 configuration.WriteTo.Sink(InjectableTestOutputSink);
 
-                //Using Map sink to fix "Only first test is logged"
-                configuration.WriteTo.Map(
-                    _ => InMemorySink,
-                    (_, writeTo) => writeTo.Sink(InMemorySink),
-                    sinkMapCountLimit: 1);
+                configuration.WriteTo.Sink(InMemorySink, LogEventLevel.Verbose);
 
                 if (testSettings.EnableSqlLogging)
                 {

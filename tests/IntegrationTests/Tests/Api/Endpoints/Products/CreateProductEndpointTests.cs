@@ -52,6 +52,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             dbProduct.Should().BeEquivalentTo(expected, o => o.Excluding(p => p.ImageUrl));
 
             //Then: expected logging
+            WebApplicationFactoryFixture.FlushLogger();
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
                 .HaveMessage("Product with id '{id}' created successfully.")
@@ -86,6 +87,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 });
 
             //Then: expected logging
+            WebApplicationFactoryFixture.FlushLogger();
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
                 .HaveMessage("Product with id '{id}' created successfully.")
