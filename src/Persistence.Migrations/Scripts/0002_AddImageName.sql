@@ -1,0 +1,1 @@
+ALTER TABLE [Products] ADD [ImageName] NVARCHAR(200) NULL;

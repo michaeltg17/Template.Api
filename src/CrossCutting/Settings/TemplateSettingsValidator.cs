@@ -8,14 +8,14 @@ namespace CrossCutting.Settings
         {
             var validationErrors = new List<string>();
 
-            if (string.IsNullOrWhiteSpace(templateSettings.ApiUrl))
-                validationErrors.Add($"The '{nameof(templateSettings.ApiUrl)}' setting is required");
-
-            if (string.IsNullOrWhiteSpace(templateSettings.ImagesRequestPath))
-                validationErrors.Add($"The '{nameof(templateSettings.ImagesRequestPath)}' setting is required");
-
             if (string.IsNullOrWhiteSpace(templateSettings.SqlServerConnectionString))
                 validationErrors.Add($"The '{nameof(templateSettings.SqlServerConnectionString)}' setting is required");
+
+            if (templateSettings.ImageApiUrl is null or { IsAbsoluteUri: false })
+                validationErrors.Add($"The '{nameof(templateSettings.ImageApiUrl)}' setting is required");
+
+            if (string.IsNullOrWhiteSpace(templateSettings.ImageApiKey))
+                validationErrors.Add($"The '{nameof(templateSettings.ImageApiKey)}' setting is required");
 
             if (validationErrors.Count > 0) return ValidateOptionsResult.Fail(validationErrors);
 

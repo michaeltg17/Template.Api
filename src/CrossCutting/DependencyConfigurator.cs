@@ -15,14 +15,7 @@ namespace CrossCutting
 
             services.AddSingleton<IValidateOptions<TemplateSettings>, TemplateSettingsValidator>();
 
-            services.AddSingleton<ITemplateSettings>(services =>
-            {
-                var settings = services.GetRequiredService<IOptions<TemplateSettings>>().Value;
-                var contentPath = services.GetRequiredService<IHostEnvironment>().ContentRootPath;
-                settings.ImagesStoragePath = Path.Combine(contentPath, "images");
-                Directory.CreateDirectory(settings.ImagesStoragePath);
-                return settings;
-            });
+            services.AddSingleton<ITemplateSettings>(sp => sp.GetRequiredService<IOptions<TemplateSettings>>().Value);
 
             return services;
         }

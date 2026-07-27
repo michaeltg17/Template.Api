@@ -37,7 +37,7 @@ public partial class DeleteProductsCommand(
             await context.SaveChangesAsync().ConfigureAwait(false);
             foreach (var product in products)
             {
-                productService.DeleteImage(product.Id);
+                await productService.DeleteImage(product.ImageName).ConfigureAwait(false);
             }
         }
 

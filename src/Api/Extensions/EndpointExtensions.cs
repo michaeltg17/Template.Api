@@ -6,9 +6,12 @@ namespace Api.Extensions;
 
 public static class EndpointExtensions
 {
+    public const string BasePath = "api";
+    public const string ProductsPath = $"{BasePath}/products";
+
     public static WebApplication MapEndpoints(this WebApplication app)
     {
-        var products = app.MapGroup("api/Products").DisableAntiforgery();
+        var products = app.MapGroup(ProductsPath).DisableAntiforgery();
         GetAllProductsEndpoint.Map(products);
         GetProductEndpoint.Map(products);
         CreateProductEndpoint.Map(products);

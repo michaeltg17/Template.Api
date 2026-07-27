@@ -45,6 +45,9 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .WithProperty("ids")
                 .WithValue([product.Id]);
 
+            //Then: expected image delete
+            ImageApiMock.ValidateDeleteRequests([product.ImageName!]);
+
             //Then: common expectations
             await ValidateCommonExpectations(2, [product.Id]);
         }
@@ -73,7 +76,10 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .Appearing().Once()
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("ids")
-, ids);
+                , ids);
+
+            //Then: expected image deletes
+            ImageApiMock.ValidateDeleteRequests([initialProducts[0].ImageName!, initialProducts[1].ImageName!]);
 
             //Then: common expectations
             await ValidateCommonExpectations(1, ids);
@@ -90,7 +96,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var response = await ApiClient.DeleteProducts(request);
 
             //Then
-            await ProblemDetailsValidator.ValidateNotAllFoundException(response, "Product", "Products", [5, 6]);
+            await ProblemDetailsValidator.ValidateNotAllFoundException(response, nameof(Product), BaseInstance, [5, 6]);
         }
 
         [Fact]
@@ -119,6 +125,9 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("ids")
                 .WithValue([existingId]);
+
+            //Then: expected image delete
+            ImageApiMock.ValidateDeleteRequests([$"{existingId}.jpeg"]);
 
             //Then: common expectations
             await ValidateCommonExpectations(2, [existingId]);

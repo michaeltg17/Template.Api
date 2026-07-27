@@ -12,20 +12,25 @@ namespace IntegrationTests
 {
     public abstract class Test : IAsyncLifetime
     {
+        public const string ApiKey = "test-api-key";
+
         public ApiClient.ApiClient ApiClient { get; private set; } = default!;
         internal WebApplicationFactoryFixture WebApplicationFactoryFixture { get; set; } = default!;
         public ITestOutputHelper TestOutputHelper { get; set; } = default!;
         protected AppDbContext Context { get; set; } = default!;
         AsyncServiceScope Scope { get; set; } = default!;
+        protected HttpClient ImageHttpClient { get; private set; } = default!;
 
         public virtual ValueTask Initialize()
         {
             WebApplicationFactoryFixture.InjectableTestOutputSink.Inject(TestOutputHelper);
             ClearInMemorySink(WebApplicationFactoryFixture.InMemorySink);
+            WebApplicationFactoryFixture.ImageApiMock!.Server.ResetLogEntries();
             ApiClient = new(WebApplicationFactoryFixture.CreateClient());
 
             Scope = WebApplicationFactoryFixture.Services.CreateAsyncScope();
             Context = Scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            ImageHttpClient = Scope.ServiceProvider.GetRequiredService<IHttpClientFactory>().CreateClient();
             return ValueTask.CompletedTask;
         }
 
@@ -35,20 +40,9 @@ namespace IntegrationTests
             return Context.Database.ExecuteSqlRawAsync(sql);
         }
 
-        void ClearImages()
-        {
-            var settings = Scope.ServiceProvider.GetRequiredService<ITemplateSettings>();
-            if (Directory.Exists(settings.ImagesStoragePath))
-            {
-                Directory.Delete(settings.ImagesStoragePath, true);
-                Directory.CreateDirectory(settings.ImagesStoragePath);
-            }
-        }
-
         public async ValueTask DisposeAsync()
         {
             await DeleteEntitiesFromDb();
-            ClearImages();
             await Scope.DisposeAsync();
             WebApplicationFactoryFixture.FlushLogger();
         }

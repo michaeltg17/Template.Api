@@ -1,8 +1,10 @@
 using ApiClient.Extensions;
+using Application.Features.Images;
 using AwesomeAssertions;
 using Core.Testing.Builders;
 using Domain.Models;
 using IntegrationTests.Collections;
+using IntegrationTests.Extensions;
 using System.Net;
 using Xunit;
 
@@ -24,6 +26,16 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var products = await response.To<List<Product>>();
             products.Should().BeEquivalentTo(initialProducts, o => o.WithStrictOrdering());
+
+            //Then: verify downloads
+            foreach (var product in products)
+            {
+                var imageUrl = ImageService.BuildUrl(ImageApiMock.Server.Uri, product.ImageName!);
+                var productImage = await ImageHttpClient.GetByteArrayAsync(imageUrl);
+                productImage.Should()
+                    .BeEquivalentTo(InitialImage, $"downloaded image for product '{product.Id}' should match initial image");
+                ImageApiMock.ValidateGetRequest(product.ImageName!);
+            }
 
             //Then: common expectations
             await ValidateCommonExpectations(3);

@@ -13,6 +13,7 @@
 		<PackageReference Include="Serilog.Sinks.Map" />
 		<PackageReference Include="Serilog.Sinks.XUnit.Injectable" />
 		<PackageReference Include="Testcontainers.MsSql" />
+		<PackageReference Include="WireMock.Net" />
 		<PackageReference Include="Xunit.DependencyInjection" />
 		<PackageReference Include="xunit.v3" />
 		<PackageReference Include="xunit.runner.visualstudio">

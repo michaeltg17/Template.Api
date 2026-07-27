@@ -15,6 +15,7 @@ using IntegrationTests.Settings;
 using IntegrationTests.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Serilog.Sinks.XUnit.Injectable.Abstract;
+using IntegrationTests.Extensions;
 
 namespace IntegrationTests.Fixtures
 {
@@ -27,10 +28,11 @@ namespace IntegrationTests.Fixtures
         public InMemorySink InMemorySink { get; } = new();
         public InjectableTestOutputSink InjectableTestOutputSink { get; set; } = new();
         Database? Database { get; set; }
+        internal ImageApiMock ImageApiMock { get; private set; } = new();
 
         async ValueTask IAsyncLifetime.InitializeAsync()
         {
-            Database = await databaseFactory.Create();
+            Database = await databaseFactory.Create().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -73,6 +75,8 @@ namespace IntegrationTests.Fixtures
                 services.Configure<TemplateSettings>(templateSettings =>
                 {
                     templateSettings.SqlServerConnectionString = Database!.ConnectionString;
+                    templateSettings.ImageApiUrl = ImageApiMock!.Server.Uri;
+                    templateSettings.ImageApiKey = Test.ApiKey;
                 });
 
                 if (testSettings.EnableSqlLogging)
@@ -86,6 +90,7 @@ namespace IntegrationTests.Fixtures
 
         public async new Task DisposeAsync()
         {
+            ImageApiMock?.Server.Dispose();
             if (Database != null) await Database.DisposeAsync();
             await base.DisposeAsync();
         }

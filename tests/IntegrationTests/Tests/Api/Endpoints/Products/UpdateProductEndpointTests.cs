@@ -10,6 +10,8 @@ using System.Net;
 using Xunit;
 using Serilog.Sinks.InMemory.Assertions;
 using IntegrationTests.Collections;
+using Application.Features.Images;
+using IntegrationTests.Extensions;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
@@ -39,15 +41,17 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                     p.Name = request.Name;
                     p.Description = request.Description;
                     p.Price = request.Price;
+                    p.ImageName = updatedProduct.ImageName;
                     p.ImageUrl = updatedProduct.ImageUrl;
                 })
                 .Build();
 
             updatedProduct.Should().BeEquivalentTo(expected);
-            var updatedProductImage = await ApiClient.HttpClient.GetByteArrayAsync(
-                new Uri(updatedProduct.ImageUrl!),
-                TestContext.Current.CancellationToken);
+            ImageApiMock.ValidatePostAndSetGetMock($"{updatedProduct.Id}.jpg", Image2);
+            var updatedProductImageUrl = ImageService.BuildUrl(ImageApiMock.Server.Uri, updatedProduct.ImageName!);
+            var updatedProductImage = await ImageHttpClient.GetByteArrayAsync(updatedProductImageUrl);
             updatedProductImage.Should().BeEquivalentTo(Image2);
+            ImageApiMock.ValidateGetRequest($"{updatedProduct.Id}.jpg");
 
             //Then: expected product in db
             var dbProduct = await Context.Products.FindAsync(updatedProduct.Id);
@@ -77,7 +81,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var response = await ApiClient.UpdateProduct(5, request);
 
             //Then: product not found
-            await ProblemDetailsValidator.ValidateNotFoundException(response, "Product", "Products", 5);
+            await ProblemDetailsValidator.ValidateNotFoundException(response, nameof(Product), BaseInstance, 5);
 
             //Then: expected no logging
             WebApplicationFactoryFixture.InMemorySink

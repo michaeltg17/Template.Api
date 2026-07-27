@@ -14,7 +14,7 @@ namespace Application.Features.Products.Actions
         {
             var product = await context.Products.FindAsync(id).ConfigureAwait(false)
                 ?? throw new NotFoundException<Product>(id);
-            product.ImageUrl = productService.BuildImageUrl(product.Id);
+            product.ImageUrl = productService.BuildImageUrl(product.ImageName);
             return product;
         }
     }

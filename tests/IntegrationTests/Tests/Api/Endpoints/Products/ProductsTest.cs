@@ -1,10 +1,9 @@
 ﻿using ApiClient.Extensions;
 using AwesomeAssertions;
 using Core.Testing.Builders;
-using CrossCutting.Settings;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using IntegrationTests.Infrastructure;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -17,7 +16,8 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         protected static byte[] InitialImage = File.ReadAllBytes("Images/didi.jpeg");
         protected static byte[] Image2 = File.ReadAllBytes("Images/didi2.jpg");
 
-        public List<Product> initialProducts = new();
+        public List<Product> initialProducts = [];
+        internal ImageApiMock ImageApiMock => WebApplicationFactoryFixture.ImageApiMock;
 
         public async ValueTask CreateProducts()
         {
@@ -28,33 +28,33 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 ApiClient.CreateProduct(new CreateProductRequestBuilder().Build()).To<Product>()
             };
             initialProducts.AddRange((await Task.WhenAll(tasks)).OrderBy(p => p.Id));
+
+            foreach (var product in initialProducts)
+            {
+                ImageApiMock.SetGetMock(product.ImageName!, InitialImage);
+            }
         }
 
         public async Task ValidateCommonExpectations(int totalProductsCount, IEnumerable<long>? exceptIds = null)
         {
-            exceptIds ??= [];
-            var productsToValidate = initialProducts.Where(p => !exceptIds.Contains(p.Id)).ToList();
-
             //Expected products in db
             var dbProducts = await Context.Products.ToListAsync();
-            dbProducts.Where(p => !exceptIds.Contains(p.Id)).Should().BeEquivalentTo(productsToValidate, o => o.Excluding(p => p.ImageUrl));
-            dbProducts.Count.Should().Be(totalProductsCount);
 
-            //Expected image files
-            var settings = WebApplicationFactoryFixture.Services.GetRequiredService<ITemplateSettings>();
-            var imageFiles = Directory.GetFiles(settings.ImagesStoragePath);
-
-            foreach (var product in productsToValidate)
+            if (exceptIds == null)
             {
-                var imageFile = imageFiles.SingleOrDefault(f => Path.GetFileNameWithoutExtension(f) == product.Id.ToString());
-                imageFile.Should().NotBeNull($"image file for product with id '{product.Id}' should exist");
-
-                var imageContent = File.ReadAllBytes(imageFile!);
-                imageContent.Should().BeEquivalentTo(InitialImage, $"image content for product with id '{product.Id}' should match");
+                dbProducts.Should().BeEquivalentTo(initialProducts, o => o.Excluding(p => p.ImageUrl));
+            }
+            else
+            {
+                dbProducts
+                    .Where(p => !exceptIds.Contains(p.Id))
+                    .Should()
+                    .BeEquivalentTo(
+                        initialProducts.Where(p => !exceptIds.Contains(p.Id)),
+                        o => o.Excluding(p => p.ImageUrl));
             }
 
-            //Expected same image files and products count
-            imageFiles.Length.Should().Be(totalProductsCount, "image count should match expected products count");
+            dbProducts.Count.Should().Be(totalProductsCount);
         }
     }
 }
