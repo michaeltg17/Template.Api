@@ -54,7 +54,6 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             dbProduct.Should().BeEquivalentTo(expected, o => o.Excluding(p => p.ImageUrl));
 
             //Then: expected logging
-            WebApplicationFactoryFixture.FlushLogger();
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
                 .HaveMessage("Product with id '{id}' updated successfully.")
@@ -81,7 +80,6 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             await ProblemDetailsValidator.ValidateNotFoundException(response, "Product", "Products", 5);
 
             //Then: expected no logging
-            WebApplicationFactoryFixture.FlushLogger();
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
                 .NotHaveMessage("Product with id '{id}' updated successfully.");
@@ -112,7 +110,6 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 });
 
             //Then: expected no logging
-            WebApplicationFactoryFixture.FlushLogger();
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
                 .NotHaveMessage("Product with id '{id}' updated successfully.");
