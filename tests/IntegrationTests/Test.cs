@@ -50,6 +50,7 @@ namespace IntegrationTests
             await DeleteEntitiesFromDb();
             ClearImages();
             await Scope.DisposeAsync();
+            WebApplicationFactoryFixture.FlushLogger();
         }
 
         public ValueTask InitializeAsync()

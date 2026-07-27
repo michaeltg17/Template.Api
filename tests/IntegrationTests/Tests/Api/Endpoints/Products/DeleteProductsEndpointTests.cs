@@ -37,7 +37,6 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             result.Should().BeEquivalentTo(expected);
 
             //Then: expected logging
-            WebApplicationFactoryFixture.FlushLogger();
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
                 .HaveMessage("Products with ids '{ids}' deleted successfully.")
@@ -68,7 +67,6 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             result.Should().BeEquivalentTo(expected);
 
             //Then: expected logging
-            WebApplicationFactoryFixture.FlushLogger();
             LogEventPropertyAssertionExtensions.WithValue(WebApplicationFactoryFixture.InMemorySink
                 .Should()
                 .HaveMessage("Products with ids '{ids}' deleted successfully.")
@@ -114,7 +112,6 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             result.Should().BeEquivalentTo(expected);
 
             //Then: expected logging
-            WebApplicationFactoryFixture.FlushLogger();
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
                 .HaveMessage("Products with ids '{ids}' deleted successfully.")
@@ -145,7 +142,6 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             result.Should().BeEquivalentTo(expected);
 
             //Then: expected logging
-            WebApplicationFactoryFixture.FlushLogger();
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
                 .NotHaveMessage("Products with ids '{ids}' deleted successfully.");
