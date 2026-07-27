@@ -32,7 +32,7 @@ namespace Application.Features.Images
         public async Task<byte[]> Get(string imageName)
         {
             using var request = new HttpRequestMessage(HttpMethod.Get, BuildUrl(imageName));
-            request.Headers.Add("X-Api-Key", settings.ImageApiKey);
+            request.Headers.Add(ImageApiKeyHeaderName, settings.ImageApiKey);
 
             var response = await httpClient.SendAsync(request).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
@@ -43,7 +43,7 @@ namespace Application.Features.Images
         public async Task Delete(string imageName)
         {
             using var request = new HttpRequestMessage(HttpMethod.Delete, BuildUrl(imageName));
-            request.Headers.Add("X-Api-Key", settings.ImageApiKey);
+            request.Headers.Add(ImageApiKeyHeaderName, settings.ImageApiKey);
 
             var response = await httpClient.SendAsync(request).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();

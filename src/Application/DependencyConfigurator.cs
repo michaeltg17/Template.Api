@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Application.Features.Images;
 using Application.Features.Products.Actions;
+using CrossCutting.Settings;
 
 namespace Application
 {
@@ -20,7 +21,7 @@ namespace Application
             services.AddScoped<DeleteProductsCommand>();
             services.AddHttpClient<ImageService>((sp, client) =>
             {
-                var settings = sp.GetRequiredService<CrossCutting.Settings.ITemplateSettings>();
+                var settings = sp.GetRequiredService<ITemplateSettings>();
                 client.BaseAddress = settings.ImageApiUrl;
             });
 

@@ -21,7 +21,7 @@ API:
 Tests:
 - Unit, integration and functional tests
 - xUnit
-- Moq
+- WireMock
 - AwesomeAssertions
 - Coverlet + ReportGenerator
 
