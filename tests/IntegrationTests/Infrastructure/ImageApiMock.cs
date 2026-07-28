@@ -84,7 +84,7 @@ namespace IntegrationTests.Infrastructure
             downloadEntries.Should().NotBeEmpty($"get of '{imageName}' should have occurred");
         }
 
-        public void ValidateDeleteRequests(string[] imageNames)
+        public void ValidateDeleteRequests(IEnumerable<string> imageNames)
         {
             foreach (var imageName in imageNames)
             {

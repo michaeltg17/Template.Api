@@ -4,7 +4,7 @@ namespace Core.Testing.Extensions
 {
     public static class LogEventPropertyAssertionExtensions
     {
-        public static LogEventAssertion WithValue<T>(
+        public static LogEventAssertion WithValues<T>(
             this LogEventPropertyValueAssertions assertion,
             IEnumerable<T> values)
         {
