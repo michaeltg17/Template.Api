@@ -1,1 +1,1 @@
-ALTER TABLE Products ADD ImageName VARCHAR(200) NULL;
+ALTER TABLE products ADD image_name VARCHAR(200) NULL;

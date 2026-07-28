@@ -55,7 +55,7 @@ Isolated unit tests with no mocking. If you have to mock, probably, you needed a
 
 ## IntegrationTests
 
-Mostly real API env tests. WebApplicationFactory + Testcontainers.MsSql.
+Mostly real API env tests. WebApplicationFactory + Testcontainers.PostgreSql.
 
 This should be enough for testing almost everything.
 

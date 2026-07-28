@@ -70,13 +70,13 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             result.Should().BeEquivalentTo(expected);
 
             //Then: expected logging
-            LogEventPropertyAssertionExtensions.WithValue(WebApplicationFactoryFixture.InMemorySink
+            WebApplicationFactoryFixture.InMemorySink
                 .Should()
                 .HaveMessage("Products with ids '{ids}' deleted successfully.")
                 .Appearing().Once()
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("ids")
-                , ids);
+                .WithValue([initialProducts[0].Id, initialProducts[1].Id]);
 
             //Then: expected image deletes
             ImageApiMock.ValidateDeleteRequests([initialProducts[0].ImageName!, initialProducts[1].ImageName!]);
