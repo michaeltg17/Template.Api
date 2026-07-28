@@ -12,7 +12,7 @@ namespace Persistence
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
-                .UseNpgsql(templateSettings.PostgreSQLConnectionString)
+                .UseNpgsql(templateSettings.PostgreSqlConnectionString)
                 .UseSnakeCaseNamingConvention();
         }
 

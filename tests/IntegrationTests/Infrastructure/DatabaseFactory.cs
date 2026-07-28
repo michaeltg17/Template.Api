@@ -16,7 +16,7 @@ namespace IntegrationTests.Infrastructure
     {
         static readonly SemaphoreSlim @lock = new(1, 1);
         const string DatabaseName = "Database";
-        const string ContainerName = "TemplateApiIntegrationTestsPostgreSQL";
+        const string ContainerName = "TemplateApiIntegrationTestsPostgreSql";
         const int HostPort = 50000;
 
         public async Task<Database> Create()

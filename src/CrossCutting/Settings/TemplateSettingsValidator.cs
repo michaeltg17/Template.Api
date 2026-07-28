@@ -8,8 +8,8 @@ namespace CrossCutting.Settings
         {
             var validationErrors = new List<string>();
 
-            if (string.IsNullOrWhiteSpace(templateSettings.PostgreSQLConnectionString))
-                validationErrors.Add($"The '{nameof(templateSettings.PostgreSQLConnectionString)}' setting is required");
+            if (string.IsNullOrWhiteSpace(templateSettings.PostgreSqlConnectionString))
+                validationErrors.Add($"The '{nameof(templateSettings.PostgreSqlConnectionString)}' setting is required");
 
             if (templateSettings.ImageApiUrl is null or { IsAbsoluteUri: false })
                 validationErrors.Add($"The '{nameof(templateSettings.ImageApiUrl)}' setting is required");

@@ -3,7 +3,7 @@
     public interface ITemplateSettings
     {
         public const string Section = "Template";
-        public string PostgreSQLConnectionString { get; }
+        public string PostgreSqlConnectionString { get; }
         public Uri ImageApiUrl { get; }
         public string ImageApiKey { get; }
         public long MaxImageSizeMb { get; }
