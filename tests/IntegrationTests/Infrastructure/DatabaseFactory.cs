@@ -3,10 +3,10 @@ using Persistence.Migrations;
 using Docker.DotNet;
 using Docker.DotNet.Models;
 using IntegrationTests.Settings;
-using Microsoft.Data.SqlClient;
+using Npgsql;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
-using Testcontainers.MsSql;
+using Testcontainers.PostgreSql;
 using Xunit;
 using Microsoft.Extensions.Hosting;
 
@@ -16,7 +16,7 @@ namespace IntegrationTests.Infrastructure
     {
         static readonly SemaphoreSlim @lock = new(1, 1);
         const string DatabaseName = "Database";
-        const string ContainerName = "IntegrationTestsSqlServer";
+        const string ContainerName = "IntegrationTestsPostgreSQL";
         const int HostPort = 50000;
 
         public async Task<Database> Create()
@@ -29,7 +29,7 @@ namespace IntegrationTests.Infrastructure
 
                 WriteMessage("Using existing container if exists.");
                 string connectionString;
-                MsSqlContainer? container = default;
+                PostgreSqlContainer? container = default;
                 if (await ExistsContainer())
                 {
                     connectionString = GetConnectionString();
@@ -71,37 +71,37 @@ namespace IntegrationTests.Infrastructure
             return false;
         }
 
-        async Task<MsSqlContainer> CreateContainer()
+        async Task<PostgreSqlContainer> CreateContainer()
         {
-            var sqlServerContainer = new MsSqlBuilder("mcr.microsoft.com/mssql/server:2022-latest")
+            var postgresContainer = new PostgreSqlBuilder("postgres:latest")
                 .WithName(ContainerName!)
-                .WithPortBinding(HostPort, 1433)
+                .WithPortBinding(HostPort, 5432)
                 .WithCleanUp(!testSettings.KeepAliveDatabase)
                 .WithAutoRemove(!testSettings.KeepAliveDatabase)
                 .Build();
 
-            await sqlServerContainer.StartAsync();
+            await postgresContainer.StartAsync();
 
-            return sqlServerContainer;
+            return postgresContainer;
         }
 
         static string DockerHost => 
             Environment.GetEnvironmentVariable("TESTCONTAINERS_HOST_OVERRIDE") ?? "localhost";
 
-        static string GetConnectionString(MsSqlContainer? container = null)
+        static string GetConnectionString(PostgreSqlContainer? container = null)
         {
             if (DockerHost == "localhost" && container != null)
             {
                 return container.GetConnectionString();
             }
 
-            var builder = new SqlConnectionStringBuilder()
+            var builder = new NpgsqlConnectionStringBuilder()
             {
-                InitialCatalog = DatabaseName,
-                UserID = MsSqlBuilder.DefaultUsername,
-                Password = MsSqlBuilder.DefaultPassword,
-                DataSource = DockerHost + "," + HostPort,
-                TrustServerCertificate = true
+                Database = DatabaseName,
+                Username = PostgreSqlBuilder.DefaultUsername,
+                Password = PostgreSqlBuilder.DefaultPassword,
+                Host = DockerHost,
+                Port = HostPort
             };
 
             return builder.ConnectionString;

@@ -11,7 +11,7 @@ namespace Persistence
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
-                .UseSqlServer(templateSettings.SqlServerConnectionString, options => options.EnableRetryOnFailure());
+                .UseNpgsql(templateSettings.PostgreSQLConnectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

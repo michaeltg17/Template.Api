@@ -36,7 +36,7 @@ namespace IntegrationTests
 
         Task<int> DeleteEntitiesFromDb()
         {
-            var sql = "TRUNCATE TABLE Products;";
+            var sql = "TRUNCATE TABLE Products RESTART IDENTITY;";
             return Context.Database.ExecuteSqlRawAsync(sql);
         }
 
