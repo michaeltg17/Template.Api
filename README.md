@@ -27,5 +27,5 @@ Tests:
 
 CI/CD:
 - CI in docker with ci.sh that runs in GitHub Actions and can also be run locally.
-- CI does Build + Tests + Coverage + if main, Docker image push to ghcr.
+- CI does Build + Tests + Coverage. If main, it also does Docker image push to ghcr, creates tag and release.
 - dev branch for continuous fast development which is then merged to main for stable versions.

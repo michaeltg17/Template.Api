@@ -29,7 +29,7 @@ Builder pattern and helpers that can be used in all projects.
 
 ## CrossCutting
 
-Shared concerns: logging and settings mainly.
+Shared concerns: settings mainly.
 
 ## Domain
 
