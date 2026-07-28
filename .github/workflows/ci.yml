@@ -107,7 +107,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          SHORT_SHA=$(echo "${{ steps.meta.outputs.tag-names }}" | cut -d' ' -f2)
+          SHORT_SHA=$(echo "${{ steps.meta.outputs.tag-names }}" | grep -E '^[0-9a-f]{7}$')
           gh release create "$SHORT_SHA" \
             --target ${{ github.sha }} \
             --title "${{ steps.pr-notes.outputs.pr_title }}" \
