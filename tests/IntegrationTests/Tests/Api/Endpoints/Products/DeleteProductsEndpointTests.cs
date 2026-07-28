@@ -43,7 +43,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .Appearing().Once()
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("ids")
-                .WithValue([product.Id]);
+                .WithValues([product.Id]);
 
             //Then: expected image delete
             ImageApiMock.ValidateDeleteRequests([product.ImageName!]);
@@ -56,8 +56,9 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         public async Task DeleteMultipleOk()
         {
             //Given
-            await CreateProducts();
-            var ids = new[] { initialProducts[0].Id, initialProducts[1].Id };
+            await CreateProducts(5);
+            var products = new[] { initialProducts[0], initialProducts[1], initialProducts[4] };
+            var ids = products.Select(p => p.Id).ToList();
             var request = new DeleteProductsRequest(ids);
 
             //When
@@ -70,19 +71,19 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             result.Should().BeEquivalentTo(expected);
 
             //Then: expected logging
-            LogEventPropertyAssertionExtensions.WithValue(WebApplicationFactoryFixture.InMemorySink
+            WebApplicationFactoryFixture.InMemorySink
                 .Should()
                 .HaveMessage("Products with ids '{ids}' deleted successfully.")
                 .Appearing().Once()
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("ids")
-                , ids);
+                .WithValues(ids);
 
             //Then: expected image deletes
-            ImageApiMock.ValidateDeleteRequests([initialProducts[0].ImageName!, initialProducts[1].ImageName!]);
+            ImageApiMock.ValidateDeleteRequests(products.Select(p => p.ImageName!));
 
             //Then: common expectations
-            await ValidateCommonExpectations(1, ids);
+            await ValidateCommonExpectations(2, ids);
         }
 
         [Fact]
@@ -124,7 +125,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .Appearing().Once()
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("ids")
-                .WithValue([existingId]);
+                .WithValues([existingId]);
 
             //Then: expected image delete
             ImageApiMock.ValidateDeleteRequests([$"{existingId}.jpeg"]);

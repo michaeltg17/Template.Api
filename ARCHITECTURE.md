@@ -29,7 +29,7 @@ Builder pattern and helpers that can be used in all projects.
 
 ## CrossCutting
 
-Shared concerns: logging and settings mainly.
+Shared concerns: settings mainly.
 
 ## Domain
 
@@ -55,7 +55,7 @@ Isolated unit tests with no mocking. If you have to mock, probably, you needed a
 
 ## IntegrationTests
 
-Mostly real API env tests. WebApplicationFactory + Testcontainers.MsSql.
+Mostly real API env tests. WebApplicationFactory + Testcontainers.PostgreSql.
 
 This should be enough for testing almost everything.
 

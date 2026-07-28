@@ -1,5 +1,6 @@
 ﻿using CrossCutting.Settings;
 using Domain.Models;
+using EFCore.NamingConventions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence
@@ -11,7 +12,8 @@ namespace Persistence
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
-                .UseSqlServer(templateSettings.SqlServerConnectionString, options => options.EnableRetryOnFailure());
+                .UseNpgsql(templateSettings.PostgreSqlConnectionString)
+                .UseSnakeCaseNamingConvention();
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

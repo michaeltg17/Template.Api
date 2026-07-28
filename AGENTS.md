@@ -25,7 +25,7 @@
 ├── ci.sh                           # CI entrypoint script
 ├── Directory.Build.props           # shared props: net10.0, nullable, implicit usings
 ├── Directory.Packages.props        # central package versions
-├── docker-compose.yml              # sqlserver, migrator, api services
+├── docker-compose.yml              # postgresql, migrator, api services
 ├── Dockerfile                      # multi-stage: SDK build → runtime (aspnet:10.0)
 ├── Dockerfile.ci                   # CI runtime image with test dependencies
 ├── Dockerfile.migrations           # multi-stage: SDK build → runtime for migrator
@@ -136,7 +136,8 @@
 │       ├── Extensions/
 │       │   └── DatabaseUpgradeResultExtensions.cs
 │       └── Scripts/
-│           └── 0001_Initial.sql
+│           ├── 0001_Initial.sql
+│           └── 0002_AddImageName.sql
 └── tests/
     ├── Core.Testing/               # shared test utilities (builders, validators)
     │   ├── Core.Testing.csproj
@@ -164,7 +165,7 @@
     │   │   └── TraceIdValidatorTests.cs
     │   └── Domain/Validators/
     │       └── ProductValidatorTests.cs
-    ├── IntegrationTests/           # WebApplicationFactory + Testcontainers.MsSql
+    ├── IntegrationTests/           # WebApplicationFactory + Testcontainers.PostgreSql
     │   ├── IntegrationTests.csproj
     │   ├── BeforeAfterTestConfiguration.cs
     │   ├── Startup.cs
@@ -228,11 +229,11 @@ Responses use `application/problem+json`. Invalid requests return 400, other err
 
 ```bash
 dotnet run --project src/Api
-# or full stack via docker compose (sqlserver → migrator → api):
+# or full stack via docker compose (postgresql → migrator → api):
 docker compose up
 ```
 
-SQL migrations run via the `Persistence.Migrations` project (dbup) and are executed by the `migrator` service in `docker-compose.yml`. The `Dockerfile` and `Dockerfile.migrations` both use `mcr.microsoft.com/dotnet/aspnet:10.0` (non-alpine) for runtime, as `Microsoft.Data.SqlClient` requires full globalization (ICU).
+SQL migrations run via the `Persistence.Migrations` project (dbup) and are executed by the `migrator` service in `docker-compose.yml`.
 
 ## Tests
 
@@ -243,7 +244,7 @@ dotnet test
 Three test projects: `UnitTests`, `IntegrationTests`, `FunctionalTests`, plus `Core.Testing` for shared utilities.
 
 - **UnitTests** — isolated unit tests (AutoFixture, validators)
-- **IntegrationTests** — `WebApplicationFactory` + `Testcontainers.MsSql` for EF Core integration (requires Docker socket)
+- **IntegrationTests** — `WebApplicationFactory` + `Testcontainers.PostgreSql` for EF Core integration (requires Docker socket)
 - **FunctionalTests** — E2E tests against a live API; requires `docker compose up` and `ApiUrl` in `Settings/testsettings.json`
 
 CI runs via `ci-docker.sh` which builds `Dockerfile.ci` and mounts the Docker socket to enable Testcontainers.

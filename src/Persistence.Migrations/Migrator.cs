@@ -8,10 +8,10 @@ public static class Migrator
 {
     public static void Migrate(string connectionString)
     {
-        EnsureDatabase.For.SqlDatabase(connectionString, collation: "SQL_Latin1_General_CP1_CI_AS");
+        EnsureDatabase.For.PostgresqlDatabase(connectionString);
 
         var upgrader = DeployChanges.To
-            .SqlDatabase(connectionString)
+            .PostgresqlDatabase(connectionString)
             .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly())
             .Build();
 

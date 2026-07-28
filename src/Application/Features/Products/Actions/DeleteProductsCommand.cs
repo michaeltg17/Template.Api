@@ -43,10 +43,12 @@ public partial class DeleteProductsCommand(
 
         if (foundIds.Count > 0)
         {
-            LogProductsDeleted(foundIds);
+            var foundIdsOrdered = request.Ids.Where(foundIds.Contains).ToArray();
+            LogProductsDeleted(foundIdsOrdered);
+            return new DeleteProductsResponse(foundIdsOrdered, notFoundIds);
         }
 
-        return new DeleteProductsResponse([.. foundIds], notFoundIds);
+        return new DeleteProductsResponse([], notFoundIds);
     }
 
     [LoggerMessage(Level = LogLevel.Information, Message = "Products with ids '{ids}' deleted successfully.")]

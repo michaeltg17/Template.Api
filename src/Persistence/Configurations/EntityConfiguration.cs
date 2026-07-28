@@ -8,7 +8,7 @@ namespace Persistence.Configurations
     {
         public virtual void Configure(EntityTypeBuilder<T> entity)
         {
-            entity.Property(e => e.Id).HasDefaultValueSql("NEWID()");
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
         }
     }
 }

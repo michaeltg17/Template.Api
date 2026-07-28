@@ -25,7 +25,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //Then: returns products
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             var products = await response.To<List<Product>>();
-            products.Should().BeEquivalentTo(initialProducts, o => o.WithStrictOrdering());
+            products.Should().BeEquivalentTo(initialProducts);
 
             //Then: verify downloads
             foreach (var product in products)

@@ -1,15 +1,15 @@
 services:
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: sqlserver
+  postgresql:
+    image: postgres:latest
+    container_name: postgresql
     restart: always
     ports:
-      - "1433:1433"
+      - "5432:5432"
     environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=yourStrong(!)Password
+      - POSTGRES_PASSWORD=yourStrong(!)Password
+      - POSTGRES_DB=Database
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'yourStrong(!)Password' -C -Q 'SELECT 1' || exit 1"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -22,10 +22,10 @@ services:
       dockerfile: Dockerfile.migrations
     container_name: migrator
     depends_on:
-      sqlserver:
+      postgresql:
         condition: service_healthy
     environment:
-      - SQL_SERVER_CONNECTION_STRING=Server=sqlserver;Database=Database;User Id=sa;Password=yourStrong(!)Password;TrustServerCertificate=True
+      - POSTGRESQL_CONNECTION_STRING=Host=postgresql;Database=Database;Username=postgres;Password=yourStrong(!)Password
     restart: "no"
     networks:
       - app-network
@@ -42,7 +42,7 @@ services:
       - "5000:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - Api__SqlServerConnectionString=Server=sqlserver;Database=Database;User Id=sa;Password=yourStrong(!)Password;TrustServerCertificate=True
+      - Api__PostgreSQLConnectionString=Host=postgresql;Database=Database;Username=postgres;Password=yourStrong(!)Password
       - Api__Url=http://0.0.0.0:8080
     networks:
       - app-network

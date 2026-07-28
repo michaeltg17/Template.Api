@@ -19,14 +19,12 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         public List<Product> initialProducts = [];
         internal ImageApiMock ImageApiMock => WebApplicationFactoryFixture.ImageApiMock;
 
-        public async ValueTask CreateProducts()
+        public async ValueTask CreateProducts(int count = 3)
         {
-            var tasks = new[]
-            {
-                ApiClient.CreateProduct(new CreateProductRequestBuilder().Build()).To<Product>(),
-                ApiClient.CreateProduct(new CreateProductRequestBuilder().Build()).To<Product>(),
-                ApiClient.CreateProduct(new CreateProductRequestBuilder().Build()).To<Product>()
-            };
+            var tasks = Enumerable
+                .Range(0, count)
+                .Select(_ => ApiClient.CreateProduct(new CreateProductRequestBuilder().Build()).To<Product>());
+
             initialProducts.AddRange((await Task.WhenAll(tasks)).OrderBy(p => p.Id));
 
             foreach (var product in initialProducts)

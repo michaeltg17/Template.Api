@@ -7,6 +7,6 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="dbup-core" />
-	  <PackageReference Include="dbup-sqlserver" />
+	  <PackageReference Include="dbup-postgresql" />
 	</ItemGroup>
 </Project>
