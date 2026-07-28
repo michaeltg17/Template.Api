@@ -3,7 +3,7 @@ using Testcontainers.PostgreSql;
 
 namespace IntegrationTests.Infrastructure
 {
-    public class Database(ITestSettings testSettings, PostgreSqlContainer? postgresContainer) : IAsyncDisposable
+    public class Database(ITestSettings testSettings, PostgreSqlContainer? postgreSqlContainer) : IAsyncDisposable
     {
         public required string ConnectionString { get; init; }
 
@@ -15,7 +15,7 @@ namespace IntegrationTests.Infrastructure
             }
 
             GC.SuppressFinalize(this);
-            return postgresContainer?.DisposeAsync() ?? ValueTask.CompletedTask;
+            return postgreSqlContainer?.DisposeAsync() ?? ValueTask.CompletedTask;
         }
     }
 }

@@ -16,7 +16,7 @@ namespace IntegrationTests.Infrastructure
     {
         static readonly SemaphoreSlim @lock = new(1, 1);
         const string DatabaseName = "Database";
-        const string ContainerName = "IntegrationTestsPostgreSQL";
+        const string ContainerName = "TemplateApiIntegrationTestsPostgreSQL";
         const int HostPort = 50000;
 
         public async Task<Database> Create()
@@ -73,16 +73,16 @@ namespace IntegrationTests.Infrastructure
 
         async Task<PostgreSqlContainer> CreateContainer()
         {
-            var postgresContainer = new PostgreSqlBuilder("postgres:latest")
+            var postgreSqlContainer = new PostgreSqlBuilder("postgres:latest")
                 .WithName(ContainerName!)
                 .WithPortBinding(HostPort, 5432)
                 .WithCleanUp(!testSettings.KeepAliveDatabase)
                 .WithAutoRemove(!testSettings.KeepAliveDatabase)
                 .Build();
 
-            await postgresContainer.StartAsync();
+            await postgreSqlContainer.StartAsync();
 
-            return postgresContainer;
+            return postgreSqlContainer;
         }
 
         static string DockerHost => 
