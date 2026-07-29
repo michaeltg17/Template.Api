@@ -15,6 +15,7 @@ internal static class UpdateProductEndpoint
         {
             var product = await updateProductCommand.Execute(id, request).ConfigureAwait(false);
             return Results.Ok(product);
-        });
+        })
+        .DisableAntiforgery();
     }
 }

@@ -15,6 +15,7 @@ internal static class CreateProductEndpoint
         {
             var product = await createProductCommand.Execute(request).ConfigureAwait(false);
             return Results.Created($"{EndpointExtensions.ProductsPath}/{product.Id}", product);
-        });
+        })
+        .DisableAntiforgery();
     }
 }
