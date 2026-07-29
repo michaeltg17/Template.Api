@@ -1,0 +1,1 @@
+ALTER TABLE products RENAME COLUMN image_name TO image_file_name;

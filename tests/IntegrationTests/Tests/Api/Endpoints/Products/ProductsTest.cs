@@ -14,7 +14,9 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
     {
         protected const string BaseInstance = "/api/Products";
         protected static byte[] InitialImage = File.ReadAllBytes("Images/didi.jpeg");
+        protected static string InitialImageExtension = Path.GetExtension("didi.jpeg");
         protected static byte[] Image2 = File.ReadAllBytes("Images/didi2.jpg");
+        protected static string Image2Extension = Path.GetExtension("didi2.jpg");
 
         public List<Product> initialProducts = [];
         internal ImageApiMock ImageApiMock => WebApplicationFactoryFixture.ImageApiMock;
@@ -29,7 +31,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
 
             foreach (var product in initialProducts)
             {
-                ImageApiMock.SetGetMock(product.ImageName!, InitialImage);
+                ImageApiMock.SetGetMock(product.Image!.FileName, InitialImage);
             }
         }
 
@@ -40,7 +42,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
 
             if (exceptIds == null)
             {
-                dbProducts.Should().BeEquivalentTo(initialProducts, o => o.Excluding(p => p.ImageUrl));
+                dbProducts.Should().BeEquivalentTo(initialProducts, o => o.Excluding(p => p.Image!.Url));
             }
             else
             {
@@ -49,7 +51,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                     .Should()
                     .BeEquivalentTo(
                         initialProducts.Where(p => !exceptIds.Contains(p.Id)),
-                        o => o.Excluding(p => p.ImageUrl));
+                        o => o.Excluding(p => p.Image!.Url));
             }
 
             dbProducts.Count.Should().Be(totalProductsCount);

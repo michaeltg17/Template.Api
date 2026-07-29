@@ -1,8 +1,9 @@
+using Application.Features.Images;
+using Application.Features.Products.Models.Requests;
+using Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Domain.Models;
 using Persistence;
-using Application.Features.Products.Models.Requests;
 
 namespace Application.Features.Products.Actions;
 
@@ -15,16 +16,12 @@ public partial class CreateProductCommand(
     {
         ArgumentNullException.ThrowIfNull(request);
         var product = productService.GetValidatedProductOrThrow(request);
-
         await context.Products.AddAsync(product).ConfigureAwait(false);
         await context.SaveChangesAsync().ConfigureAwait(false);
 
         if (request.Image != null)
         {
-            var imageName = await productService.SaveImage(product.Id, request.Image)
-                .ConfigureAwait(false);
-            product.ImageName = imageName;
-            product.ImageUrl = productService.BuildImageUrl(imageName);
+            await productService.SetImage(product, request.Image).ConfigureAwait(false);
             await context.SaveChangesAsync().ConfigureAwait(false);
         }
 
