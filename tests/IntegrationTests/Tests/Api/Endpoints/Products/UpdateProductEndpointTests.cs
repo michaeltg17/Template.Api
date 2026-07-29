@@ -61,7 +61,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //Then: expected logging
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
-                .HaveMessage("Product with id '{id}' updated successfully.")
+                .HaveMessage(ProductUpdatedMessage)
                 .Appearing().Once()
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("id")
@@ -87,7 +87,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //Then: expected no logging
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
-                .NotHaveMessage("Product with id '{id}' updated successfully.");
+                .NotHaveMessage(ProductUpdatedMessage);
 
             //Then: common expectations
             await ValidateCommonExpectations(3);
@@ -117,7 +117,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //Then: expected no logging
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
-                .NotHaveMessage("Product with id '{id}' updated successfully.");
+                .NotHaveMessage(ProductUpdatedMessage);
 
             //Then: common expectations
             await ValidateCommonExpectations(3);

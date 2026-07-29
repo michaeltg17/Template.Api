@@ -63,7 +63,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //Then: expected logging
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
-                .HaveMessage("Product with id '{id}' created successfully.")
+                .HaveMessage(ProductCreatedMessage)
                 .Appearing().Times(4)
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("id")
@@ -97,7 +97,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //Then: expected logging
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
-                .HaveMessage("Product with id '{id}' created successfully.")
+                .HaveMessage(ProductCreatedMessage)
                 .Appearing().Times(3)
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("id")

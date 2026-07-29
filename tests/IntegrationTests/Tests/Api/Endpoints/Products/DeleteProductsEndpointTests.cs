@@ -39,7 +39,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //Then: expected logging
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
-                .HaveMessage("Products with ids '{ids}' deleted successfully.")
+                .HaveMessage(ProductsDeletedMessage)
                 .Appearing().Once()
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("ids")
@@ -73,7 +73,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //Then: expected logging
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
-                .HaveMessage("Products with ids '{ids}' deleted successfully.")
+                .HaveMessage(ProductsDeletedMessage)
                 .Appearing().Once()
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("ids")
@@ -121,7 +121,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //Then: expected logging
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
-                .HaveMessage("Products with ids '{ids}' deleted successfully.")
+                .HaveMessage(ProductsDeletedMessage)
                 .Appearing().Once()
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("ids")
@@ -154,7 +154,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //Then: expected logging
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
-                .NotHaveMessage("Products with ids '{ids}' deleted successfully.");
+                .NotHaveMessage(ProductsDeletedMessage);
 
             //Then: common expectations
             await ValidateCommonExpectations(3);

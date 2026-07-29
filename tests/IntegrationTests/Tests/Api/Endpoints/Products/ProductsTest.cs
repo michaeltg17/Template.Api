@@ -18,6 +18,10 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         protected static byte[] Image2 = File.ReadAllBytes("Images/didi2.jpg");
         protected static string Image2Extension = Path.GetExtension("didi2.jpg");
 
+        protected const string ProductCreatedMessage = "Product with id '{id}' created successfully.";
+        protected const string ProductUpdatedMessage = "Product with id '{id}' updated successfully.";
+        protected const string ProductsDeletedMessage = "Products with ids '{ids}' deleted successfully.";
+
         public List<Product> initialProducts = [];
         internal ImageApiMock ImageApiMock => WebApplicationFactoryFixture.ImageApiMock;
 
