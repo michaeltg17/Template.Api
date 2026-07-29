@@ -6,7 +6,7 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_PASSWORD=yourStrong(!)Password
+      - POSTGRES_PASSWORD=${PostgresPassword}
       - POSTGRES_DB=Database
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
@@ -25,7 +25,7 @@ services:
       postgresql:
         condition: service_healthy
     environment:
-      - POSTGRESQL_CONNECTION_STRING=Host=postgresql;Database=Database;Username=postgres;Password=yourStrong(!)Password
+      - POSTGRESQL_CONNECTION_STRING=Host=postgresql;Database=Database;Username=postgres;Password=${PostgresPassword}
     restart: "no"
     networks:
       - app-network
@@ -42,8 +42,8 @@ services:
       - "5000:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - Api__PostgreSQLConnectionString=Host=postgresql;Database=Database;Username=postgres;Password=yourStrong(!)Password
-      - Api__Url=http://0.0.0.0:8080
+      - TemplateApi__PostgreSqlConnectionString=${TemplateApi__PostgreSqlConnectionString}
+      - TemplateApi__ImageApiKey=${TemplateApi__ImageApiKey}
     networks:
       - app-network
 
