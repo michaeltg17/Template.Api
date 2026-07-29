@@ -89,6 +89,8 @@ jobs:
       - name: Fetch PR title and notes
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         id: pr-notes
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           echo "::group::Fetching PR #${{ steps.extract-pr.outputs.pr_number }}"
           PR_JSON=$(gh pr view ${{ steps.extract-pr.outputs.pr_number }} --json title,body)
@@ -102,8 +104,11 @@ jobs:
 
       - name: Create tag and GitHub release
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create ${{ github.sha }} \
+          SHORT_SHA=$(echo "${{ steps.meta.outputs.tag-names }}" | grep -E '^[0-9a-f]{7}$')
+          gh release create "$SHORT_SHA" \
             --target ${{ github.sha }} \
             --title "${{ steps.pr-notes.outputs.pr_title }}" \
             --notes-file release-notes.txt \
