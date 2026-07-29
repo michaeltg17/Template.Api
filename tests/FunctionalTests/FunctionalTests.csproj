@@ -1,9 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <ItemGroup>
-    <None Remove="testsettings.json" />
-  </ItemGroup>
-
+	
   <ItemGroup>
     <Content Include="Settings\testsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
