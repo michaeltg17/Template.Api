@@ -1,10 +1,10 @@
-﻿namespace Api
-{
-    public class Program
-    {
-        static void Main(string[] args)
-        {
-            Startup.Run(args);
-        }
-    }
-}
+﻿using Api;
+
+Application.DependencyConfigurator.ConfigureValidationWithCamelCase();
+
+WebApplication
+    .CreateBuilder(args)
+    .AddDependencies()
+    .Build()
+    .Configure()
+    .Run();
