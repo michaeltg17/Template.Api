@@ -1,18 +1,17 @@
 using ApiClient.Extensions;
 using Application.Features.Products.Models.Requests;
 using AwesomeAssertions;
-using Core.Testing.Builders;
-using Core.Testing.Extensions;
+
 using Core.Testing.Validators;
 using Domain.Models;
-using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Crypto;
+
 using Serilog.Events;
 using System.Net;
 using Xunit;
 using Serilog.Sinks.InMemory.Assertions;
 using IntegrationTests.Collections;
 using Application.Features.Products.Models.Responses;
+using IntegrationTests.Extensions;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
