@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Core.Testing;
 using Core.Testing.Extensions;
 using IntegrationTests.Collections;
-using Core.Testing.Extensions;
 
 namespace IntegrationTests.Tests.ApiClient
 {

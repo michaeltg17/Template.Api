@@ -59,7 +59,7 @@ namespace IntegrationTests.Infrastructure
             if (container != null)
             {
                 if (container.State != "running")
-                    await client.Containers.StartContainerAsync(container!.ID);
+                    await client.Containers.StartContainerAsync(container.ID);
 
                 return true;
             }
@@ -70,7 +70,7 @@ namespace IntegrationTests.Infrastructure
         async Task<PostgreSqlContainer> CreateContainer()
         {
             var postgreSqlContainer = new PostgreSqlBuilder("postgres:latest")
-                .WithName(ContainerName!)
+                .WithName(ContainerName)
                 .WithPortBinding(HostPort, 5432)
                 .WithCleanUp(!testSettings.KeepAliveDatabase)
                 .WithAutoRemove(!testSettings.KeepAliveDatabase)
