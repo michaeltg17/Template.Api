@@ -59,9 +59,9 @@ namespace Application.Features.Images
             return new Uri(apiUrl, $"{ApiPath}/{imageName}");
         }
 
-        public static string BuildPathUrl(string imageName)
+        public static Uri BuildPathUrl(string imageName)
         {
-            return $"/{ApiPath}/{imageName}";
+            return new Uri($"/{ApiPath}/{imageName}", UriKind.Relative);
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Text.Json;
 
 namespace Api.Extensions
 {
-    public static class ExceptionHandlerExtensions
+    internal static class ExceptionHandlerExtensions
     {
         public static WebApplication UseExceptionHandler(this WebApplication app)
         {
@@ -49,12 +49,19 @@ namespace Api.Extensions
                 BadHttpRequestException => exception.Message,
                 _ when isInternalServerError && !isDevelopment => "Internal server error. Please contact the API support.",
                 _ when isValidationException => "One or more validation errors occurred.",
-                _ => exception!.Message
+                _ => exception.Message
+            };
+
+            var typeUri = httpContext.Response.StatusCode switch
+            {
+                (int)HttpStatusCode.BadRequest => "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+                (int)HttpStatusCode.NotFound => "https://tools.ietf.org/html/rfc9110#section-15.5.5",
+                _ => "https://tools.ietf.org/html/rfc9110#section-15.6.1",
             };
 
             var problemDetails = new ProblemDetails
             {
-                Type = isValidationException ? "https://tools.ietf.org/html/rfc9110#section-15.5.1" : null,
+                Type = typeUri,
                 Title = isInternalServerError && !isDevelopment ? "InternalServerError" : exception.GetType().GetNameWithoutGenericArity(),
                 Detail = detail,
                 Status = httpContext.Response.StatusCode,

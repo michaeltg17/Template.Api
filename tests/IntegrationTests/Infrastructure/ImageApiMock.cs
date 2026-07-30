@@ -45,7 +45,7 @@ namespace IntegrationTests.Infrastructure
             var uploadEntry = logEntries
                 .LastOrDefault(e => e.RequestMessage != null &&
                            e.RequestMessage.Method == "POST" &&
-                           e.RequestMessage.Path == ImageService.BuildPathUrl(imageName));
+                           e.RequestMessage.Path == ImageService.BuildPathUrl(imageName).ToString());
 
             uploadEntry.Should().NotBeNull($"upload of '{imageName}' should have been sent");
             var requestMessage = uploadEntry!.RequestMessage!;
@@ -64,7 +64,7 @@ namespace IntegrationTests.Infrastructure
         {
             Server
                 .Given(Request.Create()
-                    .WithPath(ImageService.BuildPathUrl(imageName))
+                    .WithPath(ImageService.BuildPathUrl(imageName).ToString())
                     .UsingGet())
                 .RespondWith(Response.Create()
                     .WithStatusCode(200)
@@ -77,7 +77,7 @@ namespace IntegrationTests.Infrastructure
             var downloadEntries = logEntries
                 .Where(e => e.RequestMessage != null &&
                            e.RequestMessage.Method == "GET" &&
-                           e.RequestMessage.Path == ImageService.BuildPathUrl(imageName));
+                           e.RequestMessage.Path == ImageService.BuildPathUrl(imageName).ToString());
 
             downloadEntries.Should().NotBeEmpty($"get of '{imageName}' should have occurred");
         }
@@ -90,7 +90,7 @@ namespace IntegrationTests.Infrastructure
                 var deleteEntries = logEntries
                     .Where(e => e.RequestMessage != null &&
                                e.RequestMessage.Method == "DELETE" &&
-                               e.RequestMessage.Path == ImageService.BuildPathUrl(imageName));
+                               e.RequestMessage.Path == ImageService.BuildPathUrl(imageName).ToString());
 
                 deleteEntries.Should().NotBeEmpty($"delete of '{imageName}' should have occurred");
             }

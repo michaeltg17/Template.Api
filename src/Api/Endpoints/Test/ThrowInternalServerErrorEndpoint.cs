@@ -1,6 +1,6 @@
 ﻿namespace Api.Endpoints.Test
 {
-    public static class ThrowInternalServerErrorEndpoint
+    internal static class ThrowInternalServerErrorEndpoint
     {
         public static void Map(IEndpointRouteBuilder app)
         {

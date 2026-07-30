@@ -14,6 +14,7 @@ namespace Application.Features.Products.Actions
     {
         public static string BuildImageFileName(Product product, string extension)
         {
+            ArgumentNullException.ThrowIfNull(product);
             return $"{product.Id}{extension}";
         }
 

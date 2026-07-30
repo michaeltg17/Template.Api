@@ -49,9 +49,9 @@ namespace ApiClient.Converters
                         else if (FloatFormat == FloatFormat.Double && reader.TryGetDouble(out var d))
                             return d;
                         using var doc = JsonDocument.ParseValue(ref reader);
-                        if (UnknownNumberFormat == UnknownNumberFormat.JsonElement)
-                            return doc.RootElement.Clone();
-                        throw new JsonException(string.Format("Cannot parse number {0}", doc.RootElement.ToString()));
+                        return UnknownNumberFormat == UnknownNumberFormat.JsonElement
+                            ? (object)doc.RootElement.Clone()
+                            : throw new JsonException(string.Format("Cannot parse number {0}", doc.RootElement.ToString()));
                     }
                 case JsonTokenType.StartArray:
                     {

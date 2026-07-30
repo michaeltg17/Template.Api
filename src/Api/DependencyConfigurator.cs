@@ -1,7 +1,6 @@
 ﻿using Api.Extensions;
 using Application;
 using CrossCutting;
-using Microsoft.Extensions.FileProviders;
 using Persistence;
 using Serilog;
 using Domain;

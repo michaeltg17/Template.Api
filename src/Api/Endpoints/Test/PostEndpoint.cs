@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Endpoints.Test
 {
-    public static class PostEndpoint
+    internal static class PostEndpoint
     {
         public static void Map(IEndpointRouteBuilder app)
         {
