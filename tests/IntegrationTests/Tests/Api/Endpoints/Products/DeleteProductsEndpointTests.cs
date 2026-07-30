@@ -1,10 +1,8 @@
 using ApiClient.Extensions;
 using Application.Features.Products.Models.Requests;
 using AwesomeAssertions;
-
 using Core.Testing.Validators;
 using Domain.Models;
-
 using Serilog.Events;
 using System.Net;
 using Xunit;
