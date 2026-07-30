@@ -63,7 +63,7 @@ namespace IntegrationTests.Infrastructure
             if (container != null)
             {
                 if (container.State != "running")
-                    await client.Containers.StartContainerAsync(container!.ID, new ContainerStartParameters());
+                    await client.Containers.StartContainerAsync(container!.ID);
 
                 return true;
             }
@@ -101,7 +101,8 @@ namespace IntegrationTests.Infrastructure
                 Username = PostgreSqlBuilder.DefaultUsername,
                 Password = PostgreSqlBuilder.DefaultPassword,
                 Host = DockerHost,
-                Port = HostPort
+                Port = HostPort,
+                GssEncryptionMode = GssEncryptionMode.Disable
             };
 
             return builder.ConnectionString;

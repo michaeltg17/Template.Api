@@ -25,7 +25,7 @@ services:
       postgresql:
         condition: service_healthy
     environment:
-      - POSTGRESQL_CONNECTION_STRING=Host=postgresql;Database=Database;Username=postgres;Password=${PostgresPassword}
+      - POSTGRESQL_CONNECTION_STRING=${TemplateApi__PostgreSqlConnectionString}
     restart: "no"
     networks:
       - app-network
