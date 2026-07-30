@@ -1,4 +1,3 @@
-using Application.Features.Products.Models.Requests;
 using CrossCutting.Settings;
 using FluentValidation;
 

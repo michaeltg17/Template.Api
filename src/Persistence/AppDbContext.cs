@@ -1,6 +1,5 @@
 ﻿using CrossCutting.Settings;
 using Domain.Models;
-using EFCore.NamingConventions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence

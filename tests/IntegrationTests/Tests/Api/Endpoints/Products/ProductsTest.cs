@@ -4,9 +4,7 @@ using Core.Testing.Builders;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using IntegrationTests.Infrastructure;
-using System.Collections.Generic;
 using System.Linq;
-using Xunit;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {

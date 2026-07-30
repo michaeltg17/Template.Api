@@ -1,10 +1,8 @@
 using Application.Features.Images;
 using AwesomeAssertions;
-using System.Collections.Generic;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
-using WireMock.Settings;
 
 namespace IntegrationTests.Infrastructure
 {

@@ -1,5 +1,4 @@
 using Application.Features.Products.Actions;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Endpoints.Products;
 

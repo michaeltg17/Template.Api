@@ -1,8 +1,6 @@
 using Application.Exceptions;
-using Application.Features.Images;
 using Application.Features.Products.Models.Requests;
 using Domain.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Persistence;
 

@@ -1,6 +1,4 @@
-﻿using Api.Extensions;
-
-namespace Api.Endpoints.Test
+﻿namespace Api.Endpoints.Test
 {
     public static class GetOkEndpoint
     {

@@ -1,4 +1,3 @@
-using Application.Features.Products.Models.Requests;
 using FluentValidation;
 
 namespace Application.Features.Products.Models.Requests.Validators;

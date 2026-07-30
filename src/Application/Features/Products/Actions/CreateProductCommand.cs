@@ -1,7 +1,5 @@
-using Application.Features.Images;
 using Application.Features.Products.Models.Requests;
 using Domain.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Persistence;
 

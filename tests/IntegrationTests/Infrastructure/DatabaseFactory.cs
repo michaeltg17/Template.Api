@@ -1,14 +1,10 @@
-﻿using Core;
-using Persistence.Migrations;
+﻿using Persistence.Migrations;
 using Docker.DotNet;
 using Docker.DotNet.Models;
 using IntegrationTests.Settings;
-using Npgsql;
-using Microsoft.EntityFrameworkCore;
-using Persistence;
 using Testcontainers.PostgreSql;
+using Npgsql;
 using Xunit;
-using Microsoft.Extensions.Hosting;
 
 namespace IntegrationTests.Infrastructure
 {

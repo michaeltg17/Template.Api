@@ -1,11 +1,6 @@
 ﻿using Application.Exceptions;
-using Application.Features.Images;
 using Domain.Models;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Application.Features.Products.Actions
 {

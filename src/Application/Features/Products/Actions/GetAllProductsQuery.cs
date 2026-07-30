@@ -1,4 +1,3 @@
-using Application.Features.Images;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
