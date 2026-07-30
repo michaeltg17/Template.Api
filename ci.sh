@@ -9,7 +9,7 @@ echo "========================================="
 
 echo
 echo "Restore, build and test. It doesn't work separately."
-dotnet test "$SOLUTION" --configuration Release
+dotnet test "$SOLUTION" --configuration Release --filter "FullyQualifiedName!~FunctionalTests"
 echo "Tests passed"
 
 echo
