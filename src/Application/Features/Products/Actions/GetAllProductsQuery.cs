@@ -1,5 +1,6 @@
-using Microsoft.EntityFrameworkCore;
+using Application.Features.Images;
 using Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Features.Products.Actions;
@@ -13,7 +14,9 @@ public class GetAllProductsQuery(AppDbContext context, ProductService productSer
             .ConfigureAwait(false);
 
         foreach (var product in products)
-            product.ImageUrl = productService.BuildImageUrl(product.ImageName);
+        {
+            productService.SetImageUrl(product);
+        }
 
         return products;
     }

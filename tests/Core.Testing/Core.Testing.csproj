@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Images\**\*">
+    <None Include="Images\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -3,8 +3,6 @@ name: ci
 on:
   push:
     branches: [main, dev]
-  pull_request:
-    branches: [main, dev]
   workflow_dispatch:
 
 jobs:
@@ -36,7 +34,6 @@ jobs:
         run: docker run --rm -v /var/run/docker.sock:/var/run/docker.sock template-ci:latest
 
       - name: Validate Docker image builds
-        if: github.event_name == 'pull_request'
         uses: docker/build-push-action@v7
         with:
           context: .

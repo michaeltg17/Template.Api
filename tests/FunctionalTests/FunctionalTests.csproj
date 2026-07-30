@@ -1,9 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <ItemGroup>
-    <None Remove="testsettings.json" />
-  </ItemGroup>
-
+	
   <ItemGroup>
     <Content Include="Settings\testsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -29,10 +25,6 @@
     <ProjectReference Include="..\..\src\Core\Core.csproj" />
     <ProjectReference Include="..\..\src\Domain\Domain.csproj" />
     <ProjectReference Include="..\Core.Testing\Core.Testing.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Tests\" />
   </ItemGroup>
 
 </Project>

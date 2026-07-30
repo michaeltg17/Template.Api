@@ -1,4 +1,5 @@
 ﻿using Application.Exceptions;
+using Application.Features.Images;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -14,7 +15,7 @@ namespace Application.Features.Products.Actions
         {
             var product = await context.Products.FindAsync(id).ConfigureAwait(false)
                 ?? throw new NotFoundException<Product>(id);
-            product.ImageUrl = productService.BuildImageUrl(product.ImageName);
+            productService.SetImageUrl(product);
             return product;
         }
     }

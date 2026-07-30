@@ -12,27 +12,31 @@ namespace Application.Features.Products.Actions
         IValidator<CreateProductRequest> requestValidator,
         ImageService imageService)
     {
-        internal async Task<string?> SaveImage(long productId, IFormFile image)
+        public static string BuildImageFileName(Product product, string extension)
+        {
+            return $"{product.Id}{extension}";
+        }
+
+        internal async Task SetImage(Product product, IFormFile image)
         {
             var extension = Path.GetExtension(image.FileName);
-            var imageFileName = $"{productId}{extension}";
+            product.Image = new Image { FileName = BuildImageFileName(product, extension) };
 
             using var stream = image.OpenReadStream();
-            await imageService.Upload(imageFileName, stream, image.ContentType)
-                .ConfigureAwait(false);
+            await imageService.Upload(product.Image.FileName, stream, image.ContentType).ConfigureAwait(false);
 
-            return imageFileName;
+            SetImageUrl(product);
         }
 
-        internal async Task DeleteImage(string? imageName)
+        internal void SetImageUrl(Product product)
         {
-            if (imageName is not null)
-                await imageService.Delete(imageName).ConfigureAwait(false);
+            product.Image?.Url = imageService.BuildUrl(product.Image.FileName);
         }
 
-        internal Uri? BuildImageUrl(string? imageName)
+        internal async Task DeleteImage(Product product)
         {
-            return imageName is not null ? imageService.BuildUrl(imageName) : null;
+            if (product.Image!.FileName is not null)
+                await imageService.Delete(product.Image!.FileName).ConfigureAwait(false);
         }
 
         internal Product GetValidatedProductOrThrow(CreateProductRequest request, Product? existing = null)

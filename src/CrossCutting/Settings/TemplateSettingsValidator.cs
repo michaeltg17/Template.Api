@@ -17,9 +17,7 @@ namespace CrossCutting.Settings
             if (string.IsNullOrWhiteSpace(templateSettings.ImageApiKey))
                 validationErrors.Add($"The '{nameof(templateSettings.ImageApiKey)}' setting is required");
 
-            if (validationErrors.Count > 0) return ValidateOptionsResult.Fail(validationErrors);
-
-            return ValidateOptionsResult.Success;
+            return validationErrors.Count > 0 ? ValidateOptionsResult.Fail(validationErrors) : ValidateOptionsResult.Success;
         }
     }
 }

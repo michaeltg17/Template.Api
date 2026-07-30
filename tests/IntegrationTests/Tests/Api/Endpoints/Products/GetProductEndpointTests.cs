@@ -1,5 +1,6 @@
 using ApiClient.Extensions;
 using Application.Features.Images;
+using Application.Features.Products.Actions;
 using AwesomeAssertions;
 using Core.Testing.Builders;
 using Core.Testing.Validators;
@@ -27,6 +28,8 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
 
             //Then
             var product = await response.To<Product>();
+            var productImageFileName = ProductService.BuildImageFileName(product, InitialImageExtension);
+            var productImageUrl = ImageService.BuildUrl(ImageApiMock.Server.Uri, productImageFileName);
 
             var expected = new ProductBuilder()
                 .WithValues(p =>
@@ -35,8 +38,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                     p.Name = initialProduct.Name;
                     p.Description = initialProduct.Description;
                     p.Price = initialProduct.Price;
-                    p.ImageName = product.ImageName;
-                    p.ImageUrl = product.ImageUrl;
+                    p.Image = new Image { FileName = productImageFileName, Url = productImageUrl };
                 })
                 .Build();
 
@@ -45,11 +47,10 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             product.Should().BeEquivalentTo(expected);
 
             //Verify uploads and register GET stub
-            ImageApiMock.ValidatePostAndSetGetMock(initialProduct.ImageName, InitialImage);
-            var productImageUrl = ImageService.BuildUrl(ImageApiMock.Server.Uri, product.ImageName!);
+            ImageApiMock.ValidatePostAndSetGetMock(initialProduct.Image!.FileName, InitialImage);
             var productImage = await ImageHttpClient.GetByteArrayAsync(productImageUrl);
             productImage.Should().BeEquivalentTo(InitialImage);
-            ImageApiMock.ValidateGetRequest(initialProduct.ImageName);
+            ImageApiMock.ValidateGetRequest(initialProduct.Image!.FileName);
 
             //Then: common expectations
             await ValidateCommonExpectations(3);

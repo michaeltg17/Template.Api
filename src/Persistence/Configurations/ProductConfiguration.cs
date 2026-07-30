@@ -12,8 +12,11 @@ namespace Persistence.Configurations
             entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
             entity.Property(e => e.Description).IsRequired().HasMaxLength(1000);
             entity.Property(e => e.Price).HasPrecision(18, 2);
-            entity.Property(e => e.ImageName).HasMaxLength(200);
-            entity.Ignore(e => e.ImageUrl);
+            entity.OwnsOne(e => e.Image, image =>
+            {
+                image.Property(i => i.FileName).HasMaxLength(200);
+                image.Ignore(i => i.Url);
+            });
         }
     }
 }

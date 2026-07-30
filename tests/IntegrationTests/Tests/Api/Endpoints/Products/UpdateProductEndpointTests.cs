@@ -1,17 +1,18 @@
 using ApiClient.Extensions;
+using Application.Features.Images;
+using Application.Features.Products.Actions;
 using Application.Features.Products.Models.Requests;
 using AwesomeAssertions;
 using Core.Testing.Builders;
 using Core.Testing.Validators;
 using Domain.Models;
+using IntegrationTests.Collections;
+using IntegrationTests.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Serilog.Events;
+using Serilog.Sinks.InMemory.Assertions;
 using System.Net;
 using Xunit;
-using Serilog.Sinks.InMemory.Assertions;
-using IntegrationTests.Collections;
-using Application.Features.Images;
-using IntegrationTests.Extensions;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
@@ -28,11 +29,13 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //When
             var request = new UpdateProductRequestBuilder().Build();
             var response = await ApiClient.UpdateProduct(initialProduct.Id, request);
-            var updatedProduct = await response.To<Product>();
+            var product = await response.To<Product>();
+            var productImageFileName = ProductService.BuildImageFileName(product, Image2Extension);
+            var productImageUrl = ImageService.BuildUrl(ImageApiMock.Server.Uri, productImageFileName);
 
             //Then: expected product
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            updatedProduct.Id.Should().BeGreaterThan(0);
+            product.Id.Should().BeGreaterThan(0);
 
             var expected = new ProductBuilder()
                 .WithValues(p =>
@@ -41,33 +44,31 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                     p.Name = request.Name;
                     p.Description = request.Description;
                     p.Price = request.Price;
-                    p.ImageName = updatedProduct.ImageName;
-                    p.ImageUrl = updatedProduct.ImageUrl;
+                    p.Image = new Image { FileName = productImageFileName, Url = productImageUrl };
                 })
                 .Build();
 
-            updatedProduct.Should().BeEquivalentTo(expected);
-            ImageApiMock.ValidatePostAndSetGetMock($"{updatedProduct.Id}.jpg", Image2);
-            var updatedProductImageUrl = ImageService.BuildUrl(ImageApiMock.Server.Uri, updatedProduct.ImageName!);
-            var updatedProductImage = await ImageHttpClient.GetByteArrayAsync(updatedProductImageUrl);
-            updatedProductImage.Should().BeEquivalentTo(Image2);
-            ImageApiMock.ValidateGetRequest($"{updatedProduct.Id}.jpg");
+            product.Should().BeEquivalentTo(expected);
+            ImageApiMock.ValidatePostAndSetGetMock($"{product.Id}.jpg", Image2);
+            var productImage = await ImageHttpClient.GetByteArrayAsync(productImageUrl);
+            productImage.Should().BeEquivalentTo(Image2);
+            ImageApiMock.ValidateGetRequest($"{product.Id}.jpg");
 
             //Then: expected product in db
-            var dbProduct = await Context.Products.FindAsync(updatedProduct.Id);
-            dbProduct.Should().BeEquivalentTo(expected, o => o.Excluding(p => p.ImageUrl));
+            var dbProduct = await Context.Products.FindAsync(product.Id);
+            dbProduct.Should().BeEquivalentTo(expected, o => o.Excluding(p => p.Image!.Url));
 
             //Then: expected logging
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
-                .HaveMessage("Product with id '{id}' updated successfully.")
+                .HaveMessage(ProductUpdatedMessage)
                 .Appearing().Once()
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("id")
                 .WithValue(initialProduct.Id);
 
             //Then: common expectations
-            await ValidateCommonExpectations(3, [updatedProduct.Id]);
+            await ValidateCommonExpectations(3, [product.Id]);
         }
 
         [Fact]
@@ -86,7 +87,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //Then: expected no logging
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
-                .NotHaveMessage("Product with id '{id}' updated successfully.");
+                .NotHaveMessage(ProductUpdatedMessage);
 
             //Then: common expectations
             await ValidateCommonExpectations(3);
@@ -116,7 +117,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //Then: expected no logging
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
-                .NotHaveMessage("Product with id '{id}' updated successfully.");
+                .NotHaveMessage(ProductUpdatedMessage);
 
             //Then: common expectations
             await ValidateCommonExpectations(3);

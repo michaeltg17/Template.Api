@@ -12,6 +12,7 @@ using Serilog.Sinks.InMemory.Assertions;
 using IntegrationTests.Collections;
 using Application.Features.Images;
 using IntegrationTests.Extensions;
+using Application.Features.Products.Actions;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
@@ -30,6 +31,8 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
 
             //Then: retuns expected product
             var product = await response.To<Product>();
+            var productImageFileName = ProductService.BuildImageFileName(product, InitialImageExtension);
+            var productImageUrl = ImageService.BuildUrl(ImageApiMock.Server.Uri, productImageFileName);
             var expected = new ProductBuilder()
                 .WithValues(p =>
                 {
@@ -37,8 +40,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                     p.Name = request.Name;
                     p.Description = request.Description;
                     p.Price = request.Price;
-                    p.ImageName = product.ImageName;
-                    p.ImageUrl = product.ImageUrl;
+                    p.Image = new Image { FileName = productImageFileName, Url = productImageUrl };
                 })
                 .Build();
 
@@ -47,22 +49,21 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             product.Should().BeEquivalentTo(expected);
 
             //Then: image is uploaded
-            ImageApiMock.ValidatePostAndSetGetMock(product.ImageName!, InitialImage);
-            var productImageUrl = ImageService.BuildUrl(ImageApiMock.Server.Uri, product.ImageName!);
+            ImageApiMock.ValidatePostAndSetGetMock(product.Image!.FileName, InitialImage);
             var productImage = await ImageHttpClient
                 .GetByteArrayAsync(productImageUrl, TestContext.Current.CancellationToken)
                 .ConfigureAwait(true);
-            ImageApiMock.ValidateGetRequest(product.ImageName!);
+            ImageApiMock.ValidateGetRequest(product.Image!.FileName);
             productImage.Should().BeEquivalentTo(InitialImage);
 
             //Then: expected product in db
             var dbProduct = await Context.Products.FindAsync(product.Id);
-            dbProduct.Should().BeEquivalentTo(expected, o => o.Excluding(p => p.ImageUrl));
+            dbProduct.Should().BeEquivalentTo(expected, o => o.Excluding(p => p.Image!.Url));
 
             //Then: expected logging
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
-                .HaveMessage("Product with id '{id}' created successfully.")
+                .HaveMessage(ProductCreatedMessage)
                 .Appearing().Times(4)
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("id")
@@ -96,7 +97,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //Then: expected logging
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
-                .HaveMessage("Product with id '{id}' created successfully.")
+                .HaveMessage(ProductCreatedMessage)
                 .Appearing().Times(3)
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("id")

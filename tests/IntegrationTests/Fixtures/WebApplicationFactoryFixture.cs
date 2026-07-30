@@ -50,7 +50,7 @@ namespace IntegrationTests.Fixtures
 
             builder.UseSerilog((context, services, configuration) =>
             {
-                Api.Startup.ApplyCommonSerilogConfiguration(context, services, configuration);
+                Api.DependencyConfigurator.ApplyCommonSerilogConfiguration(context, services, configuration);
                 configuration.WriteTo.Sink(InjectableTestOutputSink);
 
                 //Using Map sink to fix "Only first test is logged"

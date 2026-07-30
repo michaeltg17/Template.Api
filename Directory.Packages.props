@@ -28,7 +28,7 @@
     <PackageVersion Include="Serilog.Sinks.InMemory" Version="2.0.0" />
     <PackageVersion Include="Serilog.Sinks.InMemory.Assertions" Version="2.0.0" />
     <PackageVersion Include="Serilog.Sinks.Map" Version="2.0.0" />
-    <PackageVersion Include="Serilog.Sinks.XUnit.Injectable" Version="4.0.242" />
+    <PackageVersion Include="Serilog.Sinks.XUnit.Injectable" Version="4.0.246" />
     <PackageVersion Include="Testcontainers.PostgreSql" Version="4.13.0" />
     <PackageVersion Include="WireMock.Net" Version="2.13.0" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />

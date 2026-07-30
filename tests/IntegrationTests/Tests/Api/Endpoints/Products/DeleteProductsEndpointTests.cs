@@ -39,14 +39,14 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //Then: expected logging
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
-                .HaveMessage("Products with ids '{ids}' deleted successfully.")
+                .HaveMessage(ProductsDeletedMessage)
                 .Appearing().Once()
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("ids")
                 .WithValues([product.Id]);
 
             //Then: expected image delete
-            ImageApiMock.ValidateDeleteRequests([product.ImageName!]);
+            ImageApiMock.ValidateDeleteRequests([product.Image!.FileName]);
 
             //Then: common expectations
             await ValidateCommonExpectations(2, [product.Id]);
@@ -73,14 +73,14 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //Then: expected logging
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
-                .HaveMessage("Products with ids '{ids}' deleted successfully.")
+                .HaveMessage(ProductsDeletedMessage)
                 .Appearing().Once()
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("ids")
                 .WithValues(ids);
 
             //Then: expected image deletes
-            ImageApiMock.ValidateDeleteRequests(products.Select(p => p.ImageName!));
+            ImageApiMock.ValidateDeleteRequests(products.Select(p => p.Image!.FileName));
 
             //Then: common expectations
             await ValidateCommonExpectations(2, ids);
@@ -121,14 +121,14 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //Then: expected logging
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
-                .HaveMessage("Products with ids '{ids}' deleted successfully.")
+                .HaveMessage(ProductsDeletedMessage)
                 .Appearing().Once()
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("ids")
                 .WithValues([existingId]);
 
             //Then: expected image delete
-            ImageApiMock.ValidateDeleteRequests([$"{existingId}.jpeg"]);
+            ImageApiMock.ValidateDeleteRequests([initialProducts[0].Image!.FileName]);
 
             //Then: common expectations
             await ValidateCommonExpectations(2, [existingId]);
@@ -154,7 +154,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //Then: expected logging
             WebApplicationFactoryFixture.InMemorySink
                 .Should()
-                .NotHaveMessage("Products with ids '{ids}' deleted successfully.");
+                .NotHaveMessage(ProductsDeletedMessage);
 
             //Then: common expectations
             await ValidateCommonExpectations(3);

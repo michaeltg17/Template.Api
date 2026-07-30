@@ -9,21 +9,9 @@ using Domain;
 
 namespace Api
 {
-    public static class Startup
+    public static class DependencyConfigurator
     {
-        public static void Run(string[] args)
-        {
-            Application.DependencyConfigurator.ConfigureValidationWithCamelCase();
-
-            WebApplication
-                .CreateBuilder(args)
-                .AddDependencies()
-                .Build()
-                .Configure()
-                .Run();
-        }
-
-        static WebApplicationBuilder AddDependencies(this WebApplicationBuilder builder)
+        public static WebApplicationBuilder AddDependencies(this WebApplicationBuilder builder)
         {
             builder.Services.Configure<RouteHandlerOptions>(options => options.ThrowOnBadRequest = true);
 
@@ -36,7 +24,7 @@ namespace Api
             return builder;
         }
 
-        static IServiceCollection AddMainDependencies(this IServiceCollection services)
+        public static IServiceCollection AddMainDependencies(this IServiceCollection services)
         {
             return services
                 .AddApplicationDependencies()
@@ -45,7 +33,7 @@ namespace Api
                 .AddPersistanceDependencies();
         }
 
-        static WebApplicationBuilder AddSerilog(this WebApplicationBuilder builder)
+        public static WebApplicationBuilder AddSerilog(this WebApplicationBuilder builder)
         {
             builder.Host.UseSerilog((context, services, configuration) =>
             {
@@ -65,7 +53,7 @@ namespace Api
                 .Enrich.FromLogContext();
         }
 
-        static WebApplication Configure(this WebApplication app)
+        public static WebApplication Configure(this WebApplication app)
         {
             //Exception middleware first to catch exceptions
             app.UseExceptionHandler().UseStatusCodePages();

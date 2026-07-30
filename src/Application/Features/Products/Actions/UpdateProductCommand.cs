@@ -1,9 +1,10 @@
-using Microsoft.Extensions.Logging;
 using Application.Exceptions;
+using Application.Features.Images;
+using Application.Features.Products.Models.Requests;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Persistence;
-using Application.Features.Products.Models.Requests;
 
 namespace Application.Features.Products.Actions;
 
@@ -20,20 +21,13 @@ public partial class UpdateProductCommand(
 
         var product = productService.GetValidatedProductOrThrow(request, existing);
 
-        if (request.Image != null)
+        if (request.Image == null)
         {
-            string? oldImageName = existing.ImageName;
-
-            var newImageName = await productService.SaveImage(product.Id, request.Image)
-                .ConfigureAwait(false);
-
-            if (oldImageName != newImageName)
-            {
-                await productService.DeleteImage(oldImageName).ConfigureAwait(false);
-            }
-
-            product.ImageName = newImageName;
-            product.ImageUrl = productService.BuildImageUrl(newImageName);
+            await productService.DeleteImage(product).ConfigureAwait(false);
+        }
+        else
+        {
+            await productService.SetImage(product, request.Image).ConfigureAwait(false);
         }
 
         await context.SaveChangesAsync().ConfigureAwait(false);
