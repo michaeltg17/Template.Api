@@ -13,7 +13,7 @@ internal static class UpdateProductEndpoint
             [FromForm] UpdateProductRequest request,
             UpdateProductCommand updateProductCommand) =>
         {
-            var product = await updateProductCommand.Execute(id, request).ConfigureAwait(false);
+            var product = await updateProductCommand.Execute(id, request);
             return Results.Ok(product);
         })
         .DisableAntiforgery();

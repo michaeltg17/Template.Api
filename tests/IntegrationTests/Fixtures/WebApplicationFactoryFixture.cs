@@ -32,7 +32,7 @@ namespace IntegrationTests.Fixtures
 
         async ValueTask IAsyncLifetime.InitializeAsync()
         {
-            Database = await databaseFactory.Create().ConfigureAwait(false);
+            Database = await databaseFactory.Create();
         }
 
         /// <summary>

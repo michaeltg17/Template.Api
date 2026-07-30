@@ -8,7 +8,7 @@ internal static class GetAllProductsEndpoint
     {
         app.MapGet("/", static async (GetAllProductsQuery getAllProductsQuery) =>
         {
-            var products = await getAllProductsQuery.Execute().ConfigureAwait(false);
+            var products = await getAllProductsQuery.Execute();
             return Results.Ok(products);
         });
     }

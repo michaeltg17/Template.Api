@@ -18,12 +18,11 @@ public partial class DeleteProductsCommand(
     public async Task<DeleteProductsResponse> Execute(DeleteProductsRequest request)
     {
         ArgumentNullException.ThrowIfNull(request);
-        await deleteRequestValidator.ValidateAndThrowAsync(request).ConfigureAwait(false);
+        await deleteRequestValidator.ValidateAndThrowAsync(request);
 
         var products = await context.Products
             .Where(p => request.Ids.Contains(p.Id))
-            .ToListAsync()
-            .ConfigureAwait(false);
+            .ToListAsync();
 
         var foundIds = products.Select(p => p.Id).ToHashSet();
         var notFoundIds = request.Ids.Except(foundIds).ToArray();
@@ -34,10 +33,10 @@ public partial class DeleteProductsCommand(
         if (products.Count > 0)
         {
             context.Products.RemoveRange(products);
-            await context.SaveChangesAsync().ConfigureAwait(false);
+            await context.SaveChangesAsync();
             foreach (var product in products)
             {
-                await productService.DeleteImage(product).ConfigureAwait(false);
+                await productService.DeleteImage(product);
             }
         }
 

@@ -14,21 +14,21 @@ public partial class UpdateProductCommand(
     public async Task<Product> Execute(long id, UpdateProductRequest request)
     {
         ArgumentNullException.ThrowIfNull(request);
-        var existing = await context.Products.FindAsync(id).ConfigureAwait(false)
+        var existing = await context.Products.FindAsync(id)
             ?? throw new NotFoundException<Product>(id);
 
         var product = productService.GetValidatedProductOrThrow(request, existing);
 
         if (request.Image == null)
         {
-            await productService.DeleteImage(product).ConfigureAwait(false);
+            await productService.DeleteImage(product);
         }
         else
         {
-            await productService.SetImage(product, request.Image).ConfigureAwait(false);
+            await productService.SetImage(product, request.Image);
         }
 
-        await context.SaveChangesAsync().ConfigureAwait(false);
+        await context.SaveChangesAsync();
         LogProductUpdated(product.Id);
         return product;
     }

@@ -14,13 +14,13 @@ public partial class CreateProductCommand(
     {
         ArgumentNullException.ThrowIfNull(request);
         var product = productService.GetValidatedProductOrThrow(request);
-        await context.Products.AddAsync(product).ConfigureAwait(false);
-        await context.SaveChangesAsync().ConfigureAwait(false);
+        await context.Products.AddAsync(product);
+        await context.SaveChangesAsync();
 
         if (request.Image != null)
         {
-            await productService.SetImage(product, request.Image).ConfigureAwait(false);
-            await context.SaveChangesAsync().ConfigureAwait(false);
+            await productService.SetImage(product, request.Image);
+            await context.SaveChangesAsync();
         }
 
         LogProductCreated(product.Id);

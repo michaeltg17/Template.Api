@@ -8,7 +8,7 @@ namespace Application.Features.Products.Actions
     {
         public async Task<Product> Execute(long id)
         {
-            var product = await context.Products.FindAsync(id).ConfigureAwait(false)
+            var product = await context.Products.FindAsync(id)
                 ?? throw new NotFoundException<Product>(id);
             productService.SetImageUrl(product);
             return product;

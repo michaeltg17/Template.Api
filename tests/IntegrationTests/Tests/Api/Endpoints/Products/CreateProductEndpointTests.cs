@@ -51,8 +51,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //Then: image is uploaded
             ImageApiMock.ValidatePostAndSetGetMock(product.Image!.FileName, InitialImage);
             var productImage = await ImageHttpClient
-                .GetByteArrayAsync(productImageUrl, TestContext.Current.CancellationToken)
-                .ConfigureAwait(true);
+                .GetByteArrayAsync(productImageUrl, TestContext.Current.CancellationToken);
             ImageApiMock.ValidateGetRequest(product.Image!.FileName);
             productImage.Should().BeEquivalentTo(InitialImage);
 

@@ -9,8 +9,7 @@ public class GetAllProductsQuery(AppDbContext context, ProductService productSer
     public async Task<IEnumerable<Product>> Execute()
     {
         var products = await context.Products
-            .ToListAsync()
-            .ConfigureAwait(false);
+            .ToListAsync();
 
         foreach (var product in products)
         {

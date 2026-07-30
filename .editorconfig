@@ -10,6 +10,9 @@ dotnet_analyzer_diagnostic.category-Style.severity = warning
 # CA1707: Underscores in identifiers - xUnit convention uses underscores for test names
 dotnet_diagnostic.CA1707.severity = none
 
+# CA2007: Consider calling ConfigureAwait - not needed in ASP.NET Core (no SynchronizationContext)
+dotnet_diagnostic.CA2007.severity = none
+
 # CA1032: Standard exception constructors - unnecessary boilerplate for custom exceptions
 dotnet_diagnostic.CA1032.severity = none
 
@@ -36,6 +39,9 @@ dotnet_diagnostic.IDE0036.severity = none
 
 # CA1720: Identifier contains type name (e.g., Guid Guid, Type Type)
 dotnet_diagnostic.CA1720.severity = none
+
+# CA2007: ConfigureAwait(false) not required for library code in ASP.NET context
+dotnet_diagnostic.CA2007.severity = none
 
 # xUnit1044/xUnit1045: Type argument not serializable in theory data
 dotnet_diagnostic.xUnit1044.severity = none

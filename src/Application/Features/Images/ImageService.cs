@@ -25,7 +25,7 @@ namespace Application.Features.Images
             };
             request.Headers.Add(ImageApiKeyHeaderName, settings.ImageApiKey);
 
-            var response = await httpClient.SendAsync(request).ConfigureAwait(false);
+            var response = await httpClient.SendAsync(request);
             response.EnsureSuccessStatusCode();
         }
 
@@ -34,10 +34,10 @@ namespace Application.Features.Images
             using var request = new HttpRequestMessage(HttpMethod.Get, BuildUrl(imageName));
             request.Headers.Add(ImageApiKeyHeaderName, settings.ImageApiKey);
 
-            var response = await httpClient.SendAsync(request).ConfigureAwait(false);
+            var response = await httpClient.SendAsync(request);
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+            return await response.Content.ReadAsByteArrayAsync();
         }
 
         public async Task Delete(string imageName)
@@ -45,7 +45,7 @@ namespace Application.Features.Images
             using var request = new HttpRequestMessage(HttpMethod.Delete, BuildUrl(imageName));
             request.Headers.Add(ImageApiKeyHeaderName, settings.ImageApiKey);
 
-            var response = await httpClient.SendAsync(request).ConfigureAwait(false);
+            var response = await httpClient.SendAsync(request);
             response.EnsureSuccessStatusCode();
         }
 
