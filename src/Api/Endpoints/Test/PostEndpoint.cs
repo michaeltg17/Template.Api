@@ -1,10 +1,9 @@
-﻿using Api.Extensions;
-using Api.Models.Requests;
+﻿using Api.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Endpoints.Test
 {
-    public static class PostEndpoint
+    internal static class PostEndpoint
     {
         public static void Map(IEndpointRouteBuilder app)
         {

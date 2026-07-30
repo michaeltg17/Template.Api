@@ -1,6 +1,5 @@
 ﻿using System.Net.Http.Json;
 using ApiClient.Endpoints;
-using Microsoft.AspNetCore.Http;
 using Application.Features.Products.Models.Requests;
 using Api.Extensions;
 
@@ -43,12 +42,12 @@ namespace ApiClient
                 content.Add(new StreamContent(request.Image.OpenReadStream()), "image", request.Image.FileName);
             }
 
-            return await httpClient.PostAsync($"{BasePath}/Products", content).ConfigureAwait(false);
+            return await httpClient.PostAsync($"{BasePath}/Products", content);
         }
 
         public async Task<HttpResponseMessage> UpdateProduct(long id, UpdateProductRequest request)
         {
-            return await UpdateProduct((object)id, request).ConfigureAwait(false);
+            return await UpdateProduct((object)id, request);
         }
 
         public async Task<HttpResponseMessage> UpdateProduct(object id, UpdateProductRequest request)
@@ -65,7 +64,7 @@ namespace ApiClient
                 content.Add(new StreamContent(request.Image.OpenReadStream()), "image", request.Image.FileName);
             }
 
-            return await httpClient.PutAsync($"{BasePath}/Products/{id}", content).ConfigureAwait(false);
+            return await httpClient.PutAsync($"{BasePath}/Products/{id}", content);
         }
 
         public async Task<HttpResponseMessage> DeleteProducts(DeleteProductsRequest request)
@@ -74,7 +73,7 @@ namespace ApiClient
             {
                 Content = JsonContent.Create(request),
             };
-            return await httpClient.SendAsync(jsonRequest).ConfigureAwait(false);
+            return await httpClient.SendAsync(jsonRequest);
         }
     }
 }

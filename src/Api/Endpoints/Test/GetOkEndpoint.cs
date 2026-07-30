@@ -1,8 +1,6 @@
-﻿using Api.Extensions;
-
-namespace Api.Endpoints.Test
+﻿namespace Api.Endpoints.Test
 {
-    public static class GetOkEndpoint
+    internal static class GetOkEndpoint
     {
         public static void Map(IEndpointRouteBuilder app)
         {

@@ -1,6 +1,6 @@
 using Serilog.Sinks.InMemory.Assertions;
 
-namespace Core.Testing.Extensions
+namespace IntegrationTests.Extensions
 {
     public static class LogEventPropertyAssertionExtensions
     {

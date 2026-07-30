@@ -262,6 +262,16 @@ Serilog level overrides in `appsettings.json` under `MinimumLevel.Override`. Kno
 - **Models over tuples** — use a proper response class instead of `Task<(int, string, string)>`
 - **No leading underscore** — name fields `inner`, `client`, `testKdbxPath`, not `_inner`, `_client`, `_testKdbxPath`
 
+## PR Workflow
+
+When creating or updating a PR from `dev` to `main`:
+
+1. **Always run `git fetch origin main` first** — This is critical. The local `main` branch is often outdated and will show stale committed changes as part of the diff if not refreshed.
+2. Compare `origin/main..dev` to identify only the actual new changes.
+3. Check if a PR already exists (use `github_list_pull_requests`).
+4. If none exists, create one with an accurate title and description summarizing the changes.
+5. If one exists, update its title and description to reflect the actual current diff.
+
 ## MCP Tools - ALWAYS PREFER
 
 When `mcp__vs-mcp__*` tools are available, ALWAYS use them instead of Grep/Glob/LS:

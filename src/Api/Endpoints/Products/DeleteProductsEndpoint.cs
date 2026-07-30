@@ -12,7 +12,7 @@ internal static class DeleteProductsEndpoint
             [FromBody] DeleteProductsRequest request,
             DeleteProductsCommand deleteProductsCommand) =>
         {
-            var response = await deleteProductsCommand.Execute(request).ConfigureAwait(false);
+            var response = await deleteProductsCommand.Execute(request);
             return Results.Ok(response);
         });
     }

@@ -1,4 +1,3 @@
-using Application.Features.Products.Models.Requests;
 using CrossCutting.Settings;
 using FluentValidation;
 
@@ -8,6 +7,8 @@ public sealed class CreateProductRequestValidator : AbstractValidator<CreateProd
 {
     public CreateProductRequestValidator(ITemplateSettings templateSettings)
     {
+        ArgumentNullException.ThrowIfNull(templateSettings);
+
         RuleFor(x => x.Image)
             .Must((request, image) => image == null || image.Length > 0)
             .WithMessage("Image can be null but if not, length cannot be 0.");
@@ -20,8 +21,8 @@ public sealed class CreateProductRequestValidator : AbstractValidator<CreateProd
             .Custom((image, ctx) =>
             {
                 if (image == null) return;
-                var extension = Path.GetExtension(image.FileName).ToLowerInvariant();
-                if (templateSettings.AllowedImageExtensions.Contains(extension)) return;
+                var extension = Path.GetExtension(image.FileName);
+                if (templateSettings.AllowedImageExtensions.Any(e => string.Equals(e, extension, StringComparison.OrdinalIgnoreCase))) return;
 
                 var extensions = string.Join(", ", templateSettings.AllowedImageExtensions.Select(e => e.TrimStart('.')));
                 ctx.AddFailure($"Invalid image with extension '{extension}'. Allowed extensions are: {extensions}");

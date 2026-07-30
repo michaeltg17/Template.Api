@@ -1,14 +1,10 @@
-﻿using Core;
-using Persistence.Migrations;
+﻿using Persistence.Migrations;
 using Docker.DotNet;
 using Docker.DotNet.Models;
 using IntegrationTests.Settings;
-using Npgsql;
-using Microsoft.EntityFrameworkCore;
-using Persistence;
 using Testcontainers.PostgreSql;
+using Npgsql;
 using Xunit;
-using Microsoft.Extensions.Hosting;
 
 namespace IntegrationTests.Infrastructure
 {
@@ -25,9 +21,9 @@ namespace IntegrationTests.Infrastructure
 
             try
             {
-                WriteMessage("Initializing database.");
+                Log("Initializing database.");
 
-                WriteMessage("Using existing container if exists.");
+                Log("Using existing container if exists.");
                 string connectionString;
                 PostgreSqlContainer? container = default;
                 if (await ExistsContainer())
@@ -36,16 +32,16 @@ namespace IntegrationTests.Infrastructure
                 }
                 else
                 {
-                    WriteMessage("Does not exist. Creating new container.");
+                    Log("Does not exist. Creating new container.");
                     container = await CreateContainer();
-                    WriteMessage("Container created.");
+                    Log("Container created.");
                     connectionString = GetConnectionString(container);
                 }
 
-                WriteMessage("Migrating database.");
-                MigrateDatabase(connectionString);
+                Log("Migrating database.");
+                Migrator.Migrate(connectionString);
 
-                WriteMessage("Database initialized.");
+                Log("Database initialized.");
                 return new Database(testSettings, container) { ConnectionString = connectionString };
             }
             finally
@@ -63,7 +59,7 @@ namespace IntegrationTests.Infrastructure
             if (container != null)
             {
                 if (container.State != "running")
-                    await client.Containers.StartContainerAsync(container!.ID);
+                    await client.Containers.StartContainerAsync(container.ID);
 
                 return true;
             }
@@ -74,7 +70,7 @@ namespace IntegrationTests.Infrastructure
         async Task<PostgreSqlContainer> CreateContainer()
         {
             var postgreSqlContainer = new PostgreSqlBuilder("postgres:latest")
-                .WithName(ContainerName!)
+                .WithName(ContainerName)
                 .WithPortBinding(HostPort, 5432)
                 .WithCleanUp(!testSettings.KeepAliveDatabase)
                 .WithAutoRemove(!testSettings.KeepAliveDatabase)
@@ -108,12 +104,7 @@ namespace IntegrationTests.Infrastructure
             return builder.ConnectionString;
         }
 
-        static void MigrateDatabase(string connectionString)
-        {
-            Migrator.Migrate(connectionString);
-        }
-
-        static void WriteMessage(string message)
+        static void Log(string message)
         {
             TestContext.Current.SendDiagnosticMessage(message);
         }

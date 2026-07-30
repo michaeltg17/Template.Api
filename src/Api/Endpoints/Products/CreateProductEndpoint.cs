@@ -13,7 +13,7 @@ internal static class CreateProductEndpoint
             [FromForm] CreateProductRequest request,
             CreateProductCommand createProductCommand) =>
         {
-            var product = await createProductCommand.Execute(request).ConfigureAwait(false);
+            var product = await createProductCommand.Execute(request);
             return Results.Created($"{EndpointExtensions.ProductsPath}/{product.Id}", product);
         })
         .DisableAntiforgery();

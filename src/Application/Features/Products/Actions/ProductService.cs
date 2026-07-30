@@ -14,6 +14,7 @@ namespace Application.Features.Products.Actions
     {
         public static string BuildImageFileName(Product product, string extension)
         {
+            ArgumentNullException.ThrowIfNull(product);
             return $"{product.Id}{extension}";
         }
 
@@ -23,7 +24,7 @@ namespace Application.Features.Products.Actions
             product.Image = new Image { FileName = BuildImageFileName(product, extension) };
 
             using var stream = image.OpenReadStream();
-            await imageService.Upload(product.Image.FileName, stream, image.ContentType).ConfigureAwait(false);
+            await imageService.Upload(product.Image.FileName, stream, image.ContentType);
 
             SetImageUrl(product);
         }
@@ -36,7 +37,7 @@ namespace Application.Features.Products.Actions
         internal async Task DeleteImage(Product product)
         {
             if (product.Image!.FileName is not null)
-                await imageService.Delete(product.Image!.FileName).ConfigureAwait(false);
+                await imageService.Delete(product.Image!.FileName);
         }
 
         internal Product GetValidatedProductOrThrow(CreateProductRequest request, Product? existing = null)
