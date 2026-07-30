@@ -1,0 +1,59 @@
+@baseUrl = http://localhost:5000
+
+###
+# Test Endpoints
+###
+
+GET {{baseUrl}}/Test/GetOk
+Accept: application/json
+
+###
+
+POST {{baseUrl}}/Test/Post/123?date=2024-01-15T10:30:00Z
+Content-Type: application/json
+
+{
+  "id2": 456
+}
+
+###
+
+POST {{baseUrl}}/Test/ThrowInternalServerError
+
+###
+# Product Endpoints
+###
+
+GET {{baseUrl}}/api/products/
+Accept: application/json
+
+###
+
+GET {{baseUrl}}/api/products/1
+Accept: application/json
+
+###
+
+POST {{baseUrl}}/api/products/
+Accept: application/json
+Content-Type: application/x-www-form-urlencoded
+
+name=Sample+Product&description=A+sample+product&price=29.99
+
+###
+
+PUT {{baseUrl}}/api/products/9
+Accept: application/json
+Content-Type: application/x-www-form-urlencoded
+
+name=Updated+Product&description=An+updated+description&price=39.99
+
+###
+
+DELETE {{baseUrl}}/api/products/
+Content-Type: application/json
+
+{
+  "ids": [12],
+  "ignoreNotFound": false
+}
