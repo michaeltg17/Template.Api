@@ -72,7 +72,7 @@ namespace IntegrationTests.Fixtures
                 services.AddTransient<IStartupFilter, TestStartupFilter>();
                 services.AddSingleton<IInjectableTestOutputSink>(InjectableTestOutputSink);
 
-                services.Configure<TemplateSettings>(templateSettings =>
+                services.Configure<TemplateApiSettings>(templateSettings =>
                 {
                     templateSettings.PostgreSqlConnectionString = Database!.ConnectionString;
                     templateSettings.ImageApiUrl = ImageApiMock!.Server.Uri;

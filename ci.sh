@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SOLUTION="Template.slnx"
+SOLUTION="Template.Api.slnx"
 
 echo "========================================="
 echo "  Running CI"

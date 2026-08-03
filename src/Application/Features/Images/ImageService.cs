@@ -3,7 +3,7 @@ using System.Net.Http.Headers;
 
 namespace Application.Features.Images
 {
-    public class ImageService(HttpClient httpClient, ITemplateSettings settings)
+    public class ImageService(HttpClient httpClient, ITemplateApiSettings settings)
     {
         public const string ImageApiKeyHeaderName = "X-Api-Key";
         public const string ApiPath = "images";

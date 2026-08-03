@@ -27,7 +27,7 @@ namespace Api.Extensions
                     ValidationException => (int)HttpStatusCode.BadRequest,
                     NotFoundException => (int)HttpStatusCode.NotFound,
                     NotAllFoundException => (int)HttpStatusCode.NotFound,
-                    TemplateException => (int)HttpStatusCode.BadRequest,
+                    TemplateApiException => (int)HttpStatusCode.BadRequest,
                     _ => (int)HttpStatusCode.InternalServerError,
                 };
 

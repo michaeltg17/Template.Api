@@ -21,7 +21,7 @@ namespace Application
             services.AddScoped<DeleteProductsCommand>();
             services.AddHttpClient<ImageService>((sp, client) =>
             {
-                var settings = sp.GetRequiredService<ITemplateSettings>();
+                var settings = sp.GetRequiredService<ITemplateApiSettings>();
                 client.BaseAddress = settings.ImageApiUrl;
             });
 
