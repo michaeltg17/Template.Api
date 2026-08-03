@@ -23,7 +23,7 @@ runs:
         set -e
         TAG=${{ inputs.tag }}
         TAG=${TAG:0:7}
-        BODY="{\"project\":\"shop\",\"environment\":\"${{ inputs.environment }}\",\"tag\":\"${TAG}\"}"
+        BODY="{\"project\":\"template\",\"environment\":\"${{ inputs.environment }}\",\"tag\":\"${TAG}\"}"
         RESPONSE=$(curl -s --connect-timeout 10 --max-time 60 \
           -u "${{ inputs.deploy_user }}:${{ inputs.deploy_password }}" \
           -H "Content-Type: application/json" \
