@@ -1,5 +1,8 @@
 name: cd
 
+permissions:
+  contents: read
+
 on:
   workflow_run:
     workflows:
