@@ -5,7 +5,7 @@ namespace Application.Features.Products.Models.Requests.Validators;
 
 public sealed class CreateProductRequestValidator : AbstractValidator<CreateProductRequest>
 {
-    public CreateProductRequestValidator(ITemplateSettings templateSettings)
+    public CreateProductRequestValidator(ITemplateApiSettings templateSettings)
     {
         ArgumentNullException.ThrowIfNull(templateSettings);
 

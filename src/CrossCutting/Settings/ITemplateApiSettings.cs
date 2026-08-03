@@ -1,6 +1,6 @@
-﻿namespace CrossCutting.Settings
+namespace CrossCutting.Settings
 {
-    public interface ITemplateSettings
+    public interface ITemplateApiSettings
     {
         public const string Section = "TemplateApi";
         public string PostgreSqlConnectionString { get; }

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Persistence
 {
-    public class AppDbContext(DbContextOptions<AppDbContext> options, ITemplateSettings templateSettings) : DbContext(options)
+    public class AppDbContext(DbContextOptions<AppDbContext> options, ITemplateApiSettings templateSettings) : DbContext(options)
     {
         public virtual DbSet<Product> Products { get; set; }
 

@@ -26,27 +26,27 @@ jobs:
           file: Dockerfile.ci
           push: false
           load: true
-          tags: template-ci:latest
-          cache-from: type=gha,scope=template-ci
-          cache-to: type=gha,mode=max,scope=template-ci
+          tags: template-api-ci:latest
+          cache-from: type=gha,scope=template-api-ci
+          cache-to: type=gha,mode=max,scope=template-api-ci
 
       - name: Run CI checks
-        run: docker run --rm -v /var/run/docker.sock:/var/run/docker.sock template-ci:latest
+        run: docker run --rm -v /var/run/docker.sock:/var/run/docker.sock template-api-ci:latest
 
       - name: Validate Docker image builds
         uses: docker/build-push-action@v7
         with:
           context: .
           push: false
-          cache-from: type=gha,scope=template-production
-          cache-to: type=gha,mode=max,scope=template-production
+          cache-from: type=gha,scope=template-api-production
+          cache-to: type=gha,mode=max,scope=template-api-production
 
       - name: Metadata for Docker image
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         id: meta
         uses: docker/metadata-action@v6
         with:
-          images: ghcr.io/${{ github.repository_owner }}/template
+          images: ghcr.io/${{ github.repository_owner }}/template-api
           tags: |
             type=sha,prefix=,length=7
             type=raw,value=latest
@@ -67,8 +67,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha,scope=template-production
-          cache-to: type=gha,mode=max,scope=template-production
+          cache-from: type=gha,scope=template-api-production
+          cache-to: type=gha,mode=max,scope=template-api-production
 
       - name: Extract PR number from merge commit
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
