@@ -4,7 +4,7 @@ WORKDIR /src
 
 COPY Directory.Build.props ./
 COPY Directory.Packages.props ./
-COPY Template.slnx ./
+COPY Template.Api.slnx ./
 COPY src/ src/
 RUN dotnet publish src/Api/Api.csproj -c Release -o /app
 

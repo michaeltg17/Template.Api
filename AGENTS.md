@@ -30,7 +30,7 @@
 ├── Dockerfile.ci                   # CI runtime image with test dependencies
 ├── Dockerfile.migrations           # multi-stage: SDK build → runtime for migrator
 ├── README.md
-├── Template.slnx
+├── Template.Api.slnx
 ├── .github/workflows/              # GH Actions
 │   └── ci.yml
 ├── src/
