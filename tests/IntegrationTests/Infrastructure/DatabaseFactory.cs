@@ -11,7 +11,7 @@ namespace IntegrationTests.Infrastructure
     internal class DatabaseFactory(ITestSettings testSettings)
     {
         static readonly SemaphoreSlim @lock = new(1, 1);
-        const string DatabaseName = "Database";
+        const string DatabaseName = "database";
         const string ContainerName = "template-api-integration-tests-postgres";
         const int HostPort = 50000;
 
