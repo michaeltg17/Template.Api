@@ -1,4 +1,4 @@
-using Api.Models.Requests;
+using Api.Endpoints;
 using ApiClient.Extensions;
 using AwesomeAssertions;
 using Core.Testing;
@@ -8,6 +8,7 @@ using IntegrationTests.Collections;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Xunit;
+using static Api.Endpoints.TestEndpoints;
 
 namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 {

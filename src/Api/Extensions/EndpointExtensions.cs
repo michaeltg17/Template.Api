@@ -1,5 +1,5 @@
-﻿using Api.Endpoints.Test;
-using Api.Endpoints.Products;
+﻿using Api.Endpoints.Products;
+using Api.Endpoints;
 
 namespace Api.Extensions;
 
@@ -18,9 +18,7 @@ public static class EndpointExtensions
         DeleteProductsEndpoint.Map(products);
 
         var test = app.MapGroup("Test");
-        GetOkEndpoint.Map(test);
-        PostEndpoint.Map(test);
-        ThrowInternalServerErrorEndpoint.Map(test);
+        TestEndpoints.Map(test);
 
         return app;
     }
