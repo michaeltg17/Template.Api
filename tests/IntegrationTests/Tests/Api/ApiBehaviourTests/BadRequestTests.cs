@@ -53,7 +53,7 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
                 {
                     Id = (long)1, Date = "2020-01-01", Request = "x",
                     ExpectedInstance = "/Test/Post/1",
-                    ExpectedDetail = "Failed to read parameter \"PostRequest request\" from the request body as JSON. The JSON value could not be converted to Api.Models.Requests.PostRequest. Path: $ | LineNumber: 0 | BytePositionInLine: 3."
+                    ExpectedDetail = "Failed to read parameter \"PostRequest request\" from the request body as JSON. The JSON value could not be converted to Api.Endpoints.TestEndpoints+PostRequest. Path: $ | LineNumber: 0 | BytePositionInLine: 3."
                 },
                 // Invalid: body property value cannot be converted to expected type
                 new BadRequestCase
