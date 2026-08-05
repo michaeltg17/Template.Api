@@ -11,7 +11,7 @@ using IntegrationTests.Collections;
 
 namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 {
-    [Collection(nameof(DevelopmentApiCollection))]
+    [Collection(nameof(DevelopmentApiCollectionFixture))]
     public class BadRequestTests : Test
     {
         public class BadRequestCase

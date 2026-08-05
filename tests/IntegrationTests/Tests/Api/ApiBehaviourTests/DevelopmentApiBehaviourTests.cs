@@ -10,7 +10,7 @@ using Xunit;
 
 namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 {
-    [Collection(nameof(DevelopmentApiCollection))]
+    [Collection(nameof(DevelopmentApiCollectionFixture))]
     public class DevelopmentApiBehaviourTests : Test
     {
         [Fact]

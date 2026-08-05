@@ -13,7 +13,7 @@ using IntegrationTests.Extensions;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
-    [Collection(nameof(DevelopmentApiCollection))]
+    [Collection(nameof(DevelopmentApiCollectionFixture))]
     public class DeleteProductsEndpointTests : ProductsTest
     {
         [Fact]

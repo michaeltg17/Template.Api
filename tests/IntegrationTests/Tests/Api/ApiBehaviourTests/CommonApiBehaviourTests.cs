@@ -12,7 +12,7 @@ using static Api.Endpoints.TestEndpoints;
 
 namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 {
-    [Collection(nameof(DevelopmentApiCollection))]
+    [Collection(nameof(DevelopmentApiCollectionFixture))]
     public class CommonApiBehaviourTests : Test
     {
         [Fact]

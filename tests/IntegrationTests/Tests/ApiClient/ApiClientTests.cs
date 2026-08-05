@@ -10,7 +10,7 @@ using IntegrationTests.Collections;
 
 namespace IntegrationTests.Tests.ApiClient
 {
-    [Collection(nameof(DevelopmentApiCollection))]
+    [Collection(nameof(DevelopmentApiCollectionFixture))]
     public class ApiClientTests : Test
     {
         [Fact]

@@ -16,7 +16,7 @@ using Application.Features.Products.Actions;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
-    [Collection(nameof(DevelopmentApiCollection))]
+    [Collection(nameof(DevelopmentApiCollectionFixture))]
     public class CreateProductEndpointTests : ProductsTest
     {
         [Fact]
