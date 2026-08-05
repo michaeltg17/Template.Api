@@ -1,12 +1,8 @@
-﻿using CrossCutting.Settings;
-using IntegrationTests.Fixtures;
+﻿using IntegrationTests.Fixtures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence;
-using Serilog.Sinks.InMemory;
-using Serilog.Sinks.XUnit.Injectable;
 using Xunit;
-using Xunit.v3;
 
 namespace IntegrationTests
 {
