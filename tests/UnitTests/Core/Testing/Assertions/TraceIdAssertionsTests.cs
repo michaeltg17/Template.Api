@@ -2,9 +2,9 @@
 using AwesomeAssertions;
 using Xunit;
 
-namespace UnitTests.Core.Testing.Validators
+namespace UnitTests.Core.Testing.Assertions
 {
-    public class TraceIdValidatorTests
+    public class TraceIdAssertionsTests
     {
         [Theory]
         [InlineData("00-bc43ec34fc2707cab2c1477979967041-146d776ead891946-00", true)] // Valid
@@ -15,7 +15,7 @@ namespace UnitTests.Core.Testing.Validators
         [InlineData("00-bc43ec34fc2707cab2c1477979967041-146d776ead891946-00-extra", false)] // Extra characters
         public void ValidateTraceId(string traceId, bool expected)
         {
-            TraceIdValidator.IsValid(traceId).Should().Be(expected);
+            TraceIdAssertions.Assert(traceId).Should().Be(expected);
         }
     }
 }

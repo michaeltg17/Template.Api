@@ -21,8 +21,8 @@ namespace IntegrationTests.Tests.ApiClient
 
             //Then
             var problemDetails = await response.To<ProblemDetails>();
-            TraceIdValidator.IsValid(problemDetails.TraceId!).Should().BeTrue();
-            ExceptionValidator.IsValid(problemDetails.Exception!).Should().BeTrue();
+            TraceIdAssertions.Assert(problemDetails.TraceId!).Should().BeTrue();
+            ExceptionAssertions.Assert(problemDetails.Exception!).Should().BeTrue();
 
             var expectedMessage = $$"""
                 {

@@ -2,7 +2,6 @@ using ApiClient.Extensions;
 using Application.Features.Products.Models.Requests;
 using AwesomeAssertions;
 using Core.Testing.Builders;
-using Core.Testing.Validators;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Serilog.Events;
@@ -13,6 +12,7 @@ using IntegrationTests.Collections;
 using Application.Features.Images;
 using IntegrationTests.Extensions;
 using Application.Features.Products.Actions;
+using Core.Testing.Assertions;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
@@ -49,10 +49,10 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             product.Should().BeEquivalentTo(expected);
 
             //Then: image is uploaded
-            ImageApiMock.ValidatePostAndSetGetMock(product.Image!.FileName, InitialImage);
+            ImageApiMock.AssertPostAndSetGetMock(product.Image!.FileName, InitialImage);
             var productImage = await ImageHttpClient
                 .GetByteArrayAsync(productImageUrl, TestContext.Current.CancellationToken);
-            ImageApiMock.ValidateGetRequest(product.Image!.FileName);
+            ImageApiMock.AssertGetRequest(product.Image!.FileName);
             productImage.Should().BeEquivalentTo(InitialImage);
 
             //Then: expected product in db
@@ -69,7 +69,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .WithValues([.. initialProducts.Select(p => p.Id), product.Id]);
 
             //Then: common expectations
-            await ValidateCommonExpectations(4, [product.Id]);
+            await AssertCommonExpectations(4, [product.Id]);
         }
 
         [Fact]
@@ -83,7 +83,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var response = await ApiClient.CreateProduct(request);
 
             //Then
-            await ProblemDetailsValidator.ValidateValidationException(
+            await ProblemDetailsAssertions.AssertValidationException(
                 response,
                 BaseInstance,
                 new Dictionary<string, string[]>
@@ -103,7 +103,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .WithValues([.. initialProducts.Select(p => p.Id)]);
 
             //Then: common expectations
-            await ValidateCommonExpectations(3);
+            await AssertCommonExpectations(3);
         }
     }
 }

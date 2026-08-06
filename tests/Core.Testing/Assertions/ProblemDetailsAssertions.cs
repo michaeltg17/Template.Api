@@ -2,44 +2,43 @@
 using Core.Testing.Builders;
 using Core.Testing.Extensions;
 using AwesomeAssertions;
-using Core.Testing;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
-namespace Core.Testing.Validators
+namespace Core.Testing.Assertions
 {
-    public static class ProblemDetailsValidator
+    public static class ProblemDetailsAssertions
     {
-        public static async Task ValidateNotAllFoundException(
+        public static async Task AssertNotAllFoundException(
             HttpResponseMessage response, string entity, string baseInstance, long[] ids)
         {
             var builder = new ProblemDetailsBuilder().WithNotAllFoundException(entity, baseInstance, ids);
-            await ValidateCommon(response, builder, HttpStatusCode.NotFound);
+            await Assert(response, builder, HttpStatusCode.NotFound);
         }
 
-        public static async Task ValidateNotFoundException(
+        public static async Task AssertNotFoundException(
             HttpResponseMessage response, string entity, string baseInstance, long id)
         {
             var builder = new ProblemDetailsBuilder().WithNotFoundException(entity, baseInstance, id);
-            await ValidateCommon(response, builder, HttpStatusCode.NotFound);
+            await Assert(response, builder, HttpStatusCode.NotFound);
         }
 
-        public static async Task ValidateValidationException(
+        public static async Task AssertValidationException(
             HttpResponseMessage response,
             string instance,
             IDictionary<string, string[]> expectedErrors)
         {
             var builder = new ProblemDetailsBuilder().WithValidationException(instance, expectedErrors);
-            await ValidateCommon(response, builder, HttpStatusCode.BadRequest);
+            await Assert(response, builder, HttpStatusCode.BadRequest);
         }
 
-        static async Task ValidateCommon(
+        static async Task Assert(
             HttpResponseMessage response,
             ProblemDetailsBuilder builder,
             HttpStatusCode statusCode)
         {
             var problemDetails = await response.To<ProblemDetails>();
-            TraceIdValidator.IsValid(problemDetails.TraceId!).Should().BeTrue();
+            TraceIdAssertions.Assert(problemDetails.TraceId!).Should().BeTrue();
 
             var expected = builder
                 .WithTraceId(problemDetails.TraceId!)

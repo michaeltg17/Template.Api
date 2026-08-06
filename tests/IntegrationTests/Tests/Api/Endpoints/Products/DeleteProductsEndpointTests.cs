@@ -1,7 +1,6 @@
 using ApiClient.Extensions;
 using Application.Features.Products.Models.Requests;
 using AwesomeAssertions;
-using Core.Testing.Validators;
 using Domain.Models;
 using Serilog.Events;
 using System.Net;
@@ -10,6 +9,7 @@ using Serilog.Sinks.InMemory.Assertions;
 using IntegrationTests.Collections;
 using Application.Features.Products.Models.Responses;
 using IntegrationTests.Extensions;
+using Core.Testing.Assertions;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
@@ -43,10 +43,10 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .WithValues([product.Id]);
 
             //Then: expected image delete
-            ImageApiMock.ValidateDeleteRequests([product.Image!.FileName]);
+            ImageApiMock.AssertDeleteRequests([product.Image!.FileName]);
 
             //Then: common expectations
-            await ValidateCommonExpectations(2, [product.Id]);
+            await AssertCommonExpectations(2, [product.Id]);
         }
 
         [Fact]
@@ -77,10 +77,10 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .WithValues(ids);
 
             //Then: expected image deletes
-            ImageApiMock.ValidateDeleteRequests(products.Select(p => p.Image!.FileName));
+            ImageApiMock.AssertDeleteRequests(products.Select(p => p.Image!.FileName));
 
             //Then: common expectations
-            await ValidateCommonExpectations(2, ids);
+            await AssertCommonExpectations(2, ids);
         }
 
         [Fact]
@@ -94,7 +94,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var response = await ApiClient.DeleteProducts(request);
 
             //Then
-            await ProblemDetailsValidator.ValidateNotAllFoundException(response, nameof(Product), BaseInstance, [5, 6]);
+            await ProblemDetailsAssertions.AssertNotAllFoundException(response, nameof(Product), BaseInstance, [5, 6]);
         }
 
         [Fact]
@@ -125,10 +125,10 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .WithValues([existingId]);
 
             //Then: expected image delete
-            ImageApiMock.ValidateDeleteRequests([initialProducts[0].Image!.FileName]);
+            ImageApiMock.AssertDeleteRequests([initialProducts[0].Image!.FileName]);
 
             //Then: common expectations
-            await ValidateCommonExpectations(2, [existingId]);
+            await AssertCommonExpectations(2, [existingId]);
         }
 
         [Fact]
@@ -154,7 +154,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .NotHaveMessage(ProductsDeletedMessage);
 
             //Then: common expectations
-            await ValidateCommonExpectations(3);
+            await AssertCommonExpectations(3);
         }
     }
 }

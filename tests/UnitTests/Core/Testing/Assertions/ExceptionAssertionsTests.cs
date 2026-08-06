@@ -2,9 +2,9 @@ using Core.Testing;
 using AwesomeAssertions;
 using Xunit;
 
-namespace UnitTests.Core.Testing.Validators
+namespace UnitTests.Core.Testing.Assertions
 {
-    public class ExceptionValidatorTests
+    public class ExceptionAssertionsTests
     {
         [Theory]
         [InlineData("System.Exception: Sensitive data\r\n   at Api.Endpoints.Test.ThrowInternalServerErrorEndpoint.<>c.<Map>b__0_0() in E:\\1\\Repos\\Test\\ThrowInternalServerErrorEndpoint.cs:line 11\r\n   at lambda_method16(Closure, Object, HttpContext)\r\n   at Microsoft.AspNetCore.Routing.EndpointMiddleware.Invoke(HttpContext httpContext)", true)]
@@ -21,7 +21,7 @@ namespace UnitTests.Core.Testing.Validators
         [InlineData("System.Exception: Sensitive data\r\n   at Microsoft.AspNetCore.Routing.EndpointMiddleware.Invoke(HttpContext httpContext)\r\n   at ValidSource.Method() in C:\\path\\to\\File.cs:line 42", true)]
         public void IsValid_ShouldMatchExpected(string? exceptionText, bool expected)
         {
-            ExceptionValidator.IsValid(exceptionText!).Should().Be(expected);
+            ExceptionAssertions.Assert(exceptionText!).Should().Be(expected);
         }
     }
 }
