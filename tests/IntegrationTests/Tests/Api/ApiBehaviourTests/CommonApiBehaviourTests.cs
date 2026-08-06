@@ -12,7 +12,7 @@ using static Api.Endpoints.TestEndpoints;
 
 namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 {
-    [Collection(nameof(DevelopmentApiCollection))]
+    [Collection(nameof(DevelopmentApiCollectionFixture))]
     public class CommonApiBehaviourTests : Test
     {
         [Fact]
@@ -23,7 +23,7 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 
             //Then
             var problemDetails = await response.To<ProblemDetails>();
-            TraceIdValidator.IsValid(problemDetails.TraceId!).Should().BeTrue();
+            TraceIdAssertions.Assert(problemDetails.TraceId!).Should().BeTrue();
 
             var expected = new ProblemDetailsBuilder()
                 .WithTraceId(problemDetails.TraceId!)

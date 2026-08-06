@@ -3,8 +3,8 @@ using Application.Features.Images;
 using Application.Features.Products.Actions;
 using Application.Features.Products.Models.Requests;
 using AwesomeAssertions;
+using Core.Testing.Assertions;
 using Core.Testing.Builders;
-using Core.Testing.Validators;
 using Domain.Models;
 using IntegrationTests.Collections;
 using IntegrationTests.Extensions;
@@ -16,7 +16,7 @@ using Xunit;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
-    [Collection(nameof(DevelopmentApiCollection))]
+    [Collection(nameof(DevelopmentApiCollectionFixture))]
     public class UpdateProductEndpointTests : ProductsTest
     {
         [Fact]
@@ -49,10 +49,10 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .Build();
 
             product.Should().BeEquivalentTo(expected);
-            ImageApiMock.ValidatePostAndSetGetMock($"{product.Id}.jpg", Image2);
+            ImageApiMock.AssertPostAndSetGetMock($"{product.Id}.jpg", Image2);
             var productImage = await ImageHttpClient.GetByteArrayAsync(productImageUrl);
             productImage.Should().BeEquivalentTo(Image2);
-            ImageApiMock.ValidateGetRequest($"{product.Id}.jpg");
+            ImageApiMock.AssertGetRequest($"{product.Id}.jpg");
 
             //Then: expected product in db
             var dbProduct = await Context.Products.FindAsync(product.Id);
@@ -68,7 +68,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .WithValue(initialProduct.Id);
 
             //Then: common expectations
-            await ValidateCommonExpectations(3, [product.Id]);
+            await AssertCommonExpectations(3, [product.Id]);
         }
 
         [Fact]
@@ -82,7 +82,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var response = await ApiClient.UpdateProduct(5, request);
 
             //Then: product not found
-            await ProblemDetailsValidator.ValidateNotFoundException(response, nameof(Product), BaseInstance, 5);
+            await ProblemDetailsAssertions.AssertNotFoundException(response, nameof(Product), BaseInstance, 5);
 
             //Then: expected no logging
             WebApplicationFactoryFixture.InMemorySink
@@ -90,7 +90,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .NotHaveMessage(ProductUpdatedMessage);
 
             //Then: common expectations
-            await ValidateCommonExpectations(3);
+            await AssertCommonExpectations(3);
         }
 
         [Fact]
@@ -104,7 +104,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var response = await ApiClient.UpdateProduct(initialProducts[0].Id, request);
 
             //Then: validation exception
-            await ProblemDetailsValidator.ValidateValidationException(
+            await ProblemDetailsAssertions.AssertValidationException(
                 response,
                 $"{BaseInstance}/{initialProducts[0].Id}",
                 new Dictionary<string, string[]>
@@ -120,7 +120,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .NotHaveMessage(ProductUpdatedMessage);
 
             //Then: common expectations
-            await ValidateCommonExpectations(3);
+            await AssertCommonExpectations(3);
         }
     }
 }

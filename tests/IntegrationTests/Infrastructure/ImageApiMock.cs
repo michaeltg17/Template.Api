@@ -36,10 +36,10 @@ namespace IntegrationTests.Infrastructure
         }
 
         /// <summary>
-        /// Validates a post request was received and returns the uploaded bytes.
+        /// Asserts a post request was received and returns the uploaded bytes.
         /// Also sets a GET mock to get those images.
         /// </summary>
-        public byte[] ValidatePostAndSetGetMock(string imageName, byte[] expectedBody)
+        public byte[] AssertPostAndSetGetMock(string imageName, byte[] expectedBody)
         {
             var logEntries = Server.LogEntries;
             var uploadEntry = logEntries
@@ -71,7 +71,7 @@ namespace IntegrationTests.Infrastructure
                     .WithBody(imageData));
         }
 
-        public void ValidateGetRequest(string imageName)
+        public void AssertGetRequest(string imageName)
         {
             var logEntries = Server.LogEntries;
             var downloadEntries = logEntries
@@ -82,7 +82,7 @@ namespace IntegrationTests.Infrastructure
             downloadEntries.Should().NotBeEmpty($"get of '{imageName}' should have occurred");
         }
 
-        public void ValidateDeleteRequests(IEnumerable<string> imageNames)
+        public void AssertDeleteRequests(IEnumerable<string> imageNames)
         {
             foreach (var imageName in imageNames)
             {

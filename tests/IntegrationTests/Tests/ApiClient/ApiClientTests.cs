@@ -10,7 +10,7 @@ using IntegrationTests.Collections;
 
 namespace IntegrationTests.Tests.ApiClient
 {
-    [Collection(nameof(DevelopmentApiCollection))]
+    [Collection(nameof(DevelopmentApiCollectionFixture))]
     public class ApiClientTests : Test
     {
         [Fact]
@@ -21,8 +21,8 @@ namespace IntegrationTests.Tests.ApiClient
 
             //Then
             var problemDetails = await response.To<ProblemDetails>();
-            TraceIdValidator.IsValid(problemDetails.TraceId!).Should().BeTrue();
-            ExceptionValidator.IsValid(problemDetails.Exception!).Should().BeTrue();
+            TraceIdAssertions.Assert(problemDetails.TraceId!).Should().BeTrue();
+            ExceptionAssertions.Assert(problemDetails.Exception!).Should().BeTrue();
 
             var expectedMessage = $$"""
                 {

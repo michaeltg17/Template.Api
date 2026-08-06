@@ -11,7 +11,7 @@ using Xunit;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
-    [Collection(nameof(DevelopmentApiCollection))]
+    [Collection(nameof(DevelopmentApiCollectionFixture))]
     public class GetAllProductsEndpointTests : ProductsTest
     {
         [Fact]
@@ -36,11 +36,11 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 var productImage = await ImageHttpClient.GetByteArrayAsync(productImageUrl);
                 productImage.Should()
                     .BeEquivalentTo(InitialImage, $"downloaded image for product '{product.Id}' should match initial image");
-                ImageApiMock.ValidateGetRequest(productImageFileName);
+                ImageApiMock.AssertGetRequest(productImageFileName);
             }
 
             //Then: common expectations
-            await ValidateCommonExpectations(3);
+            await AssertCommonExpectations(3);
         }
 
         [Fact]

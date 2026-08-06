@@ -37,7 +37,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             }
         }
 
-        public async Task ValidateCommonExpectations(int totalProductsCount, IEnumerable<long>? exceptIds = null)
+        public async Task AssertCommonExpectations(int totalProductsCount, IEnumerable<long>? exceptIds = null)
         {
             //Expected products in db
             var dbProducts = await Context.Products.ToListAsync();

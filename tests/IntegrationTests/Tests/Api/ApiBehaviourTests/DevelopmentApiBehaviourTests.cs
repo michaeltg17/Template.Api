@@ -10,7 +10,7 @@ using Xunit;
 
 namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 {
-    [Collection(nameof(DevelopmentApiCollection))]
+    [Collection(nameof(DevelopmentApiCollectionFixture))]
     public class DevelopmentApiBehaviourTests : Test
     {
         [Fact]
@@ -21,8 +21,8 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 
             //Then
             var problemDetails = await response.To<ProblemDetails>();
-            TraceIdValidator.IsValid(problemDetails.TraceId!).Should().BeTrue();
-            ExceptionValidator.IsValid(problemDetails.Exception!).Should().BeTrue();
+            TraceIdAssertions.Assert(problemDetails.TraceId!).Should().BeTrue();
+            ExceptionAssertions.Assert(problemDetails.Exception!).Should().BeTrue();
 
             var expected = new ProblemDetailsBuilder()
                 .WithInternalServerError("Exception", "Sensitive data", "/Test/ThrowInternalServerError")

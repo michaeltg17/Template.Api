@@ -21,8 +21,8 @@ namespace IntegrationTests
 
             var fixtureType = collectionName switch
             {
-                nameof(DevelopmentApiCollection) => typeof(DevelopmentWebApplicationFactoryFixture),
-                nameof(ProductionApiCollection) => typeof(ProductionWebApplicationFactoryFixture),
+                nameof(DevelopmentApiCollectionFixture) => typeof(DevelopmentWebApplicationFactoryFixture),
+                nameof(ProductionApiCollectionFixture) => typeof(ProductionWebApplicationFactoryFixture),
                 _ => throw new IntegrationTestsException("Expected development or production collection name.")
             };
 

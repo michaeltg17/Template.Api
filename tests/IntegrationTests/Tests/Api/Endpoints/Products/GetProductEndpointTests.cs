@@ -2,8 +2,8 @@ using ApiClient.Extensions;
 using Application.Features.Images;
 using Application.Features.Products.Actions;
 using AwesomeAssertions;
+using Core.Testing.Assertions;
 using Core.Testing.Builders;
-using Core.Testing.Validators;
 using Domain.Models;
 using IntegrationTests.Collections;
 using IntegrationTests.Extensions;
@@ -13,7 +13,7 @@ using Xunit;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
-    [Collection(nameof(DevelopmentApiCollection))]
+    [Collection(nameof(DevelopmentApiCollectionFixture))]
     public class GetProductEndpointTests : ProductsTest
     {
         [Fact]
@@ -47,13 +47,13 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             product.Should().BeEquivalentTo(expected);
 
             //Verify uploads and register GET stub
-            ImageApiMock.ValidatePostAndSetGetMock(initialProduct.Image!.FileName, InitialImage);
+            ImageApiMock.AssertPostAndSetGetMock(initialProduct.Image!.FileName, InitialImage);
             var productImage = await ImageHttpClient.GetByteArrayAsync(productImageUrl);
             productImage.Should().BeEquivalentTo(InitialImage);
-            ImageApiMock.ValidateGetRequest(initialProduct.Image!.FileName);
+            ImageApiMock.AssertGetRequest(initialProduct.Image!.FileName);
 
             //Then: common expectations
-            await ValidateCommonExpectations(3);
+            await AssertCommonExpectations(3);
         }
 
         [Fact]
@@ -66,10 +66,10 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var response = await ApiClient.GetProduct(4);
 
             //Then: product not found
-            await ProblemDetailsValidator.ValidateNotFoundException(response, nameof(Product), BaseInstance, 4);
+            await ProblemDetailsAssertions.AssertNotFoundException(response, nameof(Product), BaseInstance, 4);
 
             //Then: common expectations
-            await ValidateCommonExpectations(3);
+            await AssertCommonExpectations(3);
         }
     }
 }
