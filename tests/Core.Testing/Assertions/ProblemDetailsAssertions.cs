@@ -4,6 +4,7 @@ using Core.Testing.Extensions;
 using AwesomeAssertions;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using Core.Testing.Validators;
 
 namespace Core.Testing.Assertions
 {

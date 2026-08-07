@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
-namespace Core.Testing
+namespace Core.Testing.Validators
 {
     public static partial class TraceIdValidator
     {

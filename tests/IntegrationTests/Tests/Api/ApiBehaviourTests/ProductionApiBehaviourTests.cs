@@ -1,9 +1,8 @@
 using ApiClient.Extensions;
 using AwesomeAssertions;
-using Core.Testing;
 using Core.Testing.Builders;
 using Core.Testing.Extensions;
-using IntegrationTests.Collections;
+using Core.Testing.Validators;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Xunit;

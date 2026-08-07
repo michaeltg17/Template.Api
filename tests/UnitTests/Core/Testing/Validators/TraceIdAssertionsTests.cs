@@ -1,6 +1,6 @@
-﻿using Core.Testing;
-using AwesomeAssertions;
+﻿using AwesomeAssertions;
 using Xunit;
+using Core.Testing.Validators;
 
 namespace UnitTests.Core.Testing.Validators
 {

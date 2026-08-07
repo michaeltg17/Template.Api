@@ -1,13 +1,12 @@
 using AwesomeAssertions;
-using System.Collections.Generic;
 using Xunit;
-using Core.Testing;
 using Core.Testing.Builders;
 using Core.Testing.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using ApiClient.Extensions;
 using IntegrationTests.Collections;
+using Core.Testing.Validators;
 
 namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 {
