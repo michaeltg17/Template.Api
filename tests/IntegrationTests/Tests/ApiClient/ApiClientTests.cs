@@ -4,9 +4,9 @@ using ApiClient.Extensions;
 using Domain.Models;
 using ApiClient.Exceptions;
 using Microsoft.AspNetCore.Mvc;
-using Core.Testing;
 using Core.Testing.Extensions;
 using IntegrationTests.Collections;
+using Core.Testing.Validators;
 
 namespace IntegrationTests.Tests.ApiClient
 {
@@ -21,8 +21,8 @@ namespace IntegrationTests.Tests.ApiClient
 
             //Then
             var problemDetails = await response.To<ProblemDetails>();
-            TraceIdAssertions.Assert(problemDetails.TraceId!).Should().BeTrue();
-            ExceptionAssertions.Assert(problemDetails.Exception!).Should().BeTrue();
+            TraceIdValidator.IsValid(problemDetails.TraceId!).Should().BeTrue();
+            ExceptionValidator.IsValid(problemDetails.Exception!).Should().BeTrue();
 
             var expectedMessage = $$"""
                 {

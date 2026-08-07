@@ -1,8 +1,8 @@
-﻿using Core.Testing;
-using AwesomeAssertions;
+﻿using AwesomeAssertions;
 using Xunit;
+using Core.Testing.Validators;
 
-namespace UnitTests.Core.Testing.Assertions
+namespace UnitTests.Core.Testing.Validators
 {
     public class TraceIdAssertionsTests
     {
@@ -13,9 +13,9 @@ namespace UnitTests.Core.Testing.Assertions
         [InlineData("01-bc43ec34fc2707cab2c1477979967041-146d776ead891946-00", false)] // Invalid version
         [InlineData("00-bc43ec34fc2707cab2c1477979967041-146d776ead891946-0", false)]  // Invalid flags length
         [InlineData("00-bc43ec34fc2707cab2c1477979967041-146d776ead891946-00-extra", false)] // Extra characters
-        public void ValidateTraceId(string traceId, bool expected)
+        public void IsValid_ShouldMatchExpected(string traceId, bool expected)
         {
-            TraceIdAssertions.Assert(traceId).Should().Be(expected);
+            TraceIdValidator.IsValid(traceId).Should().Be(expected);
         }
     }
 }

@@ -1,8 +1,8 @@
 using ApiClient.Extensions;
 using AwesomeAssertions;
-using Core.Testing;
 using Core.Testing.Builders;
 using Core.Testing.Extensions;
+using Core.Testing.Validators;
 using IntegrationTests.Collections;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -21,8 +21,8 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 
             //Then
             var problemDetails = await response.To<ProblemDetails>();
-            TraceIdAssertions.Assert(problemDetails.TraceId!).Should().BeTrue();
-            ExceptionAssertions.Assert(problemDetails.Exception!).Should().BeTrue();
+            TraceIdValidator.IsValid(problemDetails.TraceId!).Should().BeTrue();
+            ExceptionValidator.IsValid(problemDetails.Exception!).Should().BeTrue();
 
             var expected = new ProblemDetailsBuilder()
                 .WithInternalServerError("Exception", "Sensitive data", "/Test/ThrowInternalServerError")
