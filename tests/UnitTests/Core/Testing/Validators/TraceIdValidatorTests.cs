@@ -4,7 +4,7 @@ using Core.Testing.Validators;
 
 namespace UnitTests.Core.Testing.Validators
 {
-    public class TraceIdAssertionsTests
+    public class TraceIdValidatorTests
     {
         [Theory]
         [InlineData("00-bc43ec34fc2707cab2c1477979967041-146d776ead891946-00", true)] // Valid
