@@ -38,7 +38,7 @@ namespace Core.Testing.Assertions
             HttpStatusCode statusCode)
         {
             var problemDetails = await response.To<ProblemDetails>();
-            TraceIdAssertions.Assert(problemDetails.TraceId!).Should().BeTrue();
+            TraceIdValidator.IsValid(problemDetails.TraceId!).Should().BeTrue();
 
             var expected = builder
                 .WithTraceId(problemDetails.TraceId!)
