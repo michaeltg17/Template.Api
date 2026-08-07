@@ -10,7 +10,7 @@ using Xunit;
 
 namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 {
-    [Collection(nameof(ProductionApiCollectionFixture))]
+    //[Collection(nameof(ProductionApiCollectionFixture))]
     public class ProductionApiBehaviourTests : Test
     {
         [Fact(Skip = "Sometimes fails. Pending fix.")]
