@@ -7,6 +7,7 @@ public sealed class DeleteProductsRequestValidator : AbstractValidator<DeletePro
     public DeleteProductsRequestValidator()
     {
         RuleFor(x => x.Ids)
+            .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .Must(ids => ids.All(id => id > 0))
             .WithMessage("All ids must be positive.");
