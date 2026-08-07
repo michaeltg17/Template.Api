@@ -1,21 +1,32 @@
-﻿using AwesomeAssertions;
-using Xunit;
+﻿using Xunit;
 using Core.Testing.Validators;
+using AwesomeAssertions;
 
-namespace UnitTests.Core.Testing.Validators
+namespace UnitTests.Core.Testing.Validators;
+
+public sealed class TraceIdValidatorTests
 {
-    public class TraceIdValidatorTests
+    public static readonly TheoryDataRow<string?, bool>[] TestCases =
+    [
+        new("00-bc43ec34fc2707cab2c1477979967041-146d776ead891946-00", true) { TestDisplayName = "Valid: standard" },
+        new("00-00000000000000000000000000000000-146d776ead891946-00", false) { TestDisplayName = "Invalid: all zero trace" },
+        new("00-bc43ec34fc2707cab2c1477979967041-0000000000000000-00", false) { TestDisplayName = "Invalid: all zero parent" },
+        new("01-bc43ec34fc2707cab2c1477979967041-146d776ead891946-00", false) { TestDisplayName = "Invalid: wrong version" },
+        new("00-bc43ec34fc2707cab2c1477979967041-146d776ead891946-0", false) { TestDisplayName = "Invalid: short flags" },
+        new("00-bc43ec34fc2707cab2c1477979967041-146d776ead891946-00-extra", false) { TestDisplayName = "Invalid: extra chars" },
+        new("", false) { TestDisplayName = "Invalid: empty" },
+        new(null, false) { TestDisplayName = "Invalid: null" },
+        new("      ", false) { TestDisplayName = "Invalid: whitespace" },
+    ];
+
+    [Theory]
+    [MemberData(nameof(TestCases))]
+    public void Cases(string? traceId, bool expected)
     {
-        [Theory]
-        [InlineData("00-bc43ec34fc2707cab2c1477979967041-146d776ead891946-00", true)] // Valid
-        [InlineData("00-00000000000000000000000000000000-146d776ead891946-00", false)] // All zeros in Trace ID
-        [InlineData("00-bc43ec34fc2707cab2c1477979967041-0000000000000000-00", false)] // All zeros in Parent ID
-        [InlineData("01-bc43ec34fc2707cab2c1477979967041-146d776ead891946-00", false)] // Invalid version
-        [InlineData("00-bc43ec34fc2707cab2c1477979967041-146d776ead891946-0", false)]  // Invalid flags length
-        [InlineData("00-bc43ec34fc2707cab2c1477979967041-146d776ead891946-00-extra", false)] // Extra characters
-        public void IsValid_ShouldMatchExpected(string traceId, bool expected)
-        {
-            TraceIdValidator.IsValid(traceId).Should().Be(expected);
-        }
+        //When
+        var result = TraceIdValidator.IsValid(traceId!);
+
+        //Then
+        result.Should().Be(expected);
     }
 }
