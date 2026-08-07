@@ -16,5 +16,11 @@ namespace Core.Testing.Builders
                 Price = 10
             };
         }
+
+        public ProductBuilder WithValue(string propertyName, object? value)
+        {
+            Item.GetType().GetProperty(propertyName)!.SetValue(Item, value);
+            return this;
+        }
     }
 }
