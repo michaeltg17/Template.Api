@@ -42,7 +42,3 @@ dotnet_diagnostic.IDE0036.severity = none
 
 # CA1720: Identifier contains type name (e.g., Guid Guid, Type Type)
 dotnet_diagnostic.CA1720.severity = none
-
-# xUnit1044/xUnit1045: Type argument not serializable in theory data
-dotnet_diagnostic.xUnit1044.severity = none
-dotnet_diagnostic.xUnit1045.severity = none
