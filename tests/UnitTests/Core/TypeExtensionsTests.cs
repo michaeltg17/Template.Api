@@ -6,11 +6,11 @@ namespace UnitTests.Core
 {
     public class TypeExtensionsTests
     {
-        [InlineData(typeof(int), "Int32")]
-        [InlineData(typeof(List<>), "List")]
-        [InlineData(typeof(Exception), "Exception")]
+        [InlineData(typeof(Exception), "Exception", TestDisplayName = "Non-generic type")]
+        [InlineData(typeof(List<>), "List", TestDisplayName = "Open generic type (arity 1)")]
+        [InlineData(typeof(Dictionary<,>), "Dictionary", TestDisplayName = "Open generic type (arity 2)")]
         [Theory]
-        public void GetNameWithoutGenericArityTests(Type type, string expectedName)
+        public void GetNameWithoutGenericArity(Type type, string expectedName)
         {
             //When
             var name = type.GetNameWithoutGenericArity();
