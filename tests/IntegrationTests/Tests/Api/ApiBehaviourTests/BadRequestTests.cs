@@ -36,7 +36,7 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
                 Request = null,
                 ExpectedInstance = "/Test/Post/a",
                 ExpectedDetail = "Failed to bind parameter \"long id\" from \"a\"."
-            }) { TestDisplayName = "Invalid: route parameter id cannot be parsed as long" },
+            }) { TestDisplayName = "Invalid route parameter" },
             new(new BadRequestCase
             {
                 Id = (long)1,
@@ -44,7 +44,7 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
                 Request = null!,
                 ExpectedInstance = "/Test/Post/1",
                 ExpectedDetail = "Failed to bind parameter \"DateTime date\" from \"b\"."
-            }) { TestDisplayName = "Invalid: query string date cannot be parsed as DateTime" },
+            }) { TestDisplayName = "Invalid query string parameter" },
             new(new BadRequestCase
             {
                 Id = (long)1,
@@ -52,7 +52,7 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
                 Request = null,
                 ExpectedInstance = "/Test/Post/1",
                 ExpectedDetail = "Required parameter \"PostRequest request\" was not provided from body."
-            }) { TestDisplayName = "Missing: body not provided" },
+            }) { TestDisplayName = "Missing body" },
             new(new BadRequestCase
             {
                 Id = (long)1,
@@ -60,7 +60,7 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
                 Request = "x",
                 ExpectedInstance = "/Test/Post/1",
                 ExpectedDetail = "Failed to read parameter \"PostRequest request\" from the request body as JSON. The JSON value could not be converted to Api.Endpoints.TestEndpoints+PostRequest. Path: $ | LineNumber: 0 | BytePositionInLine: 3."
-            }) { TestDisplayName = "Invalid: body cannot be converted to expected type" },
+            }) { TestDisplayName = "Invalid body" },
             new(new BadRequestCase
             {
                 Id = (long)1,
@@ -68,7 +68,7 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
                 Request = new Dictionary<string, object?> { ["id2"] = "notanumber" },
                 ExpectedInstance = "/Test/Post/1",
                 ExpectedDetail = "Failed to read parameter \"PostRequest request\" from the request body as JSON. The JSON value could not be converted to System.Int64. Path: $.id2 | LineNumber: 0 | BytePositionInLine: 19."
-            }) { TestDisplayName = "Invalid: body property value cannot be converted to expected type" }
+            }) { TestDisplayName = "Invalid body property" }
         ];
 
         [Theory]
