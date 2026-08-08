@@ -12,21 +12,21 @@ public sealed class ProductValidatorTests
 
     public static readonly TheoryDataRow<string, object?, bool>[] TestCases =
     [
-        new(nameof(Product.Name), null, false) { TestDisplayName = "Name - Invalid: null" },
-        new(nameof(Product.Name), "      ", false) { TestDisplayName = "Name - Invalid: whitespace" },
-        new(nameof(Product.Name), "", false) { TestDisplayName = "Name - Invalid: empty" },
-        new(nameof(Product.Name), new string('x', 201), false) { TestDisplayName = "Name - Invalid: exceeds 200" },
-        new(nameof(Product.Name), new string('x', 200), true) { TestDisplayName = "Name - Valid: max 200" },
+        new(nameof(Product.Name), null, false) { TestDisplayName = "Invalid: Name null" },
+        new(nameof(Product.Name), "      ", false) { TestDisplayName = "Invalid: Name whitespace" },
+        new(nameof(Product.Name), "", false) { TestDisplayName = "Invalid: Name empty" },
+        new(nameof(Product.Name), new string('x', 201), false) { TestDisplayName = "Invalid: Name exceeds 200" },
+        new(nameof(Product.Name), new string('x', 200), true) { TestDisplayName = "Valid: Name max 200" },
 
-        new(nameof(Product.Description), null, false) { TestDisplayName = "Description - Invalid: null" },
-        new(nameof(Product.Description), "      ", false) { TestDisplayName = "Description - Invalid: whitespace" },
-        new(nameof(Product.Description), "", false) { TestDisplayName = "Description - Invalid: empty" },
-        new(nameof(Product.Description), new string('x', 2001), false) { TestDisplayName = "Description - Invalid: exceeds 2000" },
-        new(nameof(Product.Description), new string('x', 2000), true) { TestDisplayName = "Description - Valid: max 2000" },
+        new(nameof(Product.Description), null, false) { TestDisplayName = "Invalid: Description null" },
+        new(nameof(Product.Description), "      ", false) { TestDisplayName = "Invalid: Description whitespace" },
+        new(nameof(Product.Description), "", false) { TestDisplayName = "Invalid: Description empty" },
+        new(nameof(Product.Description), new string('x', 2001), false) { TestDisplayName = "Invalid: Description exceeds 2000" },
+        new(nameof(Product.Description), new string('x', 2000), true) { TestDisplayName = "Valid: Description max 2000" },
 
-        new(nameof(Product.Price), 0m, false) { TestDisplayName = "Price - Invalid: zero" },
-        new(nameof(Product.Price), -5m, false) { TestDisplayName = "Price - Invalid: negative" },
-        new(nameof(Product.Price), 10m, true) { TestDisplayName = "Price - Valid: positive" },
+        new(nameof(Product.Price), 0m, false) { TestDisplayName = "Invalid: Price zero" },
+        new(nameof(Product.Price), -5m, false) { TestDisplayName = "Invalid: Price negative" },
+        new(nameof(Product.Price), 10m, true) { TestDisplayName = "Valid: Price positive" },
     ];
 
     [Theory]
