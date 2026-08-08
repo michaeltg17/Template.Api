@@ -1,6 +1,6 @@
 namespace CrossCutting.Settings
 {
-    public class TemplateApiSettings : ITemplateApiSettings
+    public record TemplateApiSettings : ITemplateApiSettings
     {
         public required long MaxImageSizeMb { get; set; }
         public required IEnumerable<string> AllowedImageExtensions { get; set; }

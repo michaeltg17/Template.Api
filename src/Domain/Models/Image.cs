@@ -1,8 +1,7 @@
 ﻿namespace Domain.Models
 {
-    public class Image
+    public record Image(string FileName, Uri? Url = null!)
     {
-        public string FileName { get; set; } = default!;
-        public Uri Url { get; set; } = default!;
+        protected Image() : this(string.Empty!) { }
     }
 }

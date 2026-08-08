@@ -28,7 +28,7 @@ namespace ApiClient.Endpoints
         {
             var parameters = new Dictionary<string, string?>
             {
-                { nameof(date), date?.ToString() ?? "" }
+                { nameof(date), date?.ToString() }
             };
 
             var url = $"{BaseRoute}/Post/{id}" + QueryString.Create(parameters);
