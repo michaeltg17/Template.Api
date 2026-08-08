@@ -22,7 +22,7 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
             public string ExpectedDetail;
         }
 
-        public static TheoryData<BadRequestCase> BadRequestCases()
+        public static TheoryData<BadRequestCase> TestCases()
         {
             var row1 = new TheoryDataRow<BadRequestCase>(new BadRequestCase
             {
@@ -60,8 +60,8 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
         }
 
         [Theory]
-        [MemberData(nameof(BadRequestCases))]
-        public async Task BadRequest_ExpectedProblemDetails(BadRequestCase testCase)
+        [MemberData(nameof(TestCases))]
+        public async Task Cases(BadRequestCase testCase)
         {
             //When
             var response = await ApiClient.Test.Post(testCase.Id, testCase.Date, testCase.Request);

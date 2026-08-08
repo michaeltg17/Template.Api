@@ -2,11 +2,8 @@ using System.Collections.Concurrent;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
-using IntegrationTests.Tests.Api.ApiBehaviourTests;
 
-[assembly: Xunit.Sdk.RegisterXunitSerializerAttribute(typeof(IntegrationTests.GenericTestSerializer), typeof(BadRequestTests.BadRequestCase))]
-
-namespace IntegrationTests
+namespace Core.Testing.Serializers
 {
     public class GenericTestSerializer : Xunit.Sdk.IXunitSerializer
     {
