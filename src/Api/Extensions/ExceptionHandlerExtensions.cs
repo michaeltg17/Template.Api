@@ -45,7 +45,8 @@ namespace Api.Extensions
 
             var detail = exception switch
             {
-                BadHttpRequestException { InnerException: JsonException jsonEx } => exception.Message + " " + jsonEx.Message,
+                BadHttpRequestException { InnerException: JsonException jsonEx } =>
+                    string.JoinNonEmpty(exception.Message, jsonEx.Message, jsonEx.InnerException?.Message),
                 BadHttpRequestException => exception.Message,
                 _ when isInternalServerError && !isDevelopment => "Internal server error. Please contact the API support.",
                 _ when isValidationException => "One or more validation errors occurred.",
@@ -62,7 +63,9 @@ namespace Api.Extensions
             var problemDetails = new ProblemDetails
             {
                 Type = typeUri,
-                Title = isInternalServerError && !isDevelopment ? "InternalServerError" : exception.GetType().GetNameWithoutGenericArity(),
+                Title = isInternalServerError && !isDevelopment
+                    ? "InternalServerError"
+                    : exception.GetType().GetNameWithoutGenericArity(),
                 Detail = detail,
                 Status = httpContext.Response.StatusCode,
                 Instance = httpContext.Request.Path,

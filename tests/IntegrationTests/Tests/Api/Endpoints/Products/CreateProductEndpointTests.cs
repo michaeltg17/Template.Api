@@ -40,7 +40,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                     p.Name = request.Name;
                     p.Description = request.Description;
                     p.Price = request.Price;
-                    p.Image = new Image { FileName = productImageFileName, Url = productImageUrl };
+                    p.Image = new Image(productImageFileName, productImageUrl);
                 })
                 .Build();
 

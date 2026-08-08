@@ -21,17 +21,18 @@ namespace Application.Features.Products.Actions
         internal async Task SetImage(Product product, IFormFile image)
         {
             var extension = Path.GetExtension(image.FileName);
-            product.Image = new Image { FileName = BuildImageFileName(product, extension) };
+            var fileName = BuildImageFileName(product, extension);
 
             using var stream = image.OpenReadStream();
-            await imageService.Upload(product.Image.FileName, stream, image.ContentType);
+            await imageService.Upload(fileName, stream, image.ContentType);
 
-            SetImageUrl(product);
+            product.Image = new Image(fileName, imageService.BuildUrl(fileName));
         }
 
         internal void SetImageUrl(Product product)
         {
-            product.Image?.Url = imageService.BuildUrl(product.Image.FileName);
+            if (product.Image is not null)
+                product.Image = new Image(product.Image.FileName, imageService.BuildUrl(product.Image.FileName));
         }
 
         internal async Task DeleteImage(Product product)
