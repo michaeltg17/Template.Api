@@ -20,7 +20,7 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
     {
         public class BadRequestCase
         {
-            public object? Id;
+            public object Id;
             public object? Date;
             public object? Request;
             public string ExpectedInstance;
