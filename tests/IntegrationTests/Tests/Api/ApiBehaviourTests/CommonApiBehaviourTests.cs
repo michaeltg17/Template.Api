@@ -37,7 +37,7 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
         public async Task ValidRequest_Ok()
         {
             //When
-            var response = await ApiClient.Test.Post(1L, new DateTime(2020, 1, 1), new PostRequest { Id2 = 2L });
+            var response = await ApiClient.Test.Post(1L, new DateTime(2020, 1, 1), new PostRequest(2L));
 
             //Then
             response.StatusCode.Should().Be(HttpStatusCode.OK);
