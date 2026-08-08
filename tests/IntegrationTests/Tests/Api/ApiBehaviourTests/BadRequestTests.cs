@@ -75,6 +75,8 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
         [MemberData(nameof(TestCases))]
         public async Task Cases(BadRequestCase @case)
         {
+            ArgumentNullException.ThrowIfNull(@case);
+
             //When
             var response = await ApiClient.Test.Post(@case.Id, @case.Date, @case.Request);
 
