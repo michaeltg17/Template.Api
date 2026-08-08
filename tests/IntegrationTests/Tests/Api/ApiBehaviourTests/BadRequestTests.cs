@@ -67,7 +67,7 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
                 Date = "2020-01-01",
                 Request = new Dictionary<string, object?> { ["id2"] = "notanumber" },
                 ExpectedInstance = "/Test/Post/1",
-                ExpectedDetail = "Failed to read parameter \"PostRequest request\" from the request body as JSON. The JSON value could not be converted to System.Int64. Path: $.id2 | LineNumber: 0 | BytePositionInLine: 19."
+                ExpectedDetail = "Failed to read parameter \"PostRequest request\" from the request body as JSON. The JSON value could not be converted to Api.Endpoints.TestEndpoints+PostRequest. Path: $.id2 | LineNumber: 0 | BytePositionInLine: 19. Either the JSON value is not in a supported format, or is out of bounds for an Int64."
             }) { TestDisplayName = "Invalid body property" }
         ];
 
