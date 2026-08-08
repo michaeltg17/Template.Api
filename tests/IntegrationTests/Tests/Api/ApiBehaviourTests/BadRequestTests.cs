@@ -7,6 +7,11 @@ using System.Net;
 using ApiClient.Extensions;
 using IntegrationTests.Collections;
 using Core.Testing.Validators;
+using static IntegrationTests.Tests.Api.ApiBehaviourTests.BadRequestTests;
+using Core.Testing.Serializers;
+using Xunit.Sdk;
+
+[assembly: RegisterXunitSerializer(typeof(GenericTestSerializer), typeof(BadRequestCase))]
 
 namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 {
