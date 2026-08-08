@@ -2,10 +2,11 @@ using System.Collections.Concurrent;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using Xunit.Sdk;
 
 namespace Core.Testing.Serializers
 {
-    public class GenericTestSerializer : Xunit.Sdk.IXunitSerializer
+    public class TestCaseSerializer : IXunitSerializer
     {
         static readonly ConcurrentDictionary<Type, FieldInfo[]> FieldCache = new();
         static readonly ConcurrentDictionary<string, Type> TypeCache = new();

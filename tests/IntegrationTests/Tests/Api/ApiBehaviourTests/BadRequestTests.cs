@@ -11,7 +11,7 @@ using static IntegrationTests.Tests.Api.ApiBehaviourTests.BadRequestTests;
 using Core.Testing.Serializers;
 using Xunit.Sdk;
 
-[assembly: RegisterXunitSerializer(typeof(GenericTestSerializer), typeof(BadRequestCase))]
+[assembly: RegisterXunitSerializer(typeof(TestCaseSerializer), typeof(BadRequestCase))]
 
 namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 {
