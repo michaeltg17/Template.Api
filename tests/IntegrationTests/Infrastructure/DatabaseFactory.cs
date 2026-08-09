@@ -10,44 +10,34 @@ namespace IntegrationTests.Infrastructure
 {
     internal class DatabaseFactory(ITestSettings testSettings)
     {
-        static readonly SemaphoreSlim @lock = new(1, 1);
         const string DatabaseName = "database";
         const string ContainerName = "template-api-integration-tests-postgres";
         const int HostPort = 50000;
 
         public async Task<Database> Create()
         {
-            await @lock.WaitAsync();
+            Log("Initializing database.");
 
-            try
+            Log("Using existing container if exists.");
+            string connectionString;
+            PostgreSqlContainer? container = default;
+            if (await ExistsContainer())
             {
-                Log("Initializing database.");
-
-                Log("Using existing container if exists.");
-                string connectionString;
-                PostgreSqlContainer? container = default;
-                if (await ExistsContainer())
-                {
-                    connectionString = GetConnectionString();
-                }
-                else
-                {
-                    Log("Does not exist. Creating new container.");
-                    container = await CreateContainer();
-                    Log("Container created.");
-                    connectionString = GetConnectionString(container);
-                }
-
-                Log("Migrating database.");
-                Migrator.Migrate(connectionString);
-
-                Log("Database initialized.");
-                return new Database(testSettings, container) { ConnectionString = connectionString };
+                connectionString = GetConnectionString();
             }
-            finally
+            else
             {
-                @lock.Release();
+                Log("Does not exist. Creating new container.");
+                container = await CreateContainer();
+                Log("Container created.");
+                connectionString = GetConnectionString(container);
             }
+
+            Log("Migrating database.");
+            Migrator.Migrate(connectionString);
+
+            Log("Database initialized.");
+            return new Database(testSettings, container) { ConnectionString = connectionString };
         }
 
         static async Task<bool> ExistsContainer()

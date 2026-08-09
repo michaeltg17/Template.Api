@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Serilog.Sinks.InMemory;
+using Serilog.Sinks.XUnit.Injectable;
 using Xunit.DependencyInjection;
 
 namespace IntegrationTests
@@ -14,8 +16,9 @@ namespace IntegrationTests
         public static void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<BeforeAfterTest, BeforeAfterTestConfiguration>();
-            services.AddSingleton<ProductionWebApplicationFactoryFixture>();
-            services.AddSingleton<DevelopmentWebApplicationFactoryFixture>();
+            services.AddScoped<InMemorySink>();
+            services.AddScoped<InjectableTestOutputSink>();
+            services.AddScoped<ImageApiMock>();
             services.AddSingleton<DatabaseFactory>();
         }
 
