@@ -1,12 +1,19 @@
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using IntegrationTests.Infrastructure;
 using IntegrationTests.Settings;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Serilog.Sinks.InMemory;
+using Serilog.Sinks.XUnit.Injectable;
 
 namespace IntegrationTests.Fixtures
 {
-    internal class ProductionWebApplicationFactory(ITestSettings testSettings, DatabaseFactory databaseFactory)
-        : WebApplicationFactoryFixture(testSettings, databaseFactory, Environments.Production)
+    internal class ProductionWebApplicationFactory(
+        ITestSettings testSettings,
+        InMemorySink inMemorySink,
+        InjectableTestOutputSink injectableTestOutputSink,
+        ImageApiMock imageApiMock,
+        Database database)
+        : WebApplicationFactory(testSettings, databaseFactory, Environments.Production)
     {
         protected override IHost CreateHost(IHostBuilder builder)
         {
