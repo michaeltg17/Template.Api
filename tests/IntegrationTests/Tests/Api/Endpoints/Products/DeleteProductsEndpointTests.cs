@@ -34,7 +34,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             result.Should().BeEquivalentTo(expected);
 
             //Then: expected logging
-            WebApplicationFactoryFixture.InMemorySink
+            TestFixture.InMemorySink
                 .Should()
                 .HaveMessage(ProductsDeletedMessage)
                 .Appearing().Once()
@@ -68,7 +68,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             result.Should().BeEquivalentTo(expected);
 
             //Then: expected logging
-            WebApplicationFactoryFixture.InMemorySink
+            TestFixture.InMemorySink
                 .Should()
                 .HaveMessage(ProductsDeletedMessage)
                 .Appearing().Once()
@@ -116,7 +116,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             result.Should().BeEquivalentTo(expected);
 
             //Then: expected logging
-            WebApplicationFactoryFixture.InMemorySink
+            TestFixture.InMemorySink
                 .Should()
                 .HaveMessage(ProductsDeletedMessage)
                 .Appearing().Once()
@@ -149,7 +149,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             result.Should().BeEquivalentTo(expected);
 
             //Then: expected logging
-            WebApplicationFactoryFixture.InMemorySink
+            TestFixture.InMemorySink
                 .Should()
                 .NotHaveMessage(ProductsDeletedMessage);
 

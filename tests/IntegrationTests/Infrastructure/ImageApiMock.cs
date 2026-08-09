@@ -5,9 +5,9 @@ using WireMock.ResponseBuilders;
 
 namespace IntegrationTests.Infrastructure
 {
-    internal class ImageApiMock : ApiMock
+    public class ImageApiMock : ApiMock
     {
-        public ImageApiMock()
+        public ImageApiMock() : base()
         {
             SetMocks();
         }

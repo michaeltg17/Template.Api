@@ -13,10 +13,12 @@ namespace IntegrationTests.Fixtures
         InjectableTestOutputSink injectableTestOutputSink,
         ImageApiMock imageApiMock,
         Database database)
-        : WebApplicationFactory(testSettings, databaseFactory, Environments.Production)
+        : WebApplicationFactory(testSettings, inMemorySink, injectableTestOutputSink, imageApiMock, database)
     {
         protected override IHost CreateHost(IHostBuilder builder)
         {
+            builder.UseEnvironment(Environments.Production);
+
             builder.ConfigureAppConfiguration(config =>
             {
                 config.AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: false);

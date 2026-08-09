@@ -59,7 +59,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             dbProduct.Should().BeEquivalentTo(expected, o => o.Excluding(p => p.Image!.Url));
 
             //Then: expected logging
-            WebApplicationFactoryFixture.InMemorySink
+            TestFixture.InMemorySink
                 .Should()
                 .HaveMessage(ProductUpdatedMessage)
                 .Appearing().Once()
@@ -85,7 +85,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             await ProblemDetailsAssertions.AssertNotFoundException(response, nameof(Product), BaseInstance, 5);
 
             //Then: expected no logging
-            WebApplicationFactoryFixture.InMemorySink
+            TestFixture.InMemorySink
                 .Should()
                 .NotHaveMessage(ProductUpdatedMessage);
 
@@ -115,7 +115,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 });
 
             //Then: expected no logging
-            WebApplicationFactoryFixture.InMemorySink
+            TestFixture.InMemorySink
                 .Should()
                 .NotHaveMessage(ProductUpdatedMessage);
 

@@ -8,7 +8,7 @@ using Xunit;
 
 namespace IntegrationTests.Infrastructure
 {
-    internal class DatabaseFactory(ITestSettings testSettings)
+    public class DatabaseFactory(ITestSettings testSettings)
     {
         const string DatabaseName = "database";
         const string ContainerName = "template-api-integration-tests-postgres";

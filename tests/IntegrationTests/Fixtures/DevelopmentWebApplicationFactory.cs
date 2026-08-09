@@ -12,7 +12,12 @@ namespace IntegrationTests.Fixtures
         InjectableTestOutputSink injectableTestOutputSink,
         ImageApiMock imageApiMock,
         Database database)
-        : WebApplicationFactory(testSettings, databaseFactory, Environments.Development)
+        : WebApplicationFactory(testSettings, inMemorySink, injectableTestOutputSink, imageApiMock, database)
     {
+        protected override IHost CreateHost(IHostBuilder builder)
+        {
+            builder.UseEnvironment(Environments.Development);
+            return base.CreateHost(builder);
+        }
     }
 }

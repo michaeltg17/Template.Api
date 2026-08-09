@@ -17,9 +17,8 @@ using IntegrationTests.Extensions;
 
 namespace IntegrationTests.Fixtures
 {
-    internal abstract class WebApplicationFactory(
+    public abstract class WebApplicationFactory(
         ITestSettings testSettings,
-        string environment,
         InMemorySink inMemorySink,
         InjectableTestOutputSink injectableTestOutputSink,
         ImageApiMock imageApiMock,
@@ -28,8 +27,6 @@ namespace IntegrationTests.Fixtures
     {
         protected override IHost CreateHost(IHostBuilder builder)
         {
-            builder.UseEnvironment(environment);
-
             builder.UseSerilog((context, services, configuration) =>
             {
                 Api.DependencyConfigurator.ApplyCommonSerilogConfiguration(context, services, configuration);

@@ -60,7 +60,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             dbProduct.Should().BeEquivalentTo(expected, o => o.Excluding(p => p.Image!.Url));
 
             //Then: expected logging
-            WebApplicationFactoryFixture.InMemorySink
+            TestFixture.InMemorySink
                 .Should()
                 .HaveMessage(ProductCreatedMessage)
                 .Appearing().Times(4)
@@ -94,7 +94,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 });
 
             //Then: expected logging
-            WebApplicationFactoryFixture.InMemorySink
+            TestFixture.InMemorySink
                 .Should()
                 .HaveMessage(ProductCreatedMessage)
                 .Appearing().Times(3)

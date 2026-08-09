@@ -2,18 +2,19 @@
 
 namespace IntegrationTests.Infrastructure
 {
-    internal abstract class ApiMock : IDisposable
+    public abstract class ApiMock : IDisposable
     {
-        public readonly WireMockServer Server;
+        public WireMockServer Server { get; }
 
-        public ApiMock()
+        protected ApiMock()
         {
             Server = WireMockServer.Start();
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             Server.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

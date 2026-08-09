@@ -21,7 +21,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         protected const string ProductsDeletedMessage = "Products with ids '{ids}' deleted successfully.";
 
         public List<Product> initialProducts = [];
-        internal ImageApiMock ImageApiMock => WebApplicationFactoryFixture.ImageApiMock;
+        internal ImageApiMock ImageApiMock => TestFixture.ImageApiMock;
 
         public async ValueTask CreateProducts(int count = 3)
         {

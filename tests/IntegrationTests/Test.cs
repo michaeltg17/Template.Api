@@ -3,7 +3,6 @@ using IntegrationTests.Fixtures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence;
-using System.Collections;
 using Xunit;
 
 namespace IntegrationTests
@@ -16,21 +15,13 @@ namespace IntegrationTests
         protected AppDbContext Context { get; set; } = default!;
         AsyncServiceScope Scope { get; set; } = default!;
         protected HttpClient ImageHttpClient { get; private set; } = default!;
-        public TestFixture TestFixture { get; set; }
+        public TestFixture TestFixture { get; set; } = default!;
 
-        public virtual ValueTask Initialize(ITestOutputHelper testOutputHelper, Type fixtureType)
+        public virtual ValueTask Initialize(ITestOutputHelper testOutputHelper, string? collectionFixtureName)
         {
             TestFixture.InjectableTestOutputSink.Inject(testOutputHelper);
             TestFixture.ImageApiMock!.Server.ResetLogEntries();
-
-            var fixtureType = collectionName switch
-            {
-                nameof(DevelopmentApiCollectionFixture) => typeof(DevelopmentWebApplicationFactory),
-                nameof(ProductionApiCollectionFixture) => typeof(ProductionWebApplicationFactory),
-                _ => throw new IntegrationTestsException("Expected development or production collection name.")
-            };
-
-            TestFixture.WebApplicationFactory = new 
+            TestFixture.SetWebApplicationFactory(collectionFixtureName);
 
             ApiClient = new(TestFixture.WebApplicationFactory.CreateClient());
             Scope = TestFixture.WebApplicationFactory.Services.CreateAsyncScope();
@@ -58,7 +49,7 @@ namespace IntegrationTests
         }
 
         /// <summary>
-        /// To be called at the end of each test so that logs from previous test doesn't get mixed with the next one.
+        /// To be called at the end of each test so logs from previous test don't get mixed with the next one.
         /// </summary>
         public static void FlushLogger()
         {
