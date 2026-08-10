@@ -2,7 +2,7 @@ using AwesomeAssertions;
 using Core.Testing.Serializers;
 using Xunit;
 
-namespace UnitTests.Core.Serializers;
+namespace UnitTests.Core.Testing.Serializers;
 
 public class TestCaseSerializerTests
 {

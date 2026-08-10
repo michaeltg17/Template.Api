@@ -1,7 +1,4 @@
-﻿using IntegrationTests.Collections;
-using IntegrationTests.Fixtures;
-using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
+﻿using System.Reflection;
 using Xunit;
 using Xunit.DependencyInjection;
 
