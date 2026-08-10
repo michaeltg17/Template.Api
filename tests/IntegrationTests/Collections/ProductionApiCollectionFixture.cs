@@ -4,6 +4,6 @@ using Xunit;
 namespace IntegrationTests.Collections;
 
 [CollectionDefinition(nameof(ProductionApiCollectionFixture))]
-public class ProductionApiCollectionFixture : ICollectionFixture<ProductionWebApplicationFactoryFixture>
+public class ProductionApiCollectionFixture : ICollectionFixture<TestFixture>
 {
 }

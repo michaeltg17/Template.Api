@@ -1,7 +1,4 @@
-﻿using System;
-using System.Text;
-
-namespace IntegrationTests
+﻿namespace IntegrationTests
 {
     internal class IntegrationTestsException(string message) : Exception(message)
     {

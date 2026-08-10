@@ -1,8 +1,6 @@
-﻿using Api;
-using Microsoft.AspNetCore.Mvc.Testing;
+﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Xunit;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence;
 using Serilog.Events;
@@ -19,44 +17,25 @@ using IntegrationTests.Extensions;
 
 namespace IntegrationTests.Fixtures
 {
-    internal abstract class WebApplicationFactoryFixture(
+    public abstract class WebApplicationFactory(
         ITestSettings testSettings,
-        DatabaseFactory databaseFactory,
-        string environment)
-        : WebApplicationFactory<Program>, IAsyncLifetime
+        InMemorySink inMemorySink,
+        InjectableTestOutputSink injectableTestOutputSink,
+        ImageApiMock imageApiMock,
+        Database database)
+        : WebApplicationFactory<Program>
     {
-        public InMemorySink InMemorySink { get; } = new();
-        public InjectableTestOutputSink InjectableTestOutputSink { get; set; } = new();
-        Database? Database { get; set; }
-        internal ImageApiMock ImageApiMock { get; private set; } = new();
-
-        async ValueTask IAsyncLifetime.InitializeAsync()
-        {
-            Database = await databaseFactory.Create();
-        }
-
-        /// <summary>
-        /// To be called at the end of each test so that logs from previous test doesn't get mixed with the next one.
-        /// </summary>
-        public static void FlushLogger()
-        {
-            //Not the best but too hard to do it in another way.
-            Thread.Sleep(10);
-        }
-
         protected override IHost CreateHost(IHostBuilder builder)
         {
-            builder.UseEnvironment(environment);
-
             builder.UseSerilog((context, services, configuration) =>
             {
                 Api.DependencyConfigurator.ApplyCommonSerilogConfiguration(context, services, configuration);
-                configuration.WriteTo.Sink(InjectableTestOutputSink);
+                configuration.WriteTo.Sink(injectableTestOutputSink);
 
                 //Using Map sink to fix "Only first test is logged"
                 configuration.WriteTo.Map(
-                    _ => InMemorySink,
-                    (_, writeTo) => writeTo.Sink(InMemorySink),
+                    _ => inMemorySink,
+                    (_, writeTo) => writeTo.Sink(inMemorySink),
                     sinkMapCountLimit: 1);
 
                 if (testSettings.EnableSqlLogging)
@@ -70,12 +49,12 @@ namespace IntegrationTests.Fixtures
                 services.AddHttpLogging(options =>
                     options.LoggingFields = HttpLoggingFields.RequestBody | HttpLoggingFields.ResponseBody);
                 services.AddTransient<IStartupFilter, TestStartupFilter>();
-                services.AddSingleton<IInjectableTestOutputSink>(InjectableTestOutputSink);
+                services.AddSingleton<IInjectableTestOutputSink>(injectableTestOutputSink);
 
                 services.Configure<TemplateApiSettings>(templateSettings =>
                 {
-                    templateSettings.PostgreSqlConnectionString = Database!.ConnectionString;
-                    templateSettings.ImageApiUrl = ImageApiMock!.Server.Uri;
+                    templateSettings.PostgreSqlConnectionString = database!.ConnectionString;
+                    templateSettings.ImageApiUrl = imageApiMock!.Server.Uri;
                     templateSettings.ImageApiKey = Test.ApiKey;
                 });
 
@@ -86,13 +65,6 @@ namespace IntegrationTests.Fixtures
             });
 
             return base.CreateHost(builder);
-        }
-
-        public async new Task DisposeAsync()
-        {
-            ImageApiMock?.Server.Dispose();
-            if (Database != null) await Database.DisposeAsync();
-            await base.DisposeAsync();
         }
     }
 }

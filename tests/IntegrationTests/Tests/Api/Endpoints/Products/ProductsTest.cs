@@ -2,13 +2,14 @@
 using AwesomeAssertions;
 using Core.Testing.Builders;
 using Domain.Models;
-using Microsoft.EntityFrameworkCore;
+using IntegrationTests.Fixtures;
 using IntegrationTests.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
-    public abstract class ProductsTest : Test
+    public abstract class ProductsTest(TestFixture testFixture) : Test(testFixture)
     {
         protected const string BaseInstance = "/api/Products";
         protected static byte[] InitialImage = File.ReadAllBytes("Images/didi.jpeg");
@@ -21,7 +22,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         protected const string ProductsDeletedMessage = "Products with ids '{ids}' deleted successfully.";
 
         public List<Product> initialProducts = [];
-        internal ImageApiMock ImageApiMock => WebApplicationFactoryFixture.ImageApiMock;
+        internal ImageApiMock ImageApiMock => TestFixture.ImageApiMock;
 
         public async ValueTask CreateProducts(int count = 3)
         {

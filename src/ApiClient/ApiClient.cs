@@ -7,8 +7,6 @@ namespace ApiClient
 {
     public class ApiClient(HttpClient httpClient)
     {
-        public HttpClient HttpClient { get; } = httpClient;
-
         public TestEndpoints Test { get; } = new(httpClient);
 
         const string BasePath = EndpointExtensions.BasePath;

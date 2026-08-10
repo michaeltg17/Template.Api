@@ -2,17 +2,13 @@ using Application.Features.Images;
 using AwesomeAssertions;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
-using WireMock.Server;
 
 namespace IntegrationTests.Infrastructure
 {
-    internal class ImageApiMock
+    public class ImageApiMock : ApiMock
     {
-        public readonly WireMockServer Server;
-
-        public ImageApiMock()
+        public ImageApiMock() : base()
         {
-            Server = WireMockServer.Start();
             SetMocks();
         }
 

@@ -1,23 +1,24 @@
 using ApiClient.Extensions;
+using Application.Features.Images;
+using Application.Features.Products.Actions;
 using Application.Features.Products.Models.Requests;
 using AwesomeAssertions;
+using Core.Testing.Assertions;
 using Core.Testing.Builders;
 using Domain.Models;
+using IntegrationTests.Collections;
+using IntegrationTests.Extensions;
+using IntegrationTests.Fixtures;
 using Microsoft.AspNetCore.Mvc;
 using Serilog.Events;
+using Serilog.Sinks.InMemory.Assertions;
 using System.Net;
 using Xunit;
-using Serilog.Sinks.InMemory.Assertions;
-using IntegrationTests.Collections;
-using Application.Features.Images;
-using IntegrationTests.Extensions;
-using Application.Features.Products.Actions;
-using Core.Testing.Assertions;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
     [Collection(nameof(DevelopmentApiCollectionFixture))]
-    public class CreateProductEndpointTests : ProductsTest
+    public class CreateProductEndpointTests(TestFixture testFixture) : ProductsTest(testFixture)
     {
         [Fact]
         public async Task CreateProductOk()
@@ -50,7 +51,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
 
             //Then: image is uploaded
             ImageApiMock.AssertPostAndSetGetMock(product.Image!.FileName, InitialImage);
-            var productImage = await ImageHttpClient
+            var productImage = await HttpClient
                 .GetByteArrayAsync(productImageUrl, TestContext.Current.CancellationToken);
             ImageApiMock.AssertGetRequest(product.Image!.FileName);
             productImage.Should().BeEquivalentTo(InitialImage);
@@ -60,7 +61,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             dbProduct.Should().BeEquivalentTo(expected, o => o.Excluding(p => p.Image!.Url));
 
             //Then: expected logging
-            WebApplicationFactoryFixture.InMemorySink
+            TestFixture.InMemorySink
                 .Should()
                 .HaveMessage(ProductCreatedMessage)
                 .Appearing().Times(4)
@@ -94,7 +95,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 });
 
             //Then: expected logging
-            WebApplicationFactoryFixture.InMemorySink
+            TestFixture.InMemorySink
                 .Should()
                 .HaveMessage(ProductCreatedMessage)
                 .Appearing().Times(3)

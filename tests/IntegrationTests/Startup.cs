@@ -1,10 +1,12 @@
-﻿using IntegrationTests.Fixtures;
+﻿using IntegrationTests.Extensions;
 using IntegrationTests.Infrastructure;
 using IntegrationTests.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Serilog.Sinks.InMemory;
+using Serilog.Sinks.XUnit.Injectable;
 using Xunit.DependencyInjection;
 
 namespace IntegrationTests
@@ -14,9 +16,9 @@ namespace IntegrationTests
         public static void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<BeforeAfterTest, BeforeAfterTestConfiguration>();
-            services.AddSingleton<ProductionWebApplicationFactoryFixture>();
-            services.AddSingleton<DevelopmentWebApplicationFactoryFixture>();
-            services.AddSingleton<DatabaseFactory>();
+            services.AddScoped<InMemorySink>();
+            services.AddScoped<InjectableTestOutputSink>();
+            services.AddScoped<ImageApiMock>();
         }
 
         public static void ConfigureHost(IHostBuilder hostBuilder)
@@ -26,12 +28,7 @@ namespace IntegrationTests
 
         static IHostBuilder AddConfiguration(this IHostBuilder builder)
         {
-            var testSettings = new Dictionary<string, string?>
-            {
-                {nameof(ITestSettings.KeepAliveDatabase), "false"},
-                {nameof(ITestSettings.EnableSqlLogging), "true"}
-            };
-
+            var testSettings = new TestSettings { EnableSqlLogging = true }.ToDictionary();
             builder.ConfigureHostConfiguration(builder => builder.AddInMemoryCollection(testSettings));
 
             builder.ConfigureServices(services =>

@@ -1,79 +1,66 @@
 ﻿using Persistence.Migrations;
 using Docker.DotNet;
 using Docker.DotNet.Models;
-using IntegrationTests.Settings;
 using Testcontainers.PostgreSql;
 using Npgsql;
 using Xunit;
 
 namespace IntegrationTests.Infrastructure
 {
-    internal class DatabaseFactory(ITestSettings testSettings)
+    public static class DatabaseFactory
     {
-        static readonly SemaphoreSlim @lock = new(1, 1);
-        const string DatabaseName = "database";
-        const string ContainerName = "template-api-integration-tests-postgres";
-        const int HostPort = 50000;
+        const string DatabaseName = "template_api";
 
-        public async Task<Database> Create()
+        public static async Task<Database> Create(string? containerName = null, bool keepAlive = false)
         {
-            await @lock.WaitAsync();
+            Log("Initializing database.");
 
-            try
+            Log("Using existing container if exists.");
+            string connectionString;
+            PostgreSqlContainer? postgreSqlContainer = default;
+            ContainerListResponse? container = await GetContainer(containerName);
+            if (container != null)
             {
-                Log("Initializing database.");
-
-                Log("Using existing container if exists.");
-                string connectionString;
-                PostgreSqlContainer? container = default;
-                if (await ExistsContainer())
-                {
-                    connectionString = GetConnectionString();
-                }
-                else
-                {
-                    Log("Does not exist. Creating new container.");
-                    container = await CreateContainer();
-                    Log("Container created.");
-                    connectionString = GetConnectionString(container);
-                }
-
-                Log("Migrating database.");
-                Migrator.Migrate(connectionString);
-
-                Log("Database initialized.");
-                return new Database(testSettings, container) { ConnectionString = connectionString };
+                connectionString = GetConnectionString(port: container.Ports[0].PublicPort);
             }
-            finally
+            else
             {
-                @lock.Release();
+                Log("Does not exist. Creating new container.");
+                postgreSqlContainer = await CreateContainer(keepAlive);
+                Log("Container created.");
+                connectionString = GetConnectionString(postgreSqlContainer);
             }
+
+            Log("Migrating database.");
+            Migrator.Migrate(connectionString);
+
+            Log("Database initialized.");
+            return new Database(postgreSqlContainer, keepAlive) { ConnectionString = connectionString };
         }
 
-        static async Task<bool> ExistsContainer()
+        static async Task<ContainerListResponse?> GetContainer(string? containerName)
         {
+            if (containerName == null) return null;
             var client = new DockerClientBuilder().Build();
             var parameters = new ContainersListParameters() { All = true };
             var containers = await client.Containers.ListContainersAsync(parameters);
-            var container = containers.SingleOrDefault(c => c.Names.Contains("/" + ContainerName));
+            var container = containers.SingleOrDefault(c => c.Names.Contains("/" + containerName));
             if (container != null)
             {
                 if (container.State != "running")
                     await client.Containers.StartContainerAsync(container.ID);
 
-                return true;
+                return container;
             }
 
-            return false;
+            return container;
         }
 
-        async Task<PostgreSqlContainer> CreateContainer()
+        static async Task<PostgreSqlContainer> CreateContainer(bool keepAlive)
         {
             var postgreSqlContainer = new PostgreSqlBuilder("postgres:latest")
-                .WithName(ContainerName)
-                .WithPortBinding(HostPort, 5432)
-                .WithCleanUp(!testSettings.KeepAliveDatabase)
-                .WithAutoRemove(!testSettings.KeepAliveDatabase)
+                .WithCleanUp(!keepAlive)
+                .WithAutoRemove(!keepAlive)
                 .Build();
 
             await postgreSqlContainer.StartAsync();
@@ -84,11 +71,16 @@ namespace IntegrationTests.Infrastructure
         static string DockerHost => 
             Environment.GetEnvironmentVariable("TESTCONTAINERS_HOST_OVERRIDE") ?? "localhost";
 
-        static string GetConnectionString(PostgreSqlContainer? container = null)
+        static string GetConnectionString(PostgreSqlContainer? container = null, int? port = null)
         {
             if (DockerHost == "localhost" && container != null)
             {
                 return container.GetConnectionString();
+            }
+
+            if (!port.HasValue)
+            {
+                throw new ArgumentNullException(nameof(port));
             }
 
             var builder = new NpgsqlConnectionStringBuilder()
@@ -97,7 +89,7 @@ namespace IntegrationTests.Infrastructure
                 Username = PostgreSqlBuilder.DefaultUsername,
                 Password = PostgreSqlBuilder.DefaultPassword,
                 Host = DockerHost,
-                Port = HostPort,
+                Port = port.Value,
                 GssEncryptionMode = GssEncryptionMode.Disable
             };
 

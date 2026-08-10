@@ -3,16 +3,18 @@ using AwesomeAssertions;
 using Core.Testing.Builders;
 using Core.Testing.Extensions;
 using Core.Testing.Validators;
+using IntegrationTests.Collections;
+using IntegrationTests.Fixtures;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Xunit;
 
 namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 {
-    //[Collection(nameof(ProductionApiCollectionFixture))]
-    public class ProductionApiBehaviourTests : Test
+    [Collection(nameof(ProductionApiCollectionFixture))]
+    public class ProductionApiBehaviourTests(TestFixture testFixture) : Test(testFixture)
     {
-        [Fact(Skip = "Sometimes fails. Pending fix.")]
+        [Fact]
         public async Task InternalServerError_HidesSensitiveData()
         {
             //When
