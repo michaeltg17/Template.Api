@@ -1,15 +1,14 @@
-﻿using IntegrationTests.Settings;
-using Testcontainers.PostgreSql;
+﻿using Testcontainers.PostgreSql;
 
 namespace IntegrationTests.Infrastructure
 {
-    public class Database(ITestSettings testSettings, PostgreSqlContainer? postgreSqlContainer) : IAsyncDisposable
+    public class Database(PostgreSqlContainer? postgreSqlContainer, bool keepAlive = false) : IAsyncDisposable
     {
         public required string ConnectionString { get; init; }
 
         public ValueTask DisposeAsync()
         {
-            if (testSettings.KeepAliveDatabase)
+            if (keepAlive)
             {
                 return ValueTask.CompletedTask;
             }

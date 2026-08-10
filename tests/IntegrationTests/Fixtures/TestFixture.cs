@@ -11,7 +11,6 @@ using Xunit;
 namespace IntegrationTests.Fixtures
 {
     public class TestFixture(
-        DatabaseFactory databaseFactory,
         InMemorySink inMemorySink,
         InjectableTestOutputSink injectableTestOutputSink,
         ImageApiMock imageApiMock,
@@ -25,7 +24,7 @@ namespace IntegrationTests.Fixtures
 
         public async ValueTask InitializeAsync()
         {
-            Database = await databaseFactory.Create();
+            Database = await DatabaseFactory.Create();
         }
 
         [SuppressMessage("Style", "IDE0045:Convert to conditional expression", Justification = "Cleaner")]

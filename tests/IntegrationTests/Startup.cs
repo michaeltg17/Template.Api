@@ -1,5 +1,4 @@
-﻿using IntegrationTests.Fixtures;
-using IntegrationTests.Infrastructure;
+﻿using IntegrationTests.Infrastructure;
 using IntegrationTests.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,7 +18,6 @@ namespace IntegrationTests
             services.AddScoped<InMemorySink>();
             services.AddScoped<InjectableTestOutputSink>();
             services.AddScoped<ImageApiMock>();
-            services.AddSingleton<DatabaseFactory>();
         }
 
         public static void ConfigureHost(IHostBuilder hostBuilder)
@@ -31,7 +29,6 @@ namespace IntegrationTests
         {
             var testSettings = new Dictionary<string, string?>
             {
-                {nameof(ITestSettings.KeepAliveDatabase), "false"},
                 {nameof(ITestSettings.EnableSqlLogging), "true"}
             };
 
