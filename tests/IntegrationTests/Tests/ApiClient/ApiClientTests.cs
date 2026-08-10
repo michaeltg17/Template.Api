@@ -1,17 +1,18 @@
 ﻿using AwesomeAssertions;
 using Xunit;
-using ApiClient.Extensions;
-using Domain.Models;
 using ApiClient.Exceptions;
-using Microsoft.AspNetCore.Mvc;
+using ApiClient.Extensions;
 using Core.Testing.Extensions;
-using IntegrationTests.Collections;
 using Core.Testing.Validators;
+using Domain.Models;
+using IntegrationTests.Collections;
+using IntegrationTests.Fixtures;
+using Microsoft.AspNetCore.Mvc;
 
 namespace IntegrationTests.Tests.ApiClient
 {
     [Collection(nameof(DevelopmentApiCollectionFixture))]
-    public class ApiClientTests : Test
+    public class ApiClientTests(TestFixture testFixture) : Test(testFixture)
     {
         [Fact]
         public async Task MappingEntityFromInvalidResponse_ApiExceptionIsThrownWithExpectedProblemDetails()

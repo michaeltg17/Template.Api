@@ -2,13 +2,14 @@
 using AwesomeAssertions;
 using Core.Testing.Builders;
 using Domain.Models;
-using Microsoft.EntityFrameworkCore;
+using IntegrationTests.Fixtures;
 using IntegrationTests.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
-    public abstract class ProductsTest : Test
+    public abstract class ProductsTest(TestFixture testFixture) : Test(testFixture)
     {
         protected const string BaseInstance = "/api/Products";
         protected static byte[] InitialImage = File.ReadAllBytes("Images/didi.jpeg");

@@ -7,6 +7,7 @@ using Core.Testing.Builders;
 using Domain.Models;
 using IntegrationTests.Collections;
 using IntegrationTests.Extensions;
+using IntegrationTests.Fixtures;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using Xunit;
@@ -14,7 +15,7 @@ using Xunit;
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
     [Collection(nameof(DevelopmentApiCollectionFixture))]
-    public class GetProductEndpointTests : ProductsTest
+    public class GetProductEndpointTests(TestFixture testFixture) : ProductsTest(testFixture)
     {
         [Fact]
         public async Task GetProductOk()
@@ -48,7 +49,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
 
             //Verify uploads and register GET stub
             ImageApiMock.AssertPostAndSetGetMock(initialProduct.Image!.FileName, InitialImage);
-            var productImage = await ImageHttpClient.GetByteArrayAsync(productImageUrl);
+            var productImage = await HttpClient.GetByteArrayAsync(productImageUrl);
             productImage.Should().BeEquivalentTo(InitialImage);
             ImageApiMock.AssertGetRequest(initialProduct.Image!.FileName);
 

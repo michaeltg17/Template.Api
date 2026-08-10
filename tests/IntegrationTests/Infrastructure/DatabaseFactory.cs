@@ -60,8 +60,6 @@ namespace IntegrationTests.Infrastructure
         async Task<PostgreSqlContainer> CreateContainer()
         {
             var postgreSqlContainer = new PostgreSqlBuilder("postgres:latest")
-                .WithName(ContainerName)
-                .WithPortBinding(HostPort, 5432)
                 .WithCleanUp(!testSettings.KeepAliveDatabase)
                 .WithAutoRemove(!testSettings.KeepAliveDatabase)
                 .Build();

@@ -2,13 +2,14 @@ using AwesomeAssertions;
 using Xunit;
 using Core.Testing.Builders;
 using Core.Testing.Extensions;
+using Core.Testing.Serializers;
+using Core.Testing.Validators;
+using IntegrationTests.Collections;
+using IntegrationTests.Fixtures;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using ApiClient.Extensions;
-using IntegrationTests.Collections;
-using Core.Testing.Validators;
 using static IntegrationTests.Tests.Api.ApiBehaviourTests.BadRequestTests;
-using Core.Testing.Serializers;
 using Xunit.Sdk;
 
 [assembly: RegisterXunitSerializer(typeof(TestCaseSerializer), typeof(BadRequestCase))]
@@ -16,7 +17,7 @@ using Xunit.Sdk;
 namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 {
     [Collection(nameof(DevelopmentApiCollectionFixture))]
-    public class BadRequestTests : Test
+    public class BadRequestTests(TestFixture testFixture) : Test(testFixture)
     {
         public class BadRequestCase
         {

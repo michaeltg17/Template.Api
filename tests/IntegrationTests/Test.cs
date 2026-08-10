@@ -1,5 +1,4 @@
-﻿using IntegrationTests.Collections;
-using IntegrationTests.Fixtures;
+﻿using IntegrationTests.Fixtures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence;
@@ -7,15 +6,15 @@ using Xunit;
 
 namespace IntegrationTests
 {
-    public abstract class Test : IAsyncLifetime
+    public abstract class Test(TestFixture testFixture) : IAsyncLifetime
     {
         public const string ApiKey = "test-api-key";
 
         public ApiClient.ApiClient ApiClient { get; private set; } = default!;
         protected AppDbContext Context { get; set; } = default!;
         AsyncServiceScope Scope { get; set; } = default!;
-        protected HttpClient ImageHttpClient { get; private set; } = default!;
-        public TestFixture TestFixture { get; set; } = default!;
+        protected HttpClient HttpClient { get; private set; } = default!;
+        public TestFixture TestFixture { get; set; } = testFixture;
 
         public virtual ValueTask Initialize(ITestOutputHelper testOutputHelper, string? collectionFixtureName)
         {
@@ -26,7 +25,7 @@ namespace IntegrationTests
             ApiClient = new(TestFixture.WebApplicationFactory.CreateClient());
             Scope = TestFixture.WebApplicationFactory.Services.CreateAsyncScope();
             Context = Scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            ImageHttpClient = Scope.ServiceProvider.GetRequiredService<IHttpClientFactory>().CreateClient();
+            HttpClient = Scope.ServiceProvider.GetRequiredService<IHttpClientFactory>().CreateClient();
             return ValueTask.CompletedTask;
         }
 
@@ -40,6 +39,7 @@ namespace IntegrationTests
         {
             await DeleteEntitiesFromDb();
             await Scope.DisposeAsync();
+            TestFixture.InMemorySink.Dispose();
             FlushLogger();
         }
 

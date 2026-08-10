@@ -4,14 +4,10 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Xunit;
 using Xunit.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace IntegrationTests
 {
-    internal class BeforeAfterTestConfiguration(
-        IServiceProvider serviceProvider,
-        ITestOutputHelperAccessor testOutputHelperAccessor,
-        TestFixture testFixture) : BeforeAfterTest
+    internal class BeforeAfterTestConfiguration(ITestOutputHelperAccessor testOutputHelperAccessor) : BeforeAfterTest
     {
         public override ValueTask BeforeAsync(object? testClassInstance, MethodInfo methodUnderTest)
         {
@@ -20,7 +16,6 @@ namespace IntegrationTests
 
             var collectionFixtureName = testClassInstance.GetType().GetCustomAttribute<CollectionAttribute>()?.Name;
 
-            test.TestFixture = testFixture;
             return test.Initialize(testOutputHelperAccessor.Output!, collectionFixtureName);
         }
     }

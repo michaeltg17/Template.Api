@@ -4,6 +4,7 @@ using Core.Testing.Builders;
 using Core.Testing.Extensions;
 using Core.Testing.Validators;
 using IntegrationTests.Collections;
+using IntegrationTests.Fixtures;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Xunit;
@@ -12,7 +13,7 @@ using static Api.Endpoints.TestEndpoints;
 namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 {
     [Collection(nameof(DevelopmentApiCollectionFixture))]
-    public class CommonApiBehaviourTests : Test
+    public class CommonApiBehaviourTests(TestFixture testFixture) : Test(testFixture)
     {
         [Fact]
         public async Task NonexistentRoute_ExpectedProblemDetails()

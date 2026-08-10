@@ -1,20 +1,22 @@
 using ApiClient.Extensions;
+using Application.Features.Products.Actions;
 using Application.Features.Products.Models.Requests;
+using Application.Features.Products.Models.Responses;
 using AwesomeAssertions;
+using Core.Testing.Assertions;
 using Domain.Models;
+using IntegrationTests.Collections;
+using IntegrationTests.Extensions;
+using IntegrationTests.Fixtures;
 using Serilog.Events;
+using Serilog.Sinks.InMemory.Assertions;
 using System.Net;
 using Xunit;
-using Serilog.Sinks.InMemory.Assertions;
-using IntegrationTests.Collections;
-using Application.Features.Products.Models.Responses;
-using IntegrationTests.Extensions;
-using Core.Testing.Assertions;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
     [Collection(nameof(DevelopmentApiCollectionFixture))]
-    public class DeleteProductsEndpointTests : ProductsTest
+    public class DeleteProductsEndpointTests(TestFixture testFixture) : ProductsTest(testFixture)
     {
         [Fact]
         public async Task DeleteSingleOk()

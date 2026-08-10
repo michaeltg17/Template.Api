@@ -8,6 +8,7 @@ using Core.Testing.Builders;
 using Domain.Models;
 using IntegrationTests.Collections;
 using IntegrationTests.Extensions;
+using IntegrationTests.Fixtures;
 using Microsoft.EntityFrameworkCore;
 using Serilog.Events;
 using Serilog.Sinks.InMemory.Assertions;
@@ -17,7 +18,7 @@ using Xunit;
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
     [Collection(nameof(DevelopmentApiCollectionFixture))]
-    public class UpdateProductEndpointTests : ProductsTest
+    public class UpdateProductEndpointTests(TestFixture testFixture) : ProductsTest(testFixture)
     {
         [Fact]
         public async Task UpdatesProductOk()
@@ -50,7 +51,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
 
             product.Should().BeEquivalentTo(expected);
             ImageApiMock.AssertPostAndSetGetMock($"{product.Id}.jpg", Image2);
-            var productImage = await ImageHttpClient.GetByteArrayAsync(productImageUrl);
+            var productImage = await HttpClient.GetByteArrayAsync(productImageUrl);
             productImage.Should().BeEquivalentTo(Image2);
             ImageApiMock.AssertGetRequest($"{product.Id}.jpg");
 
