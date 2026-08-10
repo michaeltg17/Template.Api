@@ -1,4 +1,5 @@
-﻿using IntegrationTests.Infrastructure;
+﻿using IntegrationTests.Extensions;
+using IntegrationTests.Infrastructure;
 using IntegrationTests.Settings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,11 +28,7 @@ namespace IntegrationTests
 
         static IHostBuilder AddConfiguration(this IHostBuilder builder)
         {
-            var testSettings = new Dictionary<string, string?>
-            {
-                {nameof(ITestSettings.EnableSqlLogging), "true"}
-            };
-
+            var testSettings = new TestSettings { EnableSqlLogging = true }.ToDictionary();
             builder.ConfigureHostConfiguration(builder => builder.AddInMemoryCollection(testSettings));
 
             builder.ConfigureServices(services =>
