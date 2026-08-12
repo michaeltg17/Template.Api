@@ -25,8 +25,8 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var response = await ApiClient.GetAllProducts();
 
             //Then: returns products
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
             var products = await response.To<List<Product>>();
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             products.Should().BeEquivalentTo(initialProducts);
 
             //Then: expected images
@@ -51,8 +51,8 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var response = await ApiClient.GetAllProducts();
 
             //Then: returns empty list
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
             var products = await response.To<List<Product>>();
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             products.Should().BeEmpty();
         }
     }
