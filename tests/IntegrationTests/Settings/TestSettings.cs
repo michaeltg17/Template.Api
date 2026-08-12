@@ -2,6 +2,6 @@
 {
     public class TestSettings : ITestSettings
     {
-        public bool EnableSqlLogging { get; set; }
+        public bool EnableSqlLogging { get; set; } = true;
     }
 }

@@ -19,10 +19,6 @@ namespace IntegrationTests
 
             services.AddOptions<TestSettings>().BindConfiguration("");
             services.AddSingleton<ITestSettings>(provider => provider.GetRequiredService<IOptions<TestSettings>>().Value);
-            services.Configure<TestSettings>(testSettings =>
-            {
-                testSettings.EnableSqlLogging = true;
-            });
         }
     }
 }
