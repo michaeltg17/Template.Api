@@ -16,9 +16,9 @@ namespace IntegrationTests
         protected HttpClient HttpClient { get; private set; } = default!;
         public TestFixture TestFixture { get; set; } = testFixture;
 
-        public virtual ValueTask Initialize(ITestOutputHelper testOutputHelper, string? collectionFixtureName)
+        public virtual ValueTask Initialize(string? collectionFixtureName)
         {
-            TestFixture.InjectableTestOutputSink.Inject(testOutputHelper);
+            TestFixture.InjectableTestOutputSink.Inject(TestContext.Current.TestOutputHelper!);
             TestFixture.ImageApiMock!.Server.ResetLogEntries();
             TestFixture.SetWebApplicationFactory(collectionFixtureName);
 
