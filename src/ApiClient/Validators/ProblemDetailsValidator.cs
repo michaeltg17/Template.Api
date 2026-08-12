@@ -1,7 +1,5 @@
-using ApiClient.Exceptions;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
 namespace ApiClient.Validators
 {
@@ -19,15 +17,6 @@ namespace ApiClient.Validators
 
             RuleFor(p => p.Status)
                 .NotNull().WithMessage("Status is null.");
-        }
-
-        public static void EnsureValid(ProblemDetails problemDetails)
-        {
-            var validator = new ProblemDetailsValidator();
-            var result = validator.Validate(problemDetails);
-
-            if (!result.IsValid)
-                throw new ApiClientException("Invalid ProblemDetails: " + string.Join(" ", result.Errors.Select(e => e.ErrorMessage)));
         }
     }
 }
