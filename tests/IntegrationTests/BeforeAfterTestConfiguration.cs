@@ -4,7 +4,7 @@ using Xunit.DependencyInjection;
 
 namespace IntegrationTests
 {
-    internal class BeforeAfterTestConfiguration(ITestOutputHelperAccessor testOutputHelperAccessor) : BeforeAfterTest
+    internal class BeforeAfterTestConfiguration() : BeforeAfterTest
     {
         public override ValueTask BeforeAsync(object? testClassInstance, MethodInfo methodUnderTest)
         {
@@ -13,7 +13,7 @@ namespace IntegrationTests
 
             var collectionFixtureName = testClassInstance.GetType().GetCustomAttribute<CollectionAttribute>()?.Name;
 
-            return test.Initialize(testOutputHelperAccessor.Output!, collectionFixtureName);
+            return test.Initialize(collectionFixtureName);
         }
     }
 }
