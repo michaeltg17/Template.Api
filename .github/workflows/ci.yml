@@ -47,8 +47,8 @@ jobs:
           context: .
           file: Dockerfile.migrations
           push: false
-          cache-from: type=gha,scope=template-api-db-migrations-production
-          cache-to: type=gha,mode=max,scope=template-api-db-migrations-production
+          cache-from: type=gha,scope=template-db-migrations-production
+          cache-to: type=gha,mode=max,scope=template-db-migrations-production
 
       - name: Metadata for Docker image
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -65,7 +65,7 @@ jobs:
         id: meta-migrations
         uses: docker/metadata-action@v6
         with:
-          images: ghcr.io/${{ github.repository_owner }}/template-api-db-migrations
+          images: ghcr.io/${{ github.repository_owner }}/template-db-migrations
           tags: |
             type=sha,prefix=,length=7
             type=raw,value=latest
@@ -98,8 +98,8 @@ jobs:
           push: true
           tags: ${{ steps.meta-migrations.outputs.tags }}
           labels: ${{ steps.meta-migrations.outputs.labels }}
-          cache-from: type=gha,scope=template-api-db-migrations-production
-          cache-to: type=gha,mode=max,scope=template-api-db-migrations-production
+          cache-from: type=gha,scope=template-db-migrations-production
+          cache-to: type=gha,mode=max,scope=template-db-migrations-production
 
       - name: Extract PR number from merge commit
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'

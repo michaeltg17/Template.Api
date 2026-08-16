@@ -137,7 +137,8 @@
 │       │   └── DatabaseUpgradeResultExtensions.cs
 │       └── Scripts/
 │           ├── 0001_Initial.sql
-│           └── 0002_AddImageName.sql
+│           ├── 0002_AddImageName.sql
+│           └── 0003_RenameImageNameToFileName.sql
 └── tests/
     ├── Core.Testing/               # shared test utilities (builders, validators)
     │   ├── Core.Testing.csproj
