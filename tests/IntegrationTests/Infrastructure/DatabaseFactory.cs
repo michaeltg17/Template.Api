@@ -58,7 +58,7 @@ namespace IntegrationTests.Infrastructure
 
         static async Task<PostgreSqlContainer> CreateContainer(bool keepAlive)
         {
-            var postgreSqlContainer = new PostgreSqlBuilder("postgres:latest")
+            var postgreSqlContainer = new PostgreSqlBuilder("postgres:18.6")
                 .WithCleanUp(!keepAlive)
                 .WithAutoRemove(!keepAlive)
                 .Build();
