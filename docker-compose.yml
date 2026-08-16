@@ -7,7 +7,7 @@ services:
       - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=${PostgresPassword}
-      - POSTGRES_DB=Database
+      - POSTGRES_DB=template_db
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
