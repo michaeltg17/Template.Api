@@ -272,16 +272,3 @@ When creating or updating a PR from `dev` to `main`:
 3. Check if a PR already exists (use `github_list_pull_requests`).
 4. If none exists, create one with an accurate title and description summarizing the changes.
 5. If one exists, update its title and description to reflect the actual current diff.
-
-## MCP Tools - ALWAYS PREFER
-
-When `mcp__vs-mcp__*` tools are available, ALWAYS use them instead of Grep/Glob/LS:
-
-| Instead of | Use |
-|------------|-----|
-| `Grep` for symbols | `FindSymbols`, `FindSymbolUsages` |
-| `LS` to explore projects | `GetSolutionTree` |
-| Reading files to find code | `FindSymbolDefinition` then `Read` |
-| Searching for method calls | `GetMethodCallers`, `GetMethodCalls` |
-
-**Why?** MCP tools use Roslyn semantic analysis - 10x faster, 90% fewer tokens.
