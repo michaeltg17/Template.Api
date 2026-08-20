@@ -13,7 +13,7 @@ namespace IntegrationTests.Infrastructure
 
         public static async Task<Database> Create(string? containerName = null, bool keepAlive = false)
         {
-            Log("Initializing database.");
+            Log("Creating database.");
 
             Log("Using existing container if exists.");
             string connectionString;
@@ -34,7 +34,7 @@ namespace IntegrationTests.Infrastructure
             Log("Migrating database.");
             Migrator.Migrate(connectionString);
 
-            Log("Database initialized.");
+            Log("Database created.");
             return new Database(postgreSqlContainer, keepAlive) { ConnectionString = connectionString };
         }
 
