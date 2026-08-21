@@ -6,7 +6,11 @@
 		<EmbeddedResource Include="Scripts/*.sql" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="dbup-core" />
-	  <PackageReference Include="dbup-postgresql" />
+  <PackageReference Include="dbup-core" />
+  <PackageReference Include="dbup-postgresql" />
+  <PackageReference Include="Microsoft.Extensions.Logging" />
+  <PackageReference Include="Serilog" />
+  <PackageReference Include="Serilog.Extensions.Logging" />
+  <PackageReference Include="Serilog.Sinks.Console" />
 	</ItemGroup>
 </Project>

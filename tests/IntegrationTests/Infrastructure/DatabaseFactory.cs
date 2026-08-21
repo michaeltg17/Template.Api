@@ -1,6 +1,7 @@
 ﻿using Persistence.Migrations;
 using Docker.DotNet;
 using Docker.DotNet.Models;
+using Microsoft.Extensions.Logging;
 using Testcontainers.PostgreSql;
 using Npgsql;
 using Xunit;
@@ -32,7 +33,8 @@ namespace IntegrationTests.Infrastructure
             }
 
             Log("Migrating database.");
-            Migrator.Migrate(connectionString);
+            using var loggerFactory = LoggerFactory.Create(static _ => { });
+            Migrator.Migrate(connectionString, loggerFactory);
 
             Log("Database created.");
             return new Database(postgreSqlContainer, keepAlive) { ConnectionString = connectionString };
