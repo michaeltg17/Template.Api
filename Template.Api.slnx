@@ -13,6 +13,7 @@
     <Project Path="tests/Core.Testing/Core.Testing.csproj" />
     <Project Path="tests/FunctionalTests/FunctionalTests.csproj" />
     <Project Path="tests/IntegrationTests/IntegrationTests.csproj" />
+    <Project Path="tests/Persistence.Migrations.Tests/Persistence.Migrations.Tests.csproj" Id="4bd370b0-ce6e-4e8e-912a-92cfc8698081" />
     <Project Path="tests/UnitTests/UnitTests.csproj" />
   </Folder>
 </Solution>
