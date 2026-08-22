@@ -37,7 +37,7 @@ public class MigratorTests
         using var loggerFactory = LoggerFactory.Create(builder => builder.AddSerilog(logger, dispose: false));
 
         //When
-        Migrator.Migrate(connectionString, loggerFactory);
+        new Migrator(loggerFactory).Migrate(connectionString);
 
         //Then: database has been migrated (running AwesomeAssertions here loads the framework InMemorySink.Should() selects its adapter from)
         await using var connection = new NpgsqlConnection(connectionString);
@@ -78,7 +78,7 @@ public class MigratorTests
         using var loggerFactory = LoggerFactory.Create(builder => builder.AddSerilog(logger, dispose: false));
 
         //When
-        Migrator.Migrate(connectionString, loggerFactory);
+        new Migrator(loggerFactory).Migrate(connectionString);
 
         //Then: the missing database was created and migrated (also loads AwesomeAssertions for the sink adapter)
         await using var connection = new NpgsqlConnection(connectionString);

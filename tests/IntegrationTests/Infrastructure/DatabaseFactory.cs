@@ -7,7 +7,7 @@ using Npgsql;
 
 namespace IntegrationTests.Infrastructure
 {
-    public class DatabaseFactory(ILogger logger, Migrator migrator)
+    public class DatabaseFactory(ILogger<DatabaseFactory> logger, Migrator migrator)
     {
         const string DatabaseName = "template_db";
 

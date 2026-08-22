@@ -6,7 +6,7 @@ using Xunit;
 namespace IntegrationTests.Infrastructure
 {
     [SuppressMessage("Performance", "CA1801:Unused parameters", Justification = "ILoggerFactory implementation")]
-    sealed class TestContextDiagnosticLoggerFactory : ILoggerFactory
+    sealed class DiagnosticMessagesLoggerFactory : ILoggerFactory
     {
         public void AddProvider(ILoggerProvider provider)
         {

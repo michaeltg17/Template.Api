@@ -14,13 +14,15 @@ namespace IntegrationTests
     {
         public static void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<BeforeAfterTest, BeforeAfterTestConfiguration>();
-            services.AddScoped<InMemorySink>();
-            services.AddScoped<InjectableTestOutputSink>();
+            services.AddSingleton<BeforeAfterTest, BeforeAfterTestConfiguration>();
+            services.AddSingleton<InMemorySink>();
+            services.AddSingleton<InjectableTestOutputSink>();
             services.AddScoped<ImageApiMock>();
-            services.AddSingleton<ILoggerFactory, TestContextDiagnosticLoggerFactory>();
             services.AddSingleton<DatabaseFactory>();
             services.AddSingleton<Migrator>();
+
+            services.AddLogging();
+            services.AddSingleton<ILoggerFactory, DiagnosticMessagesLoggerFactory>();
 
             services.AddOptions<TestSettings>().BindConfiguration("");
             services.AddSingleton<ITestSettings>(provider => provider.GetRequiredService<IOptions<TestSettings>>().Value);
