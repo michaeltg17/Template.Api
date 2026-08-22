@@ -1,7 +1,9 @@
 ﻿using IntegrationTests.Infrastructure;
 using IntegrationTests.Settings;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Persistence.Migrations;
 using Serilog.Sinks.InMemory;
 using Serilog.Sinks.XUnit.Injectable;
 using Xunit.DependencyInjection;
@@ -16,6 +18,9 @@ namespace IntegrationTests
             services.AddScoped<InMemorySink>();
             services.AddScoped<InjectableTestOutputSink>();
             services.AddScoped<ImageApiMock>();
+            services.AddSingleton<ILoggerFactory, TestContextDiagnosticLoggerFactory>();
+            services.AddSingleton<DatabaseFactory>();
+            services.AddSingleton<Migrator>();
 
             services.AddOptions<TestSettings>().BindConfiguration("");
             services.AddSingleton<ITestSettings>(provider => provider.GetRequiredService<IOptions<TestSettings>>().Value);

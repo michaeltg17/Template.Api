@@ -1,7 +1,6 @@
 ﻿using IntegrationTests.Collections;
 using IntegrationTests.Infrastructure;
 using IntegrationTests.Settings;
-using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Sinks.InMemory;
 using Serilog.Sinks.XUnit.Injectable;
@@ -14,7 +13,8 @@ namespace IntegrationTests.Fixtures
         InMemorySink inMemorySink,
         InjectableTestOutputSink injectableTestOutputSink,
         ImageApiMock imageApiMock,
-        IServiceProvider serviceProvider) : IAsyncLifetime
+        ITestSettings testSettings,
+        DatabaseFactory databaseFactory) : IAsyncLifetime
     {
         public WebApplicationFactory WebApplicationFactory { get; set; } = default!;
         public InMemorySink InMemorySink { get; } = inMemorySink;
@@ -24,7 +24,7 @@ namespace IntegrationTests.Fixtures
 
         public async ValueTask InitializeAsync()
         {
-            Database = await DatabaseFactory.Create();
+            Database = await databaseFactory.Create();
         }
 
         [SuppressMessage("Style", "IDE0045:Convert to conditional expression", Justification = "Cleaner")]
@@ -36,7 +36,7 @@ namespace IntegrationTests.Fixtures
             if (collectionFixtureName == nameof(DevelopmentApiCollectionFixture))
             {
                 webApplicationFactory = new DevelopmentWebApplicationFactory(
-                    serviceProvider.GetRequiredService<ITestSettings>(),
+                    testSettings,
                     InMemorySink,
                     InjectableTestOutputSink,
                     ImageApiMock,
@@ -45,7 +45,7 @@ namespace IntegrationTests.Fixtures
             else if (collectionFixtureName == nameof(ProductionApiCollectionFixture))
             {
                 webApplicationFactory = new ProductionWebApplicationFactory(
-                    serviceProvider.GetRequiredService<ITestSettings>(),
+                    testSettings,
                     InMemorySink,
                     InjectableTestOutputSink,
                     ImageApiMock,

@@ -4,19 +4,18 @@ using Docker.DotNet.Models;
 using Microsoft.Extensions.Logging;
 using Testcontainers.PostgreSql;
 using Npgsql;
-using Xunit;
 
 namespace IntegrationTests.Infrastructure
 {
-    public static class DatabaseFactory
+    public class DatabaseFactory(ILogger logger, Migrator migrator)
     {
         const string DatabaseName = "template_db";
 
-        public static async Task<Database> Create(string? containerName = null, bool keepAlive = false)
+        public async Task<Database> Create(string? containerName = null, bool keepAlive = false)
         {
-            Log("Creating database.");
+            logger.LogInformation("Creating database.");
 
-            Log("Using existing container if exists.");
+            logger.LogInformation("Using existing container if exists.");
             string connectionString;
             PostgreSqlContainer? postgreSqlContainer = default;
             ContainerListResponse? container = await GetContainer(containerName);
@@ -26,17 +25,16 @@ namespace IntegrationTests.Infrastructure
             }
             else
             {
-                Log("Does not exist. Creating new container.");
+                logger.LogInformation("Does not exist. Creating new container.");
                 postgreSqlContainer = await CreateContainer(keepAlive);
-                Log("Container created.");
+                logger.LogInformation("Container created.");
                 connectionString = GetConnectionString(postgreSqlContainer);
             }
 
-            Log("Migrating database.");
-            using var loggerFactory = LoggerFactory.Create(static _ => { });
-            Migrator.Migrate(connectionString, loggerFactory);
+            logger.LogInformation("Migrating database.");
+            migrator.Migrate(connectionString);
 
-            Log("Database created.");
+            logger.LogInformation("Database created.");
             return new Database(postgreSqlContainer, keepAlive) { ConnectionString = connectionString };
         }
 
@@ -97,11 +95,6 @@ namespace IntegrationTests.Infrastructure
             };
 
             return builder.ConnectionString;
-        }
-
-        static void Log(string message)
-        {
-            TestContext.Current.SendDiagnosticMessage(message);
         }
     }
 }

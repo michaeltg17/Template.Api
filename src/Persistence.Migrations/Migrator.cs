@@ -8,9 +8,9 @@ using System.Reflection;
 namespace Persistence.Migrations;
 
 [SuppressMessage("Maintainability", "CA1515:Consider making public types internal", Justification = "Used outside")]
-public static class Migrator
+public class Migrator(ILoggerFactory loggerFactory)
 {
-    public static void Migrate(string connectionString, ILoggerFactory loggerFactory)
+    public void Migrate(string connectionString)
     {
         EnsureDatabase.For.PostgresqlDatabase(connectionString, new MicrosoftUpgradeLog(loggerFactory));
 

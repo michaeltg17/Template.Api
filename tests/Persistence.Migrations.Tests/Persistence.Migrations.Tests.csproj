@@ -2,13 +2,27 @@
 
 	<ItemGroup>
 		<PackageReference Include="AwesomeAssertions" />
+		<PackageReference Include="coverlet.collector">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" />
 		<PackageReference Include="Microsoft.TestPlatform.TestHost" />
+		<PackageReference Include="Npgsql" />
+		<PackageReference Include="Serilog.Extensions.Logging" />
+		<PackageReference Include="Serilog.Sinks.InMemory" />
+		<PackageReference Include="Serilog.Sinks.InMemory.Assertions" />
+		<PackageReference Include="Serilog.Sinks.XUnit.Injectable" />
+		<PackageReference Include="Testcontainers.PostgreSql" />
 		<PackageReference Include="xunit.v3" />
 		<PackageReference Include="xunit.runner.visualstudio">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\Persistence.Migrations\Persistence.Migrations.csproj" />
 	</ItemGroup>
 
 </Project>
