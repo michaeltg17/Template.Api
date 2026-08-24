@@ -21,7 +21,10 @@ public class MigratorTests
     {
         //Given
         var cancellationToken = TestContext.Current.CancellationToken;
-        await using var container = new PostgreSqlBuilder("postgres:18.6").WithDatabase("template_db").Build();
+        await using var container = new PostgreSqlBuilder("postgres:18.6")
+            .WithDatabase("template_db") //This creates the db
+            .Build();
+
         await container.StartAsync(cancellationToken);
         var connectionString = container.GetConnectionString();
 
