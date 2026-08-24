@@ -13,9 +13,6 @@ namespace Persistence.Migrations.Tests;
 
 public class MigratorTests
 {
-    static string DockerHost =>
-        Environment.GetEnvironmentVariable("TESTCONTAINERS_HOST_OVERRIDE") ?? "localhost";
-
     [Fact]
     public async Task MigrateExistingDb_Migrated_Logged()
     {
@@ -99,7 +96,8 @@ public class MigratorTests
     static string BuildConnectionString(PostgreSqlContainer container, string database) =>
         new NpgsqlConnectionStringBuilder
         {
-            Host = DockerHost,
+            //Hostname resolves the reachable host (TESTCONTAINERS_HOST_OVERRIDE, then the docker network gateway when running inside a container); "localhost" would point at the test container itself in CI
+            Host = container.Hostname,
             Port = container.GetMappedPublicPort(5432),
             Database = database,
             Username = PostgreSqlBuilder.DefaultUsername,

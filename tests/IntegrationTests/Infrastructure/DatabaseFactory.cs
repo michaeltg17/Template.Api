@@ -74,6 +74,11 @@ namespace IntegrationTests.Infrastructure
 
         static string GetConnectionString(PostgreSqlContainer? container = null, int? port = null)
         {
+            if (container != null && !port.HasValue)
+            {
+                port = container.GetMappedPublicPort(PostgreSqlBuilder.PostgreSqlPort);
+            }
+
             if (DockerHost == "localhost" && container != null)
             {
                 return container.GetConnectionString();
