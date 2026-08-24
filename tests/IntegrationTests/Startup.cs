@@ -21,8 +21,7 @@ namespace IntegrationTests
             services.AddSingleton<DatabaseFactory>();
             services.AddSingleton<Migrator>();
 
-            services.AddLogging();
-            services.AddSingleton<ILoggerFactory, DiagnosticMessagesLoggerFactory>();
+            services.AddLogging(logging => logging.AddProvider(new DiagnosticMessagesLoggerProvider()));
 
             services.AddOptions<TestSettings>().BindConfiguration("");
             services.AddSingleton<ITestSettings>(provider => provider.GetRequiredService<IOptions<TestSettings>>().Value);

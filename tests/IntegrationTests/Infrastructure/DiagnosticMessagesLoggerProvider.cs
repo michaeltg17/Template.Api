@@ -5,16 +5,12 @@ using Xunit;
 
 namespace IntegrationTests.Infrastructure
 {
-    [SuppressMessage("Performance", "CA1801:Unused parameters", Justification = "ILoggerFactory implementation")]
-    sealed class DiagnosticMessagesLoggerFactory : ILoggerFactory
+    [SuppressMessage("Performance", "CA1801:Unused parameters", Justification = "ILoggerProvider implementation")]
+    sealed class DiagnosticMessagesLoggerProvider : ILoggerProvider
     {
-        public void AddProvider(ILoggerProvider provider)
-        {
-        }
+        static readonly DiagnosticLogger logger = new();
 
-        public IDisposable BeginScope<TState>(TState state) where TState : notnull => null!;
-
-        public ILogger CreateLogger(string categoryName) => new DiagnosticLogger();
+        public ILogger CreateLogger(string categoryName) => logger;
 
         public void Dispose()
         {
@@ -25,13 +21,13 @@ namespace IntegrationTests.Infrastructure
         {
             public bool IsEnabled(LogLevel logLevel) => logLevel >= LogLevel.Information;
 
-            public IDisposable? BeginScope<TState>(TState state) where TState : notnull => null;
+            public IDisposable? BeginScope<TState>(TState state) where TState : notnull => NullScope.Instance;
 
             public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception,
                 Func<TState, Exception?, string> formatter)
             {
                 if (!IsEnabled(logLevel)) return;
-                var time = DateTime.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
+                var time = DateTimeOffset.Now.ToString("HH:mm:ss", CultureInfo.InvariantCulture);
                 var message = formatter(state, exception);
                 if (exception is not null)
                 {
@@ -42,14 +38,28 @@ namespace IntegrationTests.Infrastructure
 
             static string LevelCode(LogLevel level) => level switch
             {
+                LogLevel.Trace => "VRB",
+                LogLevel.Debug => "DBG",
                 LogLevel.Information => "INF",
                 LogLevel.Warning => "WRN",
                 LogLevel.Error => "ERR",
                 LogLevel.Critical => "FTL",
-                LogLevel.Debug => "DBG",
-                LogLevel.Trace => "VRB",
+                LogLevel.None => "INF",
                 _ => "INF",
             };
+        }
+
+        private sealed class NullScope : IDisposable
+        {
+            public static readonly NullScope Instance = new();
+
+            NullScope()
+            {
+            }
+
+            public void Dispose()
+            {
+            }
         }
     }
 }
