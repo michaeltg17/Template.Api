@@ -7,15 +7,15 @@ using Npgsql;
 
 namespace IntegrationTests.Infrastructure
 {
-    public class DatabaseFactory(ILogger<DatabaseFactory> logger, Migrator migrator)
+    public partial class DatabaseFactory(ILogger<DatabaseFactory> logger, Migrator migrator)
     {
         const string DatabaseName = "template_db";
 
         public async Task<Database> Create(string? containerName = null, bool keepAlive = false)
         {
-            logger.LogInformation("Creating database.");
+            LogCreatingDatabase();
 
-            logger.LogInformation("Using existing container if exists.");
+            LogUsingExistingContainer();
             string connectionString;
             PostgreSqlContainer? postgreSqlContainer = default;
             ContainerListResponse? container = await GetContainer(containerName);
@@ -25,16 +25,16 @@ namespace IntegrationTests.Infrastructure
             }
             else
             {
-                logger.LogInformation("Does not exist. Creating new container.");
+                LogDoesNotExistCreatingNewContainer();
                 postgreSqlContainer = await CreateContainer(keepAlive);
-                logger.LogInformation("Container created.");
+                LogContainerCreated();
                 connectionString = GetConnectionString(postgreSqlContainer);
             }
 
-            logger.LogInformation("Migrating database.");
+            LogMigratingDatabase();
             migrator.Migrate(connectionString);
 
-            logger.LogInformation("Database created.");
+            LogDatabaseCreated();
             return new Database(postgreSqlContainer, keepAlive) { ConnectionString = connectionString };
         }
 
@@ -96,5 +96,23 @@ namespace IntegrationTests.Infrastructure
 
             return builder.ConnectionString;
         }
+
+        [LoggerMessage(Level = LogLevel.Information, Message = "Creating database.")]
+        public partial void LogCreatingDatabase();
+
+        [LoggerMessage(Level = LogLevel.Information, Message = "Using existing container if exists.")]
+        public partial void LogUsingExistingContainer();
+
+        [LoggerMessage(Level = LogLevel.Information, Message = "Does not exist. Creating new container.")]
+        public partial void LogDoesNotExistCreatingNewContainer();
+
+        [LoggerMessage(Level = LogLevel.Information, Message = "Container created.")]
+        public partial void LogContainerCreated();
+
+        [LoggerMessage(Level = LogLevel.Information, Message = "Migrating database.")]
+        public partial void LogMigratingDatabase();
+
+        [LoggerMessage(Level = LogLevel.Information, Message = "Database created.")]
+        public partial void LogDatabaseCreated();
     }
 }
