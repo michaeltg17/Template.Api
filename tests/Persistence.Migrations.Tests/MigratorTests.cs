@@ -17,7 +17,7 @@ public class MigratorTests
         Environment.GetEnvironmentVariable("TESTCONTAINERS_HOST_OVERRIDE") ?? "localhost";
 
     [Fact]
-    public async Task Migrate_OnExistingDatabase_AppliesAllScripts_AndLogsExpectedMessages()
+    public async Task MigrateExistingDb_Migrated_Logged()
     {
         //Given
         var cancellationToken = TestContext.Current.CancellationToken;
@@ -58,7 +58,7 @@ public class MigratorTests
     }
 
     [Fact]
-    public async Task Migrate_OnMissingDatabase_CreatesDatabase_AndMigrates()
+    public async Task MigrateUnexistingDb_Created_Migrated_Logged()
     {
         //Given: container is running but the target database does not exist yet
         var cancellationToken = TestContext.Current.CancellationToken;

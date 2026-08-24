@@ -6,14 +6,14 @@
     <Project Path="src/Core/Core.csproj" />
     <Project Path="src/CrossCutting/CrossCutting.csproj" />
     <Project Path="src/Domain/Domain.csproj" />
-    <Project Path="src/Persistence.Migrations/Persistence.Migrations.csproj" Id="5f0c2bd7-fcea-4b4d-91d5-e2b7972235d2" />
+    <Project Path="src/Persistence.Migrations/Persistence.Migrations.csproj" />
     <Project Path="src/Persistence/Persistence.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Core.Testing/Core.Testing.csproj" />
     <Project Path="tests/FunctionalTests/FunctionalTests.csproj" />
     <Project Path="tests/IntegrationTests/IntegrationTests.csproj" />
-    <Project Path="tests/Persistence.Migrations.Tests/Persistence.Migrations.Tests.csproj" Id="4bd370b0-ce6e-4e8e-912a-92cfc8698081" />
+    <Project Path="tests/Persistence.Migrations.Tests/Persistence.Migrations.Tests.csproj" />
     <Project Path="tests/UnitTests/UnitTests.csproj" />
   </Folder>
 </Solution>
