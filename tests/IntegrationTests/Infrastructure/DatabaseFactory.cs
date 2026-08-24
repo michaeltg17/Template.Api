@@ -1,21 +1,21 @@
 ﻿using Persistence.Migrations;
 using Docker.DotNet;
 using Docker.DotNet.Models;
+using Microsoft.Extensions.Logging;
 using Testcontainers.PostgreSql;
 using Npgsql;
-using Xunit;
 
 namespace IntegrationTests.Infrastructure
 {
-    public static class DatabaseFactory
+    public partial class DatabaseFactory(ILogger<DatabaseFactory> logger, Migrator migrator)
     {
         const string DatabaseName = "template_db";
 
-        public static async Task<Database> Create(string? containerName = null, bool keepAlive = false)
+        public async Task<Database> Create(string? containerName = null, bool keepAlive = false)
         {
-            Log("Initializing database.");
+            LogCreatingDatabase();
 
-            Log("Using existing container if exists.");
+            LogUsingExistingContainer();
             string connectionString;
             PostgreSqlContainer? postgreSqlContainer = default;
             ContainerListResponse? container = await GetContainer(containerName);
@@ -25,16 +25,16 @@ namespace IntegrationTests.Infrastructure
             }
             else
             {
-                Log("Does not exist. Creating new container.");
+                LogDoesNotExistCreatingNewContainer();
                 postgreSqlContainer = await CreateContainer(keepAlive);
-                Log("Container created.");
+                LogContainerCreated();
                 connectionString = GetConnectionString(postgreSqlContainer);
             }
 
-            Log("Migrating database.");
-            Migrator.Migrate(connectionString);
+            LogMigratingDatabase();
+            migrator.Migrate(connectionString);
 
-            Log("Database initialized.");
+            LogDatabaseCreated();
             return new Database(postgreSqlContainer, keepAlive) { ConnectionString = connectionString };
         }
 
@@ -74,6 +74,11 @@ namespace IntegrationTests.Infrastructure
 
         static string GetConnectionString(PostgreSqlContainer? container = null, int? port = null)
         {
+            if (container != null && !port.HasValue)
+            {
+                port = container.GetMappedPublicPort(PostgreSqlBuilder.PostgreSqlPort);
+            }
+
             if (DockerHost == "localhost" && container != null)
             {
                 return container.GetConnectionString();
@@ -97,9 +102,22 @@ namespace IntegrationTests.Infrastructure
             return builder.ConnectionString;
         }
 
-        static void Log(string message)
-        {
-            TestContext.Current.SendDiagnosticMessage(message);
-        }
+        [LoggerMessage(Level = LogLevel.Information, Message = "Creating database.")]
+        public partial void LogCreatingDatabase();
+
+        [LoggerMessage(Level = LogLevel.Information, Message = "Using existing container if exists.")]
+        public partial void LogUsingExistingContainer();
+
+        [LoggerMessage(Level = LogLevel.Information, Message = "Does not exist. Creating new container.")]
+        public partial void LogDoesNotExistCreatingNewContainer();
+
+        [LoggerMessage(Level = LogLevel.Information, Message = "Container created.")]
+        public partial void LogContainerCreated();
+
+        [LoggerMessage(Level = LogLevel.Information, Message = "Migrating database.")]
+        public partial void LogMigratingDatabase();
+
+        [LoggerMessage(Level = LogLevel.Information, Message = "Database created.")]
+        public partial void LogDatabaseCreated();
     }
 }
