@@ -16,7 +16,7 @@ namespace IntegrationTests
         {
             services.AddSingleton<BeforeAfterTest, BeforeAfterTestConfiguration>();
             services.AddSingleton<InMemorySink>();
-            services.AddSingleton<InjectableTestOutputSink>();
+            services.AddScoped<InjectableTestOutputSink>();
             services.AddScoped<ImageApiMock>();
             services.AddSingleton<DatabaseFactory>();
             services.AddSingleton<Migrator>();

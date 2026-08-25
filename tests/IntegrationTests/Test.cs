@@ -1,4 +1,5 @@
-﻿using IntegrationTests.Fixtures;
+﻿using AwesomeAssertions;
+using IntegrationTests.Fixtures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence;
@@ -40,7 +41,7 @@ namespace IntegrationTests
             await DeleteEntitiesFromDb();
             await Scope.DisposeAsync();
             TestFixture.InMemorySink.Dispose();
-            FlushLogger();
+            FlushLoggerAndValidateLogDone();
         }
 
         public ValueTask InitializeAsync()
@@ -48,13 +49,9 @@ namespace IntegrationTests
             return ValueTask.CompletedTask;
         }
 
-        /// <summary>
-        /// To be called at the end of each test so logs from previous test don't get mixed with the next one.
-        /// </summary>
-        public static void FlushLogger()
+        public static void FlushLoggerAndValidateLogDone()
         {
-            //Not the best but too hard to do it in another way.
-            Thread.Sleep(10);
+            TestContext.Current.TestOutputHelper!.Output.Should().NotBeNullOrWhiteSpace();
         }
     }
 }
