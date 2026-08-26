@@ -16,13 +16,12 @@ namespace IntegrationTests
         {
             services.AddSingleton<BeforeAfterTest, BeforeAfterTestConfiguration>();
             services.AddSingleton<InMemorySink>();
-            services.AddSingleton<InjectableTestOutputSink>();
+            services.AddScoped<InjectableTestOutputSink>();
             services.AddScoped<ImageApiMock>();
             services.AddSingleton<DatabaseFactory>();
             services.AddSingleton<Migrator>();
 
-            services.AddLogging();
-            services.AddSingleton<ILoggerFactory, DiagnosticMessagesLoggerFactory>();
+            services.AddLogging(logging => logging.AddProvider(new DiagnosticMessagesLoggerProvider()));
 
             services.AddOptions<TestSettings>().BindConfiguration("");
             services.AddSingleton<ITestSettings>(provider => provider.GetRequiredService<IOptions<TestSettings>>().Value);
