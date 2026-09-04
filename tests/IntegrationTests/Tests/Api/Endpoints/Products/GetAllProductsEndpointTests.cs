@@ -1,3 +1,5 @@
+using Api.Features.Images;
+using Api.Features.Products;
 using ApiClient.Extensions;
 using Application.Features.Images;
 using Application.Features.Products.Actions;

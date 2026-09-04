@@ -1,5 +1,5 @@
-﻿using Api.Endpoints.Products;
-using Api.Endpoints;
+﻿using Api.Features.Products.Endpoints;
+using Api.Features.Test;
 
 namespace Api.Extensions;
 

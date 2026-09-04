@@ -2,7 +2,6 @@
   <Folder Name="/src/">
     <Project Path="src/Api/Api.csproj" />
     <Project Path="src/ApiClient/ApiClient.csproj" />
-    <Project Path="src/Application/Application.csproj" />
     <Project Path="src/Core/Core.csproj" />
     <Project Path="src/CrossCutting/CrossCutting.csproj" />
     <Project Path="src/Domain/Domain.csproj" />

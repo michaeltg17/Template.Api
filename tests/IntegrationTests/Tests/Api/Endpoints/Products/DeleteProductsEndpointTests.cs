@@ -1,3 +1,4 @@
+using Api.Features.Products.Models.Responses;
 using ApiClient.Extensions;
 using Application.Features.Products.Actions;
 using Application.Features.Products.Models.Requests;
