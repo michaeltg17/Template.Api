@@ -11,7 +11,7 @@ Built with the help of local AI using https://github.com/michaeltg17/best-model-
 API:
 - ASP.NET Core Minimal API
 - OpenAPI
-- Features and Services
+- Feature-based architecture
 - ProblemDetails
 - N-Layer Architecture
 - Anemic Domain Model
@@ -25,7 +25,15 @@ Tests:
 - AwesomeAssertions
 - Coverlet + ReportGenerator
 
-CI/CD:
-- CI in docker with ci.sh that runs in GitHub Actions and can also be run locally.
-- CI does Build + Tests + Coverage. If main, it also pushes `template-api` and `template-db-migrations` Docker images to ghcr, creates tag and release.
+Branching:
 - dev branch for continuous fast development which is then merged to main for stable versions.
+
+CI:
+- In docker with ci.sh that runs in GitHub Actions and can also be run locally.
+- Does Build + Tests + Coverage. If main, it also pushes `template-api` and `template-db-migrations` Docker images to ghcr + Tag + Release.
+
+CD:
+- Done in [Template.Deployment](https://github.com/michaeltg17/Template.Deployment)
+
+UI:
+- Done in [Template.React](https://github.com/michaeltg17/Template.React)

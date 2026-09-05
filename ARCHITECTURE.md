@@ -2,26 +2,17 @@
 
 ## Api
 
-ASP.NET Core minimal API with endpoints organized by resource.
+ASP.NET Core minimal API with Feature-based architecture.
 
-Each endpoint is a new cs file.
-
-Each has minimal code to reach the application service.
+Logic is inside each endpoint because this is a template. If project grows and same code needs to be shared, command query handler pattern can be used.
 
 There are test endpoints for test purposes.
-
-All the exception mapping from Application happens here in ExceptionHandlerExtensions.cs.
-Exception to ProblemDetails.
 
 Antiforgery disabled but should be enabled in prod app.
 
 ## ApiClient
 
 Client for the Api itself. A nuget can be created from this project. But mainly used for testing.
-
-## Application
-
-All the core business logic goes here. Domain is anemic.
 
 ## Core
 
