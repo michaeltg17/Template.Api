@@ -286,6 +286,12 @@ Serilog level overrides in `appsettings.json` under `MinimumLevel.Override`. Kno
 - **Models over tuples** — use a proper response class instead of `Task<(int, string, string)>`
 - **No leading underscore** — name fields `inner`, `client`, `testKdbxPath`, not `_inner`, `_client`, `_testKdbxPath`
 
+## Branching model
+
+- **All work happens on the `dev` branch.** Commit directly to `dev`; do **not** create feature/topic branches that open a PR straight to `main`.
+- `main` only ever changes via a merged **`dev` → `main`** PR. There is exactly one PR in flight at a time, from `dev` to `main`.
+- So the loop is: commit on `dev` → push `dev` → open (or update) the `dev` → `main` PR → merge.
+
 ## PR Workflow
 
 When creating or updating a PR from `dev` to `main`:

@@ -3,7 +3,7 @@
 
 .NET 10, ASP.NET Core Api + Tests template of my recommended architecture for a successful, dev efficient and scalable solution. 
 
-Full description of the architecture there: [ARCHITECTURE.md](https://github.com/michaeltg17/Template.Api/blob/main/ARCHITECTURE.md)
+Full description of the architecture there: [ARCH.md](https://github.com/michaeltg17/Template.Api/blob/main/ARCH.md)
 
 Built with the help of local AI using https://github.com/michaeltg17/best-model-dual-3090 and [OpenCode](https://github.com/anomalyco/opencode).
 
