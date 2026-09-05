@@ -1,5 +1,3 @@
-using Application.Features.Products.Models.Requests;
-using Application.Features.Products.Models.Requests.Validators;
 using FluentValidation.TestHelper;
 using Core.Testing.Builders;
 using Xunit;

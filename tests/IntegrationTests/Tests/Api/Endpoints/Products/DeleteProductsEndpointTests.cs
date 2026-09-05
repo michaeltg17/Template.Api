@@ -1,8 +1,6 @@
+using Api.Features.Products.Models.Requests;
 using Api.Features.Products.Models.Responses;
 using ApiClient.Extensions;
-using Application.Features.Products.Actions;
-using Application.Features.Products.Models.Requests;
-using Application.Features.Products.Models.Responses;
 using AwesomeAssertions;
 using Core.Testing.Assertions;
 using Domain.Models;

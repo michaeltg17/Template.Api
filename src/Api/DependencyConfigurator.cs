@@ -1,7 +1,6 @@
 ﻿using Api.Extensions;
 using Api.Features.Images;
 using Api.Features.Products;
-using Application;
 using CrossCutting;
 using CrossCutting.Settings;
 using Domain;
