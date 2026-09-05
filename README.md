@@ -9,12 +9,12 @@ Built with the help of local AI using https://github.com/michaeltg17/best-model-
 
 ## Tech stack
 API:
-- ASP.NET Core
+- ASP.NET Core Minimal API
 - OpenAPI
+- Features and Services
 - ProblemDetails
 - N-Layer Architecture
 - Anemic Domain Model
-- Services
 - Entity Framework Core
 - PostgreSQL
 
