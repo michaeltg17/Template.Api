@@ -1,6 +1,6 @@
+using Api.Features.Images;
+using Api.Features.Products;
 using ApiClient.Extensions;
-using Application.Features.Images;
-using Application.Features.Products.Actions;
 using AwesomeAssertions;
 using Core.Testing.Assertions;
 using Core.Testing.Builders;
@@ -8,7 +8,6 @@ using Domain.Models;
 using IntegrationTests.Collections;
 using IntegrationTests.Extensions;
 using IntegrationTests.Fixtures;
-using Microsoft.EntityFrameworkCore;
 using System.Net;
 using Xunit;
 

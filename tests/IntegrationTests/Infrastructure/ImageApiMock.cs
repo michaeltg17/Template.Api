@@ -1,4 +1,4 @@
-using Application.Features.Images;
+using Api.Features.Images;
 using AwesomeAssertions;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;

@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Json;
 using ApiClient.Endpoints;
-using Application.Features.Products.Models.Requests;
 using Api.Extensions;
+using Api.Features.Products.Models.Requests;
 
 namespace ApiClient
 {

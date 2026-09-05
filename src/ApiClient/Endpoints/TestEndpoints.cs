@@ -1,7 +1,6 @@
-﻿using Api.Endpoints;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using System.Net.Http.Json;
-using static Api.Endpoints.TestEndpoints;
+using static Api.Features.Test.TestEndpoints;
 
 namespace ApiClient.Endpoints
 {

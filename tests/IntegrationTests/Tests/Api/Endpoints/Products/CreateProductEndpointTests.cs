@@ -1,7 +1,7 @@
+using Api.Features.Images;
+using Api.Features.Products;
+using Api.Features.Products.Models.Requests;
 using ApiClient.Extensions;
-using Application.Features.Images;
-using Application.Features.Products.Actions;
-using Application.Features.Products.Models.Requests;
 using AwesomeAssertions;
 using Core.Testing.Assertions;
 using Core.Testing.Builders;

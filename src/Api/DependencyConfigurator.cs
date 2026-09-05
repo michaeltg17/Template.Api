@@ -1,9 +1,14 @@
 ﻿using Api.Extensions;
-using Application;
+using Api.Features.Images;
+using Api.Features.Products;
 using CrossCutting;
+using CrossCutting.Settings;
+using Domain;
+using FluentValidation;
 using Persistence;
 using Serilog;
-using Domain;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Api
 {
@@ -59,6 +64,35 @@ namespace Api
             app.MapEndpoints();
 
             return app;
+        }
+
+        public static IServiceCollection AddApplicationDependencies(this IServiceCollection services)
+        {
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddScoped<ProductService>();
+            services.AddHttpClient<ImageService>((sp, client) =>
+            {
+                var settings = sp.GetRequiredService<ITemplateApiSettings>();
+                client.BaseAddress = settings.ImageApiUrl;
+            });
+
+            return services;
+        }
+
+        public static void ConfigureValidationWithCamelCase()
+        {
+            var defaultResolver = ValidatorOptions.Global.PropertyNameResolver;
+
+            string camelCaseResolver(Type type, MemberInfo memberInfo, LambdaExpression expression)
+            {
+                var pascal = defaultResolver(type, memberInfo, expression);
+                return string.Join(ValidatorOptions.Global.PropertyChainSeparator,
+                    pascal.Split(ValidatorOptions.Global.PropertyChainSeparator, StringSplitOptions.None)
+                        .Select(p => char.ToLowerInvariant(p[0]) + p[1..]));
+            }
+
+            ValidatorOptions.Global.PropertyNameResolver = camelCaseResolver;
+            ValidatorOptions.Global.DisplayNameResolver = camelCaseResolver;
         }
     }
 }

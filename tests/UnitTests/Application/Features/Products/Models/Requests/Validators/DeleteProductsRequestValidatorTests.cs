@@ -1,8 +1,8 @@
-using Application.Features.Products.Models.Requests;
-using Application.Features.Products.Models.Requests.Validators;
 using FluentValidation.TestHelper;
 using Core.Testing.Builders;
 using Xunit;
+using Api.Features.Products.Models.Requests.Validators;
+using Api.Features.Products.Models.Requests;
 
 namespace UnitTests.Application.Features.Products.Models.Requests.Validators;
 

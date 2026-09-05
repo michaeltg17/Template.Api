@@ -8,7 +8,7 @@ using IntegrationTests.Fixtures;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Xunit;
-using static Api.Endpoints.TestEndpoints;
+using static Api.Features.Test.TestEndpoints;
 
 namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 {
