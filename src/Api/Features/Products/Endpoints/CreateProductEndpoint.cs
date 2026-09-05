@@ -7,7 +7,7 @@ namespace Api.Features.Products.Endpoints;
 
 internal partial class CreateProductEndpoint
 {
-    public void Map(IEndpointRouteBuilder app)
+    public static void Map(IEndpointRouteBuilder app)
     {
         app.MapPost("/", static async (
             [FromForm] CreateProductRequest request,
@@ -16,22 +16,25 @@ internal partial class CreateProductEndpoint
             ILogger<CreateProductEndpoint> logger) =>
         {
             var product = productService.GetValidatedProductOrThrow(request);
+
             await context.Products.AddAsync(product);
             await context.SaveChangesAsync();
 
-            if (request.Image != null)
+            if (request.Image is not null)
             {
                 await productService.SetImage(product, request.Image);
                 await context.SaveChangesAsync();
             }
 
-            LogProductCreated(product.Id);
+            LogProductCreated(logger, product.Id);
 
-            return Results.Created($"{EndpointExtensions.ProductsPath}/{product.Id}", product);
+            return Results.Created(
+                $"{EndpointExtensions.ProductsPath}/{product.Id}",
+                product);
         })
         .DisableAntiforgery();
     }
 
     [LoggerMessage(Level = LogLevel.Information, Message = "Product with id '{id}' created successfully.")]
-    public partial void LogProductCreated(long id);
+    private static partial void LogProductCreated(ILogger<CreateProductEndpoint> logger, long id);
 }
