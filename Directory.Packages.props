@@ -2,14 +2,10 @@
   <ItemGroup>
     <PackageVersion Include="AwesomeAssertions" Version="9.6.0" />
     <PackageVersion Include="coverlet.collector" Version="10.0.1" />
-    <PackageVersion Include="DragoAnt.Serilog.Sinks.InMemory" Version="3.2.1" />
-    <PackageVersion Include="DragoAnt.Serilog.Sinks.InMemory.Assertions" Version="3.2.1" />
     <PackageVersion Include="FluentValidation" Version="12.1.1" />
     <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
-    <PackageVersion Include="Flurl" Version="4.0.0" />
     <PackageVersion Include="dbup-core" Version="6.1.1" />
     <PackageVersion Include="dbup-postgresql" Version="7.0.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.11" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.11" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.11" />
@@ -17,7 +13,6 @@
     <PackageVersion Include="Npgsql" Version="10.0.3" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.11" />
-    <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.11" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="10.0.11" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.11" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.11" />
