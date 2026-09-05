@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SOLUTION="Template.Api.slnx"
-
 echo "========================================="
 echo "  Running CI"
 echo "========================================="
 
 echo
 echo "Restore, build and test. It doesn't work separately."
-dotnet test "$SOLUTION" --configuration Release --filter "FullyQualifiedName!~FunctionalTests"
+dotnet test --solution Template.Api.slnx --configuration Release -- --filter "FullyQualifiedName!~FunctionalTests" --ignore-exit-code 8
 echo "Tests passed"
 
 echo
