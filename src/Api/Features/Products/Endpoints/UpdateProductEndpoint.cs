@@ -6,9 +6,9 @@ using Persistence;
 
 namespace Api.Features.Products.Endpoints;
 
-internal class UpdateProductEndpoint
+internal partial class UpdateProductEndpoint
 {
-    public void Map(IEndpointRouteBuilder app)
+    public static void Map(IEndpointRouteBuilder app)
     {
         app.MapPut("/{id:long}", static async (
             long id,
@@ -31,12 +31,12 @@ internal class UpdateProductEndpoint
             }
 
             await context.SaveChangesAsync();
-            LogProductUpdated(product.Id);
+            LogProductUpdated(logger, product.Id);
             return Results.Ok(product);
         })
         .DisableAntiforgery();
     }
 
     [LoggerMessage(Level = LogLevel.Information, Message = "Product with id '{id}' updated successfully.")]
-    public partial void LogProductUpdated(long id);
+    private static partial void LogProductUpdated(ILogger<UpdateProductEndpoint> logger, long id);
 }

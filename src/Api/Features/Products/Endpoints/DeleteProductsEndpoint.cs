@@ -9,9 +9,9 @@ using Api.Exceptions;
 
 namespace Api.Features.Products.Endpoints;
 
-internal class DeleteProductsEndpoint
+internal partial class DeleteProductsEndpoint
 {
-    public void Map(IEndpointRouteBuilder app)
+    public static void Map(IEndpointRouteBuilder app)
     {
         app.MapDelete("/", static async (
             [FromBody] DeleteProductsRequest request,
@@ -45,7 +45,7 @@ internal class DeleteProductsEndpoint
             if (foundIds.Count > 0)
             {
                 var foundIdsOrdered = request.Ids.Where(foundIds.Contains).ToArray();
-                LogProductsDeleted(foundIdsOrdered);
+                LogProductsDeleted(logger, foundIdsOrdered);
                 return new DeleteProductsResponse(foundIdsOrdered, notFoundIds);
             }
 
@@ -54,5 +54,5 @@ internal class DeleteProductsEndpoint
     }
 
     [LoggerMessage(Level = LogLevel.Information, Message = "Products with ids '{ids}' deleted successfully.")]
-    public partial void LogProductsDeleted(IEnumerable<long> ids);
+    private static partial void LogProductsDeleted(ILogger<DeleteProductsEndpoint> logger, IEnumerable<long> ids);
 }

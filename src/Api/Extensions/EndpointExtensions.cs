@@ -13,9 +13,9 @@ public static class EndpointExtensions
         var products = app.MapGroup(ProductsPath);
         GetAllProductsEndpoint.Map(products);
         GetProductEndpoint.Map(products);
-        new CreateProductEndpoint().Map(products);
-        new UpdateProductEndpoint().Map(products);
-        new DeleteProductsEndpoint().Map(products);
+        CreateProductEndpoint.Map(products);
+        UpdateProductEndpoint.Map(products);
+        DeleteProductsEndpoint.Map(products);
 
         var test = app.MapGroup("Test");
         TestEndpoints.Map(test);

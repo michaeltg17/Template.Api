@@ -1,6 +1,6 @@
 ﻿using Api;
 
-Application.DependencyConfigurator.ConfigureValidationWithCamelCase();
+DependencyConfigurator.ConfigureValidationWithCamelCase();
 
 WebApplication
     .CreateBuilder(args)
