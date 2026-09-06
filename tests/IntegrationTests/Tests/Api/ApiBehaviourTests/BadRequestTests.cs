@@ -11,6 +11,7 @@ using System.Net;
 using ApiClient.Extensions;
 using static IntegrationTests.Tests.Api.ApiBehaviourTests.BadRequestTests;
 using Xunit.Sdk;
+using System.Diagnostics.CodeAnalysis;
 
 [assembly: RegisterXunitSerializer(typeof(TestCaseSerializer), typeof(BadRequestCase))]
 
@@ -19,6 +20,7 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
     [Collection(nameof(DevelopmentApiCollectionFixture))]
     public class BadRequestTests(TestFixture testFixture) : Test(testFixture)
     {
+        [SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "More sense here")]
         public class BadRequestCase
         {
             public object Id;
