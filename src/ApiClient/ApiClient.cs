@@ -28,6 +28,7 @@ namespace ApiClient
 
         public async Task<HttpResponseMessage> CreateProduct(CreateProductRequest request)
         {
+            ArgumentNullException.ThrowIfNull(request);
             using var content = new MultipartFormDataContent
             {
                 { new StringContent(request.Name), "name" },
@@ -50,6 +51,7 @@ namespace ApiClient
 
         public async Task<HttpResponseMessage> UpdateProduct(object id, UpdateProductRequest request)
         {
+            ArgumentNullException.ThrowIfNull(request);
             using var content = new MultipartFormDataContent
             {
                 { new StringContent(request.Name), "name" },

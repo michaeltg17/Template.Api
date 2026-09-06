@@ -18,6 +18,7 @@ namespace Core.Testing.Serializers
 
         public string Serialize(object value)
         {
+            ArgumentNullException.ThrowIfNull(value);
             var type = value.GetType();
             var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance)
                 .Where(f => !f.IsLiteral).ToArray();
@@ -40,6 +41,7 @@ namespace Core.Testing.Serializers
 
         public object Deserialize(Type type, string data)
         {
+            ArgumentNullException.ThrowIfNull(type);
             var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance)
                 .Where(f => !f.IsLiteral).ToArray();
             var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance)

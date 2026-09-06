@@ -16,6 +16,7 @@ namespace Api
     {
         public static WebApplicationBuilder AddDependencies(this WebApplicationBuilder builder)
         {
+            ArgumentNullException.ThrowIfNull(builder);
             builder.Services.Configure<RouteHandlerOptions>(options => options.ThrowOnBadRequest = true);
 
             builder.AddSerilog();
@@ -38,6 +39,7 @@ namespace Api
 
         public static WebApplicationBuilder AddSerilog(this WebApplicationBuilder builder)
         {
+            ArgumentNullException.ThrowIfNull(builder);
             builder.Host.UseSerilog((context, services, configuration) =>
             {
                 ApplyCommonSerilogConfiguration(context, services, configuration);
@@ -50,6 +52,9 @@ namespace Api
         public static void ApplyCommonSerilogConfiguration(
             HostBuilderContext context, IServiceProvider services, LoggerConfiguration configuration)
         {
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(services);
+            ArgumentNullException.ThrowIfNull(configuration);
             configuration
                 .ReadFrom.Configuration(context.Configuration)
                 .ReadFrom.Services(services)
