@@ -14,5 +14,13 @@ namespace FunctionalTests
                 test.Initialize();
             }
         }
+
+        public override void After(object? testClassInstance, MethodInfo methodUnderTest)
+        {
+            if (testClassInstance is Test test)
+            {
+                test.Dispose();
+            }
+        }
     }
 }

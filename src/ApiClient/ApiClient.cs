@@ -28,19 +28,26 @@ namespace ApiClient
 
         public async Task<HttpResponseMessage> CreateProduct(CreateProductRequest request)
         {
-            using var content = new MultipartFormDataContent
-            {
-                { new StringContent(request.Name), "name" },
-                { new StringContent(request.Description), "description" },
-                { new StringContent(request.Price.ToString()), "price" }
-            };
+            using var content = new MultipartFormDataContent();
 
+            using var nameContent = new StringContent(request.Name);
+            using var descriptionContent = new StringContent(request.Description);
+            using var priceContent = new StringContent(request.Price.ToString());
+
+            content.Add(nameContent, "name");
+            content.Add(descriptionContent, "description");
+            content.Add(priceContent, "price");
+
+            StreamContent? imageContent = null;
             if (request.Image != null)
             {
-                content.Add(new StreamContent(request.Image.OpenReadStream()), "image", request.Image.FileName);
+                imageContent = new StreamContent(request.Image.OpenReadStream());
+                content.Add(imageContent, "image", request.Image.FileName);
             }
 
-            return await httpClient.PostAsync($"{BasePath}/Products", content);
+            var response = await httpClient.PostAsync($"{BasePath}/Products", content);
+            imageContent?.Dispose();
+            return response;
         }
 
         public async Task<HttpResponseMessage> UpdateProduct(long id, UpdateProductRequest request)
@@ -50,19 +57,26 @@ namespace ApiClient
 
         public async Task<HttpResponseMessage> UpdateProduct(object id, UpdateProductRequest request)
         {
-            using var content = new MultipartFormDataContent
-            {
-                { new StringContent(request.Name), "name" },
-                { new StringContent(request.Description), "description" },
-                { new StringContent(request.Price.ToString()), "price" }
-            };
+            using var content = new MultipartFormDataContent();
 
+            using var nameContent = new StringContent(request.Name);
+            using var descriptionContent = new StringContent(request.Description);
+            using var priceContent = new StringContent(request.Price.ToString());
+
+            content.Add(nameContent, "name");
+            content.Add(descriptionContent, "description");
+            content.Add(priceContent, "price");
+
+            StreamContent? imageContent = null;
             if (request.Image != null)
             {
-                content.Add(new StreamContent(request.Image.OpenReadStream()), "image", request.Image.FileName);
+                imageContent = new StreamContent(request.Image.OpenReadStream());
+                content.Add(imageContent, "image", request.Image.FileName);
             }
 
-            return await httpClient.PutAsync($"{BasePath}/Products/{id}", content);
+            var response = await httpClient.PutAsync($"{BasePath}/Products/{id}", content);
+            imageContent?.Dispose();
+            return response;
         }
 
         public async Task<HttpResponseMessage> DeleteProducts(DeleteProductsRequest request)
