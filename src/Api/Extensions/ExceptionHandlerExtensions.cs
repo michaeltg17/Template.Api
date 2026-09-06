@@ -46,7 +46,7 @@ namespace Api.Extensions
             var detail = exception switch
             {
                 BadHttpRequestException { InnerException: JsonException jsonEx } =>
-                    string.JoinNonEmpty(exception.Message, jsonEx.Message, jsonEx.InnerException?.Message),
+                    StringExtensions.JoinNonEmpty(exception.Message, jsonEx.Message, jsonEx.InnerException?.Message),
                 BadHttpRequestException => exception.Message,
                 _ when isInternalServerError && !isDevelopment => "Internal server error. Please contact the API support.",
                 _ when isValidationException => "One or more validation errors occurred.",

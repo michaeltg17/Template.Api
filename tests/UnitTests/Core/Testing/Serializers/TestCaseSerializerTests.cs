@@ -8,14 +8,14 @@ public class TestCaseSerializerTests
 {
     readonly TestCaseSerializer serializer = new();
 
-    public class FieldsOnly
+    internal sealed class FieldsOnly
     {
         public string Name;
         public int Count;
         public double? Ratio;
     }
 
-    public sealed class PropertiesOnly
+    internal sealed class PropertiesOnly
     {
         public string Label { get; init; } = "";
         public int Value { get; init; }
@@ -23,7 +23,7 @@ public class TestCaseSerializerTests
         public bool IsValid => Numbers.Length == 0;
     }
 
-    public class Mixed
+    internal sealed class Mixed
     {
         public string Field1;
         public int Field2;
@@ -32,7 +32,7 @@ public class TestCaseSerializerTests
         public bool Derived => Field2 > 0;
     }
 
-    public class ContainsArrayAndNullable
+    internal sealed class ContainsArrayAndNullable
     {
         public string? Name;
         public string[] Tags { get; init; } = [];
@@ -138,7 +138,7 @@ public class TestCaseSerializerTests
         result.Errors.Should().BeEmpty();
     }
 
-    public class ClassWithTupleArray
+    internal sealed class ClassWithTupleArray
     {
         public (string Property, string Message)[] Errors { get; init; } = [];
     }
@@ -188,10 +188,10 @@ public class TestCaseSerializerTests
         result.Value.Should().Be(10);
     }
 
-    public class ClassWithLiteral
+    internal sealed class ClassWithLiteral
     {
         public const int Constant = 42;
-        public static readonly int Static = 99;
+        public const int Static = 99;
         public int Value;
     }
 }

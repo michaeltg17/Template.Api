@@ -22,8 +22,8 @@ namespace IntegrationTests.Tests.ApiClient
 
             //Then
             var problemDetails = await response.To<ProblemDetails>();
-            TraceIdValidator.IsValid(problemDetails.TraceId!).Should().BeTrue();
-            ExceptionValidator.IsValid(problemDetails.Exception!).Should().BeTrue();
+            TraceIdValidator.IsValid(problemDetails.TraceId()!).Should().BeTrue();
+            ExceptionValidator.IsValid(problemDetails.Exception()!).Should().BeTrue();
 
             var expectedMessage = $$"""
                 {
@@ -33,7 +33,7 @@ namespace IntegrationTests.Tests.ApiClient
                   "detail": "Sensitive data",
                   "instance": "/Test/ThrowInternalServerError",
                   "exception": *,
-                  "traceId": "{{problemDetails.TraceId}}"
+                  "traceId": "{{problemDetails.TraceId()}}"
                 }
                 """;
 

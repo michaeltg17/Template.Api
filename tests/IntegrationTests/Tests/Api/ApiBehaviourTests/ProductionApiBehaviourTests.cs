@@ -22,10 +22,10 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 
             //Then
             var problemDetails = await response.To<ProblemDetails>();
-            TraceIdValidator.IsValid(problemDetails.TraceId!).Should().BeTrue();
+            TraceIdValidator.IsValid(problemDetails.TraceId()!).Should().BeTrue();
 
             var expected = new ProblemDetailsBuilder()
-                .WithTraceId(problemDetails.TraceId!)
+                .WithTraceId(problemDetails.TraceId()!)
                 .WithHiddenInternalServerError("/Test/ThrowInternalServerError")
                 .Build();
 
