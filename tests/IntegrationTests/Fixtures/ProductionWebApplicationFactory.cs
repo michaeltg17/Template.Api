@@ -7,7 +7,7 @@ using Serilog.Sinks.XUnit.Injectable;
 
 namespace IntegrationTests.Fixtures
 {
-    internal class ProductionWebApplicationFactory(
+    internal sealed class ProductionWebApplicationFactory(
         ITestSettings testSettings,
         InMemorySink inMemorySink,
         InjectableTestOutputSink injectableTestOutputSink,
