@@ -26,7 +26,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             //Then: returns products
             var products = await response.To<List<Product>>();
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            products.Should().BeEquivalentTo(initialProducts);
+            products.Should().BeEquivalentTo(InitialProducts);
 
             //Then: expected images
             foreach (var product in products)
