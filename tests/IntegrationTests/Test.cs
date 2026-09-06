@@ -42,6 +42,7 @@ namespace IntegrationTests
             await Scope.DisposeAsync();
             TestFixture.InMemorySink.Dispose();
             FlushLoggerAndValidateLogDone();
+            GC.SuppressFinalize(this);
         }
 
         public ValueTask InitializeAsync()
