@@ -23,11 +23,11 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
         [SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "More sense here")]
         public class BadRequestCase
         {
-            public object Id;
+            public object Id = null!;
             public object? Date;
             public object? Request;
-            public string ExpectedInstance;
-            public string ExpectedDetail;
+            public string ExpectedInstance = null!;
+            public string ExpectedDetail = null!;
         }
 
         public static readonly TheoryDataRow<BadRequestCase>[] TestCases =

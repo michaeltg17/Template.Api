@@ -10,7 +10,7 @@ public class TestCaseSerializerTests
 
     public class FieldsOnly
     {
-        public string Name;
+        public string? Name;
         public int Count;
         public double? Ratio;
     }
@@ -25,7 +25,7 @@ public class TestCaseSerializerTests
 
     public class Mixed
     {
-        public string Field1;
+        public string? Field1;
         public int Field2;
         public string Prop1 { get; init; } = "";
         public double? Prop2 { get; init; }
