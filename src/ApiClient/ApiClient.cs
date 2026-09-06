@@ -13,7 +13,7 @@ namespace ApiClient
 
         public Task<HttpResponseMessage> GetAllProducts()
         {
-            return httpClient.GetAsync($"{BasePath}/Products");
+            return httpClient.GetAsync(new Uri($"{BasePath}/Products", UriKind.RelativeOrAbsolute));
         }
 
         public Task<HttpResponseMessage> GetProduct(long id)
@@ -23,7 +23,7 @@ namespace ApiClient
 
         public Task<HttpResponseMessage> GetProduct(object id)
         {
-            return httpClient.GetAsync($"{BasePath}/Products/{id}");
+            return httpClient.GetAsync(new Uri($"{BasePath}/Products/{id}", UriKind.RelativeOrAbsolute));
         }
 
         public async Task<HttpResponseMessage> CreateProduct(CreateProductRequest request)
@@ -40,7 +40,7 @@ namespace ApiClient
                 content.Add(new StreamContent(request.Image.OpenReadStream()), "image", request.Image.FileName);
             }
 
-            return await httpClient.PostAsync($"{BasePath}/Products", content);
+            return await httpClient.PostAsync(new Uri($"{BasePath}/Products", UriKind.RelativeOrAbsolute), content);
         }
 
         public async Task<HttpResponseMessage> UpdateProduct(long id, UpdateProductRequest request)
@@ -62,7 +62,7 @@ namespace ApiClient
                 content.Add(new StreamContent(request.Image.OpenReadStream()), "image", request.Image.FileName);
             }
 
-            return await httpClient.PutAsync($"{BasePath}/Products/{id}", content);
+            return await httpClient.PutAsync(new Uri($"{BasePath}/Products/{id}", UriKind.RelativeOrAbsolute), content);
         }
 
         public async Task<HttpResponseMessage> DeleteProducts(DeleteProductsRequest request)
