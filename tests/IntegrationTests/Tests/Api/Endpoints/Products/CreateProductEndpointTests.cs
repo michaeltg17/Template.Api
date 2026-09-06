@@ -67,7 +67,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .Appearing().Times(4)
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("id")
-                .WithValues([.. initialProducts.Select(p => p.Id), product.Id]);
+                .WithValues([.. InitialProducts.Select(p => p.Id), product.Id]);
 
             //Then: common expectations
             await AssertCommonExpectations(4, [product.Id]);
@@ -101,7 +101,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .Appearing().Times(3)
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("id")
-                .WithValues([.. initialProducts.Select(p => p.Id)]);
+                .WithValues([.. InitialProducts.Select(p => p.Id)]);
 
             //Then: common expectations
             await AssertCommonExpectations(3);

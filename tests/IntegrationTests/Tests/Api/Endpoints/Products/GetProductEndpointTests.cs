@@ -21,7 +21,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         {
             //Given
             await CreateProducts();
-            var initialProduct = initialProducts[1];
+            var initialProduct = InitialProducts[1];
 
             //When
             var response = await ApiClient.GetProduct(initialProduct.Id);

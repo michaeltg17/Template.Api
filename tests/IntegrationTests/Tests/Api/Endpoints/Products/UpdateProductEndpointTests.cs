@@ -23,7 +23,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         {
             //Given
             await CreateProducts();
-            var initialProduct = initialProducts[1];
+            var initialProduct = InitialProducts[1];
 
             //When
             var request = new UpdateProductRequestBuilder().Build();
@@ -100,12 +100,12 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
 
             //When
             var request = new UpdateProductRequestBuilder().WithName("").WithDescription("").WithPrice(0m).Build();
-            var response = await ApiClient.UpdateProduct(initialProducts[0].Id, request);
+            var response = await ApiClient.UpdateProduct(InitialProducts[0].Id, request);
 
             //Then: validation exception
             await ProblemDetailsAssertions.AssertValidationException(
                 response,
-                $"{BaseInstance}/{initialProducts[0].Id}",
+                $"{BaseInstance}/{InitialProducts[0].Id}",
                 new Dictionary<string, string[]>
                 {
                     { "name", ["'name' must not be empty."] },
