@@ -12,7 +12,7 @@ using Xunit;
 namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 {
     [Collection(nameof(DevelopmentApiCollectionFixture))]
-    public class DevelopmentApiBehaviourTests(TestFixture testFixture) : Test(testFixture)
+    public class DevelopmentApiBehaviourTests(TestFixture testFixture) : TestBase(testFixture)
     {
         [Fact]
         public async Task InternalServerError_ExposesSensitiveData()

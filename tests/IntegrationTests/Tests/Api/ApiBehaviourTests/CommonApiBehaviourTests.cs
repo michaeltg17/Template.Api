@@ -13,7 +13,7 @@ using static Api.Features.Test.TestEndpoints;
 namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 {
     [Collection(nameof(DevelopmentApiCollectionFixture))]
-    public class CommonApiBehaviourTests(TestFixture testFixture) : Test(testFixture)
+    public class CommonApiBehaviourTests(TestFixture testFixture) : TestBase(testFixture)
     {
         [Fact]
         public async Task NonexistentRoute_ExpectedProblemDetails()

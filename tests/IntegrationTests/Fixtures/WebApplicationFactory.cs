@@ -55,7 +55,7 @@ namespace IntegrationTests.Fixtures
                 {
                     templateSettings.PostgreSqlConnectionString = database!.ConnectionString;
                     templateSettings.ImageApiUrl = imageApiMock!.Server.Uri;
-                    templateSettings.ImageApiKey = Test.ApiKey;
+                    templateSettings.ImageApiKey = TestBase.ApiKey;
                 });
 
                 if (testSettings.EnableSqlLogging)

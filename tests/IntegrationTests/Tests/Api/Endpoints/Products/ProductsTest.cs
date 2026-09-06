@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
-    public abstract class ProductsTest(TestFixture testFixture) : Test(testFixture)
+    public abstract class ProductsTest(TestFixture testFixture) : TestBase(testFixture)
     {
         protected const string BaseInstance = "/api/Products";
         protected static byte[] InitialImage = File.ReadAllBytes("Images/didi.jpeg");

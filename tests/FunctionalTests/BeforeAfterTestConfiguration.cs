@@ -8,7 +8,7 @@ namespace FunctionalTests
     {
         public override void Before(object? testClassInstance, MethodInfo methodUnderTest)
         {
-            if (testClassInstance is Test test)
+            if (testClassInstance is TestBase test)
             {
                 test.TestSettings = testSettings;
                 test.Initialize();

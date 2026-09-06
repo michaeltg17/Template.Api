@@ -7,11 +7,11 @@ using Xunit;
 
 namespace IntegrationTests
 {
-    public abstract class Test(TestFixture testFixture) : IAsyncLifetime
+    public abstract class TestBase(TestFixture testFixture) : IAsyncLifetime
     {
         public const string ApiKey = "test-api-key";
 
-        public ApiClient.ApiClient ApiClient { get; private set; } = default!;
+        public ApiClient.Client ApiClient { get; private set; } = default!;
         protected AppDbContext Context { get; set; } = default!;
         AsyncServiceScope Scope { get; set; } = default!;
         protected HttpClient HttpClient { get; private set; } = default!;
