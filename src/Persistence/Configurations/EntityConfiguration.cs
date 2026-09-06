@@ -6,9 +6,9 @@ namespace Persistence.Configurations
 {
     public abstract class EntityConfiguration<T> : IEntityTypeConfiguration<T> where T : Entity
     {
-        public virtual void Configure(EntityTypeBuilder<T> entity)
+        public virtual void Configure(EntityTypeBuilder<T> builder)
         {
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            builder.Property(e => e.Id).ValueGeneratedOnAdd();
         }
     }
 }
