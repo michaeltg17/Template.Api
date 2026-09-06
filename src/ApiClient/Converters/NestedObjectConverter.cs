@@ -1,4 +1,5 @@
 ﻿using System.Dynamic;
+using System.Globalization;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 
@@ -51,7 +52,7 @@ namespace ApiClient.Converters
                         using var doc = JsonDocument.ParseValue(ref reader);
                         return UnknownNumberFormat == UnknownNumberFormat.JsonElement
                             ? (object)doc.RootElement.Clone()
-                            : throw new JsonException(string.Format("Cannot parse number {0}", doc.RootElement.ToString()));
+                            : throw new JsonException(string.Format(CultureInfo.InvariantCulture, "Cannot parse number {0}", doc.RootElement.ToString()));
                     }
                 case JsonTokenType.StartArray:
                     {
@@ -88,7 +89,7 @@ namespace ApiClient.Converters
                     }
                     throw new JsonException();
                 default:
-                    throw new JsonException(string.Format("Unknown token {0}", reader.TokenType));
+                    throw new JsonException(string.Format(CultureInfo.InvariantCulture, "Unknown token {0}", reader.TokenType));
             }
         }
 

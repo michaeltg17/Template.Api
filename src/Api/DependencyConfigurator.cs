@@ -7,6 +7,7 @@ using Domain;
 using FluentValidation;
 using Persistence;
 using Serilog;
+using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -41,7 +42,7 @@ namespace Api
             builder.Host.UseSerilog((context, services, configuration) =>
             {
                 ApplyCommonSerilogConfiguration(context, services, configuration);
-                configuration.WriteTo.Console();
+                configuration.WriteTo.Console(formatProvider: CultureInfo.InvariantCulture);
             });
 
             return builder;
