@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Http;
-
 namespace Api.Features.Products.Models.Requests;
 
 public record CreateProductRequest
