@@ -69,7 +69,7 @@ namespace Core.Testing.Serializers
         {
             // Prefer public constructor if available, fall back to uninitialized
             var ctor = type.GetConstructor(Type.EmptyTypes);
-            return ctor != null ? Activator.CreateInstance(type) : RuntimeHelpers.GetUninitializedObject(type);
+            return ctor != null ? Activator.CreateInstance(type)! : RuntimeHelpers.GetUninitializedObject(type);
         }
 
         static Dictionary<string, string?> ToJsonEntry(Type type, object? value)
