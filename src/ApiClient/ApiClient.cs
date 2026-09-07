@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.Globalization;
+using System.Net.Http.Json;
 using ApiClient.Endpoints;
 using Api.Extensions;
 using Api.Features.Products.Models.Requests;
@@ -32,7 +33,7 @@ namespace ApiClient
             {
                 { new StringContent(request.Name), "name" },
                 { new StringContent(request.Description), "description" },
-                { new StringContent(request.Price.ToString()), "price" }
+                { new StringContent(request.Price.ToString(CultureInfo.InvariantCulture)), "price" }
             };
 
             if (request.Image != null)
@@ -54,7 +55,7 @@ namespace ApiClient
             {
                 { new StringContent(request.Name), "name" },
                 { new StringContent(request.Description), "description" },
-                { new StringContent(request.Price.ToString()), "price" }
+                { new StringContent(request.Price.ToString(CultureInfo.InvariantCulture)), "price" }
             };
 
             if (request.Image != null)
