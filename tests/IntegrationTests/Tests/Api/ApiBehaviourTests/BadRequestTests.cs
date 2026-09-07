@@ -9,27 +9,15 @@ using IntegrationTests.Fixtures;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using ApiClient.Extensions;
-using static IntegrationTests.Tests.Api.ApiBehaviourTests.BadRequestTests;
 using Xunit.Sdk;
-using System.Diagnostics.CodeAnalysis;
 
-[assembly: RegisterXunitSerializer(typeof(TestCaseSerializer), typeof(BadRequestCase))]
+[assembly: RegisterXunitSerializer(typeof(TestCaseSerializer), typeof(IntegrationTests.Tests.Api.ApiBehaviourTests.BadRequestCase))]
 
 namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 {
     [Collection(nameof(DevelopmentApiCollectionFixture))]
     public class BadRequestTests(TestFixture testFixture) : Test(testFixture)
     {
-        [SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "More sense here")]
-        public class BadRequestCase
-        {
-            public object Id;
-            public object? Date;
-            public object? Request;
-            public string ExpectedInstance;
-            public string ExpectedDetail;
-        }
-
         public static readonly TheoryDataRow<BadRequestCase>[] TestCases =
         [
             new(new BadRequestCase
@@ -44,7 +32,7 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
             {
                 Id = (long)1,
                 Date = "b",
-                Request = null!,
+                Request = null,
                 ExpectedInstance = "/Test/Post/1",
                 ExpectedDetail = "Failed to bind parameter \"DateTime date\" from \"b\"."
             }) { TestDisplayName = "Invalid query string parameter" },
@@ -85,10 +73,10 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 
             //Then
             var problemDetails = await response.To<ProblemDetails>();
-            TraceIdValidator.IsValid(problemDetails.TraceId!).Should().BeTrue();
+            TraceIdValidator.IsValid(problemDetails.TraceId()!).Should().BeTrue();
 
             var expected = new ProblemDetailsBuilder()
-                .WithTraceId(problemDetails.TraceId!)
+                .WithTraceId(problemDetails.TraceId()!)
                 .WithBadHttpRequestException()
                 .WithInstance(@case.ExpectedInstance)
                 .WithDetail(@case.ExpectedDetail)
@@ -97,5 +85,14 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
             problemDetails.Should().BeEquivalentTo(expected);
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
+    }
+
+    public sealed class BadRequestCase
+    {
+        public object Id;
+        public object? Date;
+        public object? Request;
+        public string ExpectedInstance;
+        public string ExpectedDetail;
     }
 }
