@@ -57,7 +57,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             productImage.Should().BeEquivalentTo(InitialImage);
 
             //Then: expected product in db
-            var dbProduct = await Context.Products.FindAsync(product.Id);
+            var dbProduct = await Context.Products.FindAsync([product.Id], TestContext.Current.CancellationToken);
             dbProduct.Should().BeEquivalentTo(expected, o => o.Excluding(p => p.Image!.Url));
 
             //Then: expected logging

@@ -33,7 +33,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             {
                 var productImageFileName = ProductService.BuildImageFileName(product, InitialImageExtension);
                 var productImageUrl = ImageService.BuildUrl(ImageApiMock.Server.Uri, productImageFileName);
-                var productImage = await HttpClient.GetByteArrayAsync(productImageUrl);
+                var productImage = await HttpClient.GetByteArrayAsync(productImageUrl, TestContext.Current.CancellationToken);
                 productImage.Should()
                     .BeEquivalentTo(InitialImage, $"downloaded image for product '{product.Id}' should match initial image");
                 ImageApiMock.AssertGetRequest(productImageFileName);
