@@ -4,7 +4,7 @@ using Xunit.DependencyInjection;
 
 namespace IntegrationTests
 {
-    internal class BeforeAfterTestConfiguration() : BeforeAfterTest
+    public class BeforeAfterTestConfiguration() : BeforeAfterTest
     {
         public override ValueTask BeforeAsync(object? testClassInstance, MethodInfo methodUnderTest)
         {
