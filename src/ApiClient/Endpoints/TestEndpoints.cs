@@ -10,12 +10,12 @@ namespace ApiClient.Endpoints
 
         public Task<HttpResponseMessage> ThrowInternalServerError()
         {
-            return httpClient.PostAsync($"{BaseRoute}/ThrowInternalServerError", null);
+            return httpClient.PostAsync(new Uri($"{BaseRoute}/ThrowInternalServerError", UriKind.RelativeOrAbsolute), null);
         }
 
         public Task<HttpResponseMessage> GetOk()
         {
-            return httpClient.GetAsync($"{BaseRoute}/GetOk");
+            return httpClient.GetAsync(new Uri($"{BaseRoute}/GetOk", UriKind.RelativeOrAbsolute));
         }
 
         public Task<HttpResponseMessage> Post(long id, DateTime date, PostRequest request)
@@ -37,7 +37,7 @@ namespace ApiClient.Endpoints
 
         public Task<HttpResponseMessage> RequestUnexistingRoute()
         {
-            return httpClient.GetAsync("UnexistingRoute/UnexistingRoute");
+            return httpClient.GetAsync(new Uri("UnexistingRoute/UnexistingRoute", UriKind.RelativeOrAbsolute));
         }
     }
 }
