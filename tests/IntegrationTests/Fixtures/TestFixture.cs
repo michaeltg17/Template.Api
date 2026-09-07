@@ -69,6 +69,7 @@ namespace IntegrationTests.Fixtures
             InMemorySink.Instance.Dispose();
             await InjectableTestOutputSink.DisposeAsync();
             await Log.CloseAndFlushAsync();
+            GC.SuppressFinalize(this);
         }
     }
 }
