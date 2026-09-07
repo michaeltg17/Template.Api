@@ -10,9 +10,9 @@ public class TestCaseSerializerTests
 
     public class FieldsOnly
     {
-        public string Name;
-        public int Count;
-        public double? Ratio;
+        public string Name { get; set; }
+        public int Count { get; set; }
+        public double? Ratio { get; set; }
     }
 
     public sealed class PropertiesOnly
@@ -25,8 +25,8 @@ public class TestCaseSerializerTests
 
     public class Mixed
     {
-        public string Field1;
-        public int Field2;
+        public string Field1 { get; set; }
+        public int Field2 { get; set; }
         public string Prop1 { get; init; } = "";
         public double? Prop2 { get; init; }
         public bool Derived => Field2 > 0;
@@ -34,7 +34,7 @@ public class TestCaseSerializerTests
 
     public class ContainsArrayAndNullable
     {
-        public string? Name;
+        public string? Name { get; set; }
         public string[] Tags { get; init; } = [];
     }
 
@@ -192,6 +192,6 @@ public class TestCaseSerializerTests
     {
         public const int Constant = 42;
         public static readonly int Static = 99;
-        public int Value;
+        public int Value { get; set; }
     }
 }
