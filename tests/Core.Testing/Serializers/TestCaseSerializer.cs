@@ -51,14 +51,14 @@ namespace Core.Testing.Serializers
             foreach (var field in fields)
             {
                 var entry = ToDictionary(elements[idx]);
-                field.SetValue(instance, FromJsonEntry(field.FieldType, entry));
+                field.SetValue(instance, FromJsonEntry(entry));
                 idx++;
             }
 
             foreach (var prop in properties)
             {
                 var entry = ToDictionary(elements[idx]);
-                prop.SetValue(instance, FromJsonEntry(prop.PropertyType, entry));
+                prop.SetValue(instance, FromJsonEntry(entry));
                 idx++;
             }
 
@@ -116,7 +116,7 @@ namespace Core.Testing.Serializers
             return dict;
         }
 
-        static object? FromJsonEntry(Type _target, Dictionary<string, string?> entry)
+        static object? FromJsonEntry(Dictionary<string, string?> entry)
         {
             var typeTag = entry["t"]!;
 
