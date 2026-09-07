@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace IntegrationTests.Tests.ApiClient
 {
     [Collection(nameof(DevelopmentApiCollectionFixture))]
-    public class ApiClientTests(TestFixture testFixture) : Test(testFixture)
+    public class ApiClientTests(TestFixture testFixture) : TestBase(testFixture)
     {
         [Fact]
         public async Task MappingEntityFromInvalidResponse_ApiExceptionIsThrownWithExpectedProblemDetails()

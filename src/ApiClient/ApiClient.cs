@@ -5,7 +5,7 @@ using Api.Features.Products.Models.Requests;
 
 namespace ApiClient
 {
-    public class ApiClient(HttpClient httpClient)
+    public class Client(HttpClient httpClient)
     {
         public TestEndpoints Test { get; } = new(httpClient);
 

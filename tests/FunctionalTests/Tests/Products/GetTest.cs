@@ -6,7 +6,7 @@ using Xunit;
 
 namespace FunctionalTests.Tests.Products
 {
-    public class GetTest : Test
+    public class GetTest : TestBase
     {
         [Fact]
         public async Task GetAllProducts_ThenGetByIdIfAny()

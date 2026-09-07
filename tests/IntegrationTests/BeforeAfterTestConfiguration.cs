@@ -8,7 +8,7 @@ namespace IntegrationTests
     {
         public override ValueTask BeforeAsync(object? testClassInstance, MethodInfo methodUnderTest)
         {
-            if (testClassInstance is not Test test)
+            if (testClassInstance is not TestBase test)
                 return ValueTask.CompletedTask;
 
             var collectionFixtureName = testClassInstance.GetType().GetCustomAttribute<CollectionAttribute>()?.Name;

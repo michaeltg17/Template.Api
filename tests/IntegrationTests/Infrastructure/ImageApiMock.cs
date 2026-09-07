@@ -16,7 +16,7 @@ namespace IntegrationTests.Infrastructure
         {
             Server
                 .Given(Request.Create()
-                    .WithHeader(ImageService.ImageApiKeyHeaderName, Test.ApiKey)
+                    .WithHeader(ImageService.ImageApiKeyHeaderName, TestBase.ApiKey)
                     .WithPath($"/{ImageService.ApiPath}/*")
                     .UsingPost())
                 .RespondWith(Response.Create()
@@ -24,7 +24,7 @@ namespace IntegrationTests.Infrastructure
 
             Server
                 .Given(Request.Create()
-                    .WithHeader(ImageService.ImageApiKeyHeaderName, Test.ApiKey)
+                    .WithHeader(ImageService.ImageApiKeyHeaderName, TestBase.ApiKey)
                     .WithPath($"/{ImageService.ApiPath}/*")
                     .UsingDelete())
                 .RespondWith(Response.Create()

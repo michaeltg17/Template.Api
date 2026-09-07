@@ -18,7 +18,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace IntegrationTests.Tests.Api.ApiBehaviourTests
 {
     [Collection(nameof(DevelopmentApiCollectionFixture))]
-    public class BadRequestTests(TestFixture testFixture) : Test(testFixture)
+    public class BadRequestTests(TestFixture testFixture) : TestBase(testFixture)
     {
         [SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "More sense here")]
         public class BadRequestCase
