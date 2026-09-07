@@ -12,10 +12,10 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
     public abstract class ProductsTest(TestFixture testFixture) : Test(testFixture)
     {
         protected const string BaseInstance = "/api/Products";
-        protected static byte[] InitialImage = File.ReadAllBytes("Images/didi.jpeg");
-        protected static string InitialImageExtension = Path.GetExtension("didi.jpeg");
-        protected static byte[] Image2 = File.ReadAllBytes("Images/didi2.jpg");
-        protected static string Image2Extension = Path.GetExtension("didi2.jpg");
+        protected static readonly byte[] InitialImage = File.ReadAllBytes("Images/didi.jpeg");
+        protected static readonly string InitialImageExtension = Path.GetExtension("didi.jpeg");
+        protected static readonly byte[] Image2 = File.ReadAllBytes("Images/didi2.jpg");
+        protected static readonly string Image2Extension = Path.GetExtension("didi2.jpg");
 
         protected const string ProductCreatedMessage = "Product with id '{id}' created successfully.";
         protected const string ProductUpdatedMessage = "Product with id '{id}' updated successfully.";
