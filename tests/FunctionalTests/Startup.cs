@@ -16,6 +16,7 @@ namespace FunctionalTests
 
         public static void ConfigureHost(IHostBuilder hostBuilder)
         {
+            ArgumentNullException.ThrowIfNull(hostBuilder);
             hostBuilder.AddConfiguration();
         }
 

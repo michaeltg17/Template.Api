@@ -7,6 +7,7 @@ namespace Persistence.Configurations
     {
         public override void Configure(EntityTypeBuilder<Product> entity)
         {
+            ArgumentNullException.ThrowIfNull(entity);
             base.Configure(entity);
 
             entity.Property(e => e.Name).IsRequired().HasMaxLength(200);

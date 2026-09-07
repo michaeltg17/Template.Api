@@ -8,6 +8,7 @@ namespace IntegrationTests.Extensions
             this LogEventPropertyValueAssertions assertion,
             IEnumerable<T> values)
         {
+            ArgumentNullException.ThrowIfNull(assertion);
             return assertion.WithValue($"[{string.Join(", ", values)}]");
         }
     }

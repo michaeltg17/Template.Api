@@ -80,6 +80,7 @@ namespace IntegrationTests.Infrastructure
 
         public void AssertDeleteRequests(IEnumerable<string> imageNames)
         {
+            ArgumentNullException.ThrowIfNull(imageNames);
             foreach (var imageName in imageNames)
             {
                 var logEntries = Server.LogEntries;

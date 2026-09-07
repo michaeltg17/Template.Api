@@ -14,6 +14,8 @@ namespace ApiClient.Converters
 
         public override void Write(Utf8JsonWriter writer, object value, JsonSerializerOptions options)
         {
+            ArgumentNullException.ThrowIfNull(writer);
+            ArgumentNullException.ThrowIfNull(value);
             if (value.GetType() == typeof(object))
             {
                 writer.WriteStartObject();

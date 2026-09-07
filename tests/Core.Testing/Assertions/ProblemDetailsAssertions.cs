@@ -13,6 +13,7 @@ namespace Core.Testing.Assertions
         public static async Task AssertNotAllFoundException(
             HttpResponseMessage response, string entity, string baseInstance, long[] ids)
         {
+            ArgumentNullException.ThrowIfNull(response);
             var builder = new ProblemDetailsBuilder().WithNotAllFoundException(entity, baseInstance, ids);
             await Assert(response, builder, HttpStatusCode.NotFound);
         }
@@ -20,6 +21,7 @@ namespace Core.Testing.Assertions
         public static async Task AssertNotFoundException(
             HttpResponseMessage response, string entity, string baseInstance, long id)
         {
+            ArgumentNullException.ThrowIfNull(response);
             var builder = new ProblemDetailsBuilder().WithNotFoundException(entity, baseInstance, id);
             await Assert(response, builder, HttpStatusCode.NotFound);
         }
@@ -29,6 +31,7 @@ namespace Core.Testing.Assertions
             string instance,
             IDictionary<string, string[]> expectedErrors)
         {
+            ArgumentNullException.ThrowIfNull(response);
             var builder = new ProblemDetailsBuilder().WithValidationException(instance, expectedErrors);
             await Assert(response, builder, HttpStatusCode.BadRequest);
         }
