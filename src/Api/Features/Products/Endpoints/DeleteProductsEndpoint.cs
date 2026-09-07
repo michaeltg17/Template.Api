@@ -9,7 +9,7 @@ using Api.Exceptions;
 
 namespace Api.Features.Products.Endpoints;
 
-internal partial class DeleteProductsEndpoint
+internal sealed partial class DeleteProductsEndpoint
 {
     public static void Map(IEndpointRouteBuilder app)
     {

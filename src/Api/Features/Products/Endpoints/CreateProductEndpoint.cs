@@ -5,7 +5,7 @@ using Persistence;
 
 namespace Api.Features.Products.Endpoints;
 
-internal partial class CreateProductEndpoint
+internal sealed partial class CreateProductEndpoint
 {
     public static void Map(IEndpointRouteBuilder app)
     {

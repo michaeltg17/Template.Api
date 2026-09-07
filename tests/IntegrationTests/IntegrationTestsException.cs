@@ -1,6 +1,6 @@
 ﻿namespace IntegrationTests
 {
-    internal class IntegrationTestsException(string message) : Exception(message)
+    internal sealed class IntegrationTestsException(string message) : Exception(message)
     {
     }
 }
