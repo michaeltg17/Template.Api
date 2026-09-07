@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
@@ -10,7 +11,7 @@ namespace Core.Testing.Serializers
     {
         static readonly ConcurrentDictionary<string, Type> TypeCache = new();
 
-        public bool IsSerializable(Type type, object? value, out string? reason)
+        public bool IsSerializable(Type type, object? value, [NotNullWhen(false)] out string? reason)
         {
             reason = null;
             return true;
