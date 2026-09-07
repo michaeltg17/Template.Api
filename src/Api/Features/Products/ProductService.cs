@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using FluentValidation;
 using FluentValidation.Results;
 using Domain.Models;

@@ -5,7 +5,6 @@ using Domain.Models;
 using IntegrationTests.Fixtures;
 using IntegrationTests.Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace IntegrationTests.Tests.Api.Endpoints.Products
 {

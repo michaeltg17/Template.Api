@@ -1,6 +1,5 @@
 using Api.Features.Images;
 using Api.Features.Products;
-using Api.Features.Products.Models.Requests;
 using ApiClient.Extensions;
 using AwesomeAssertions;
 using Core.Testing.Assertions;
@@ -9,7 +8,6 @@ using Domain.Models;
 using IntegrationTests.Collections;
 using IntegrationTests.Extensions;
 using IntegrationTests.Fixtures;
-using Microsoft.AspNetCore.Mvc;
 using Serilog.Events;
 using Serilog.Sinks.InMemory.Assertions;
 using System.Net;

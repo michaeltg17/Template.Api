@@ -1,5 +1,4 @@
-﻿using Api.Extensions;
-using Core.Builders;
+﻿using Core.Builders;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
