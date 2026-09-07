@@ -13,7 +13,7 @@ namespace IntegrationTests
 
         public ApiClient.ApiClient ApiClient { get; private set; } = default!;
         protected AppDbContext Context { get; set; } = default!;
-        AsyncServiceScope Scope { get; set; } = default!;
+        AsyncServiceScope Scope { get; set; }
         protected HttpClient HttpClient { get; private set; } = default!;
         public TestFixture TestFixture { get; set; } = testFixture;
 
