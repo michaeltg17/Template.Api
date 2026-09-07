@@ -10,9 +10,9 @@ namespace Core.Testing.Serializers
     {
         static readonly ConcurrentDictionary<string, Type> TypeCache = new();
 
-        public bool IsSerializable(Type type, object? value, out string? reason)
+        public bool IsSerializable(Type type, object? value, out string? failureReason)
         {
-            reason = null;
+            failureReason = null;
             return true;
         }
 
@@ -38,13 +38,13 @@ namespace Core.Testing.Serializers
             return JsonSerializer.Serialize(entries);
         }
 
-        public object Deserialize(Type type, string data)
+        public object Deserialize(Type type, string serializedValue)
         {
             var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance)
                 .Where(f => !f.IsLiteral).ToArray();
             var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(p => p.CanWrite).ToArray();
-            var elements = JsonSerializer.Deserialize<JsonElement>(data).EnumerateArray().ToList();
+            var elements = JsonSerializer.Deserialize<JsonElement>(serializedValue).EnumerateArray().ToList();
             var instance = CreateInstance(type);
 
             int idx = 0;
