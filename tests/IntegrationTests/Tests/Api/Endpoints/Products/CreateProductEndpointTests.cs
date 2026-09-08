@@ -28,7 +28,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var request = new CreateProductRequestBuilder().Build();
 
             //When
-            var response = await ApiClient.CreateProduct(request);
+            var response = await ApiClient.Products.CreateProduct(request);
 
             //Then: retuns expected product
             var product = await response.To<Product>();
@@ -81,7 +81,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
 
             //When
             var request = new CreateProductRequestBuilder().WithName("").WithDescription("").WithPrice(0m).Build();
-            var response = await ApiClient.CreateProduct(request);
+            var response = await ApiClient.Products.CreateProduct(request);
 
             //Then
             await ProblemDetailsAssertions.AssertValidationException(

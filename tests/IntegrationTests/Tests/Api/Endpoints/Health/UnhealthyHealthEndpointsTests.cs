@@ -21,7 +21,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Health
         public async Task HealthReady_WhenUnhealthyCheck_ReturnsServiceUnavailable()
         {
             //When
-            var response = await ApiClient.GetHealthReady();
+            var response = await ApiClient.Health.GetHealthReady();
 
             //Then
             var problemDetails = await response.To<ProblemDetails>();
@@ -40,7 +40,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Health
         public async Task HealthLive_WhenUnhealthyCheck_ReturnsOk()
         {
             //When
-            var response = await ApiClient.GetHealthLive();
+            var response = await ApiClient.Health.GetHealthLive();
 
             //Then
             var health = await response.To<HealthResponse>();

@@ -26,7 +26,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var request = new DeleteProductsRequest([product.Id]);
 
             //When
-            var response = await ApiClient.DeleteProducts(request);
+            var response = await ApiClient.Products.DeleteProducts(request);
 
             //Then: expected response
             var result = await response.To<DeleteProductsResponse>();
@@ -60,7 +60,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var request = new DeleteProductsRequest(ids);
 
             //When
-            var response = await ApiClient.DeleteProducts(request);
+            var response = await ApiClient.Products.DeleteProducts(request);
 
             //Then: expected response
             var result = await response.To<DeleteProductsResponse>();
@@ -92,7 +92,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var request = new DeleteProductsRequest([5, 6]);
 
             //When
-            var response = await ApiClient.DeleteProducts(request);
+            var response = await ApiClient.Products.DeleteProducts(request);
 
             //Then
             await ProblemDetailsAssertions.AssertNotAllFoundException(response, nameof(Product), BaseInstance, [5, 6]);
@@ -108,7 +108,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var request = new DeleteProductsRequest([existingId, notFoundId], true);
 
             //When
-            var response = await ApiClient.DeleteProducts(request);
+            var response = await ApiClient.Products.DeleteProducts(request);
 
             //Then: expected response
             var result = await response.To<DeleteProductsResponse>();
@@ -141,7 +141,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var request = new DeleteProductsRequest(ids, true);
 
             //When
-            var response = await ApiClient.DeleteProducts(request);
+            var response = await ApiClient.Products.DeleteProducts(request);
 
             //Then: expected response
             var result = await response.To<DeleteProductsResponse>();

@@ -21,7 +21,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             await CreateProducts();
 
             //When
-            var response = await ApiClient.GetAllProducts();
+            var response = await ApiClient.Products.GetAllProducts();
 
             //Then: returns products
             var products = await response.To<List<Product>>();
@@ -47,7 +47,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         public async Task NoProducts_ReturnsOkEmptyList()
         {
             //When
-            var response = await ApiClient.GetAllProducts();
+            var response = await ApiClient.Products.GetAllProducts();
 
             //Then: returns empty list
             var products = await response.To<List<Product>>();

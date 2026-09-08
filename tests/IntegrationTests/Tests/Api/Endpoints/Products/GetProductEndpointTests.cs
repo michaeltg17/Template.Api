@@ -24,7 +24,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var initialProduct = InitialProducts[1];
 
             //When
-            var response = await ApiClient.GetProduct(initialProduct.Id);
+            var response = await ApiClient.Products.GetProduct(initialProduct.Id);
 
             //Then
             var product = await response.To<Product>();
@@ -63,7 +63,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             await CreateProducts();
 
             //When
-            var response = await ApiClient.GetProduct(4);
+            var response = await ApiClient.Products.GetProduct(4);
 
             //Then: product not found
             await ProblemDetailsAssertions.AssertNotFoundException(response, nameof(Product), BaseInstance, 4);
