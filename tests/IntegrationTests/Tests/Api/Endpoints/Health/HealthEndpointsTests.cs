@@ -25,7 +25,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Health
         }
 
         [Fact]
-        public async Task HealthReady_WhenDbUp_ReturnsOk()
+        public async Task HealthReady_ReturnsOk()
         {
             //When
             var response = await ApiClient.Health.GetHealthReady();
