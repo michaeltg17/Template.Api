@@ -2,6 +2,6 @@
 {
     public interface ITestSettings
     {
-        public string TemplateApiUrl { get; }
+        public Uri TemplateApiUrl { get; }
     }
 }

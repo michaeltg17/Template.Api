@@ -5,6 +5,6 @@ namespace FunctionalTests.Settings
     public class TestSettings : ITestSettings
     {
         [Required]
-        public required string TemplateApiUrl { get; init; }
+        public required Uri TemplateApiUrl { get; init; }
     }
 }

@@ -22,9 +22,20 @@ namespace Api
 
             builder.Services
                 .AddMainDependencies()
+                .AddHealthCheckDependencies()
                 .AddProblemDetails();
 
             return builder;
+        }
+
+        public static IServiceCollection AddHealthCheckDependencies(this IServiceCollection services)
+        {
+            services
+                .AddHealthChecks()
+                .AddNpgSql(sp => sp.GetRequiredService<ITemplateApiSettings>().PostgreSqlConnectionString,
+                    name: "db", timeout: TimeSpan.FromSeconds(5));
+
+            return services;
         }
 
         public static IServiceCollection AddMainDependencies(this IServiceCollection services)

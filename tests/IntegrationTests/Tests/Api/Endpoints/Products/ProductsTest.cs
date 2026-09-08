@@ -11,7 +11,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
 {
     public abstract class ProductsTest(TestFixture testFixture) : Test(testFixture)
     {
-        protected const string BaseInstance = "/api/Products";
+        protected const string BaseInstance = "/api/products";
         protected static byte[] InitialImage = File.ReadAllBytes("Images/didi.jpeg");
         protected static string InitialImageExtension = Path.GetExtension("didi.jpeg");
         protected static byte[] Image2 = File.ReadAllBytes("Images/didi2.jpg");
@@ -21,14 +21,15 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         protected const string ProductUpdatedMessage = "Product with id '{id}' updated successfully.";
         protected const string ProductsDeletedMessage = "Products with ids '{ids}' deleted successfully.";
 
-        public List<Product> initialProducts = [];
+        private readonly List<Product> initialProducts = [];
+        protected IReadOnlyList<Product> InitialProducts => initialProducts;
         internal ImageApiMock ImageApiMock => TestFixture.ImageApiMock;
 
         public async ValueTask CreateProducts(int count = 3)
         {
             var tasks = Enumerable
                 .Range(0, count)
-                .Select(_ => ApiClient.CreateProduct(new CreateProductRequestBuilder().Build()).To<Product>());
+                .Select(_ => ApiClient.Products.CreateProduct(new CreateProductRequestBuilder().Build()).To<Product>());
 
             initialProducts.AddRange((await Task.WhenAll(tasks)).OrderBy(p => p.Id));
 

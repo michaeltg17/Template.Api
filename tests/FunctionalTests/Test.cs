@@ -9,7 +9,7 @@ namespace FunctionalTests
 
         internal void Initialize()
         {
-            ApiClient = new ApiClient.ApiClient(new HttpClient() { BaseAddress = new Uri(TestSettings.TemplateApiUrl) });
+            ApiClient = new ApiClient.ApiClient(new HttpClient() { BaseAddress = TestSettings.TemplateApiUrl });
         }
     }
 }

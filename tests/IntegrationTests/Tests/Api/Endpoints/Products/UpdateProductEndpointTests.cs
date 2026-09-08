@@ -23,11 +23,11 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         {
             //Given
             await CreateProducts();
-            var initialProduct = initialProducts[1];
+            var initialProduct = InitialProducts[1];
 
             //When
             var request = new UpdateProductRequestBuilder().Build();
-            var response = await ApiClient.UpdateProduct(initialProduct.Id, request);
+            var response = await ApiClient.Products.UpdateProduct(initialProduct.Id, request);
             var product = await response.To<Product>();
             var productImageFileName = ProductService.BuildImageFileName(product, Image2Extension);
             var productImageUrl = ImageService.BuildUrl(ImageApiMock.Server.Uri, productImageFileName);
@@ -78,7 +78,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
 
             //When
             var request = new UpdateProductRequestBuilder().Build();
-            var response = await ApiClient.UpdateProduct(5, request);
+            var response = await ApiClient.Products.UpdateProduct(5, request);
 
             //Then: product not found
             await ProblemDetailsAssertions.AssertNotFoundException(response, nameof(Product), BaseInstance, 5);
@@ -100,12 +100,12 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
 
             //When
             var request = new UpdateProductRequestBuilder().WithName("").WithDescription("").WithPrice(0m).Build();
-            var response = await ApiClient.UpdateProduct(initialProducts[0].Id, request);
+            var response = await ApiClient.Products.UpdateProduct(InitialProducts[0].Id, request);
 
             //Then: validation exception
             await ProblemDetailsAssertions.AssertValidationException(
                 response,
-                $"{BaseInstance}/{initialProducts[0].Id}",
+                $"{BaseInstance}/{InitialProducts[0].Id}",
                 new Dictionary<string, string[]>
                 {
                     { "name", ["'name' must not be empty."] },

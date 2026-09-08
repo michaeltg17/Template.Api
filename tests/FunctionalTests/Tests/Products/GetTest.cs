@@ -12,7 +12,7 @@ namespace FunctionalTests.Tests.Products
         public async Task GetAllProducts_ThenGetByIdIfAny()
         {
             //Get all products ok
-            var getAllProductsResponse = await ApiClient.GetAllProducts();
+            var getAllProductsResponse = await ApiClient.Products.GetAllProducts();
             var products = await getAllProductsResponse.To<List<Product>>();
             getAllProductsResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
@@ -24,7 +24,7 @@ namespace FunctionalTests.Tests.Products
 
             //Get by id ok
             var product = products[0];
-            var getByIdResponse = await ApiClient.GetProduct(product.Id);
+            var getByIdResponse = await ApiClient.Products.GetProduct(product.Id);
             var getByIdProduct = await getByIdResponse.To<Product>();
             getByIdResponse.StatusCode.Should().Be(HttpStatusCode.OK);
             getByIdProduct.Should().BeEquivalentTo(product);

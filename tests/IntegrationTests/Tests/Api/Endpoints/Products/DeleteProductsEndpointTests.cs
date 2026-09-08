@@ -22,11 +22,11 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         {
             //Given
             await CreateProducts();
-            var product = initialProducts[1];
+            var product = InitialProducts[1];
             var request = new DeleteProductsRequest([product.Id]);
 
             //When
-            var response = await ApiClient.DeleteProducts(request);
+            var response = await ApiClient.Products.DeleteProducts(request);
 
             //Then: expected response
             var result = await response.To<DeleteProductsResponse>();
@@ -55,12 +55,12 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         {
             //Given
             await CreateProducts(5);
-            var products = new[] { initialProducts[0], initialProducts[1], initialProducts[4] };
+            var products = new[] { InitialProducts[0], InitialProducts[1], InitialProducts[4] };
             var ids = products.Select(p => p.Id).ToList();
             var request = new DeleteProductsRequest(ids);
 
             //When
-            var response = await ApiClient.DeleteProducts(request);
+            var response = await ApiClient.Products.DeleteProducts(request);
 
             //Then: expected response
             var result = await response.To<DeleteProductsResponse>();
@@ -92,7 +92,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var request = new DeleteProductsRequest([5, 6]);
 
             //When
-            var response = await ApiClient.DeleteProducts(request);
+            var response = await ApiClient.Products.DeleteProducts(request);
 
             //Then
             await ProblemDetailsAssertions.AssertNotAllFoundException(response, nameof(Product), BaseInstance, [5, 6]);
@@ -103,12 +103,12 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
         {
             //Given
             await CreateProducts();
-            var existingId = initialProducts[0].Id;
+            var existingId = InitialProducts[0].Id;
             var notFoundId = 10;
             var request = new DeleteProductsRequest([existingId, notFoundId], true);
 
             //When
-            var response = await ApiClient.DeleteProducts(request);
+            var response = await ApiClient.Products.DeleteProducts(request);
 
             //Then: expected response
             var result = await response.To<DeleteProductsResponse>();
@@ -126,7 +126,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .WithValues([existingId]);
 
             //Then: expected image delete
-            ImageApiMock.AssertDeleteRequests([initialProducts[0].Image!.FileName]);
+            ImageApiMock.AssertDeleteRequests([InitialProducts[0].Image!.FileName]);
 
             //Then: common expectations
             await AssertCommonExpectations(2, [existingId]);
@@ -141,7 +141,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var request = new DeleteProductsRequest(ids, true);
 
             //When
-            var response = await ApiClient.DeleteProducts(request);
+            var response = await ApiClient.Products.DeleteProducts(request);
 
             //Then: expected response
             var result = await response.To<DeleteProductsResponse>();

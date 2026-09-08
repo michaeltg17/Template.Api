@@ -28,7 +28,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
             var request = new CreateProductRequestBuilder().Build();
 
             //When
-            var response = await ApiClient.CreateProduct(request);
+            var response = await ApiClient.Products.CreateProduct(request);
 
             //Then: retuns expected product
             var product = await response.To<Product>();
@@ -67,7 +67,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .Appearing().Times(4)
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("id")
-                .WithValues([.. initialProducts.Select(p => p.Id), product.Id]);
+                .WithValues([.. InitialProducts.Select(p => p.Id), product.Id]);
 
             //Then: common expectations
             await AssertCommonExpectations(4, [product.Id]);
@@ -81,7 +81,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
 
             //When
             var request = new CreateProductRequestBuilder().WithName("").WithDescription("").WithPrice(0m).Build();
-            var response = await ApiClient.CreateProduct(request);
+            var response = await ApiClient.Products.CreateProduct(request);
 
             //Then
             await ProblemDetailsAssertions.AssertValidationException(
@@ -101,7 +101,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
                 .Appearing().Times(3)
                 .WithLevel(LogEventLevel.Information)
                 .WithProperty("id")
-                .WithValues([.. initialProducts.Select(p => p.Id)]);
+                .WithValues([.. InitialProducts.Select(p => p.Id)]);
 
             //Then: common expectations
             await AssertCommonExpectations(3);
