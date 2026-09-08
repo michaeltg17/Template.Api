@@ -1,4 +1,5 @@
-﻿using Api.Features.Products.Endpoints;
+﻿using Api.Features.Health;
+using Api.Features.Products.Endpoints;
 using Api.Features.Test;
 
 namespace Api.Extensions;
@@ -10,6 +11,8 @@ public static class EndpointExtensions
 
     public static WebApplication MapEndpoints(this WebApplication app)
     {
+        HealthEndpoints.Map(app);
+
         var products = app.MapGroup(ProductsPath);
         GetAllProductsEndpoint.Map(products);
         GetProductEndpoint.Map(products);

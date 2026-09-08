@@ -51,10 +51,19 @@ namespace IntegrationTests.Fixtures
                     ImageApiMock,
                     Database);
             }
+            else if (collectionFixtureName == nameof(UnhealthyApiCollectionFixture))
+            {
+                webApplicationFactory = new UnhealthyWebApplicationFactory(
+                    testSettings,
+                    InMemorySink,
+                    InjectableTestOutputSink,
+                    ImageApiMock,
+                    Database);
+            }
             else
             {
                 throw new IntegrationTestsException(
-                    $"Expected value '{collectionFixtureName}' to be development or production collection name.");
+                    $"Expected value '{collectionFixtureName}' to be development, production or unhealthy collection name.");
             }
 
             WebApplicationFactory = webApplicationFactory;
