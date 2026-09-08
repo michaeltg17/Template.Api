@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Json;
 using ApiClient.Endpoints;
 using Api.Extensions;
+using Api.Features.Health;
 using Api.Features.Products.Models.Requests;
 
 namespace ApiClient
@@ -10,6 +11,16 @@ namespace ApiClient
         public TestEndpoints Test { get; } = new(httpClient);
 
         const string BasePath = EndpointExtensions.BasePath;
+
+        public Task<HttpResponseMessage> GetHealthLive()
+        {
+            return httpClient.GetAsync(new Uri(HealthEndpoints.LivePath, UriKind.Relative));
+        }
+
+        public Task<HttpResponseMessage> GetHealthReady()
+        {
+            return httpClient.GetAsync(new Uri(HealthEndpoints.ReadyPath, UriKind.Relative));
+        }
 
         public Task<HttpResponseMessage> GetAllProducts()
         {

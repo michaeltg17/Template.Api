@@ -1,4 +1,5 @@
 ﻿using Api.Extensions;
+using Api.Features.Health;
 using Core.Builders;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -52,6 +53,17 @@ namespace Core.Testing.Builders
             Item.Type = "https://tools.ietf.org/html/rfc9110#section-15.5.1";
             Item.Title = "BadHttpRequestException";
             Item.Status = (int)HttpStatusCode.BadRequest;
+
+            return this;
+        }
+
+        public ProblemDetailsBuilder WithServiceUnavailable()
+        {
+            Item.Type = "https://tools.ietf.org/html/rfc9110#section-15.6.1";
+            Item.Title = "Service unavailable";
+            Item.Status = (int)HttpStatusCode.ServiceUnavailable;
+            Item.Detail = "The service is unavailable. Please contact the API support.";
+            Item.Instance = $"/{HealthEndpoints.ReadyPath}";
 
             return this;
         }

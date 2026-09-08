@@ -56,7 +56,11 @@ DI is composed via `DependencyConfigurator` classes: each project exposes `Add*D
 │   │   │   └── ValidationFailureExtensions.cs
 │   │   ├── Features/
 │   │   │   ├── Health/
-│   │   │   │   └── HealthEndpoints.cs        # /health/live (no checks) + /health/ready (db check)
+│   │   │   │   ├── HealthEndpoints.cs        # /health/live (no checks) + /health/ready (db check)
+│   │   │   │   ├── HealthCheckResponseWriter.cs
+│   │   │   │   └── Models/
+│   │   │   │       └── Responses/
+│   │   │   │           └── HealthResponse.cs
 │   │   │   ├── Images/
 │   │   │   │   └── ImageService.cs           # HttpClient for the external image API
 │   │   │   ├── Products/
@@ -252,7 +256,7 @@ App settings bind to `TemplateApiSettings` under the `TemplateApi` config sectio
 
 Endpoints are organized under `src/Api/Features/<Feature>/Endpoints/` by feature. Each endpoint is a `static class` with a `Map(IEndpointRouteBuilder)` method, registered in `EndpointExtensions.MapEndpoints()` (products under the `api/products` group, test endpoints under `Test`).
 
-Health endpoints (mapped in `HealthEndpoints`): `/health/live` runs no checks (always 200 while the process is up) and `/health/ready` runs the PostgreSQL `db` check (200 Healthy / 503 Unhealthy). Checks are registered in `DependencyConfigurator.AddHealthCheckDependencies()`. Intended for k8s liveness/readiness probes and load-balancer health checks.
+Health endpoints (mapped in `HealthEndpoints`): `/health/live` runs no checks (always 200 while the process is up) and `/health/ready` runs the PostgreSQL `db` check (200 with `{status: "Healthy"}` / 503 with problem+json `ServiceUnavailable`). Response bodies are written by `HealthCheckResponseWriter`. Checks are registered in `DependencyConfigurator.AddHealthCheckDependencies()`. Intended for k8s liveness/readiness probes and load-balancer health checks.
 
 Responses use `application/problem+json`. Invalid requests return 400, other errors return 500 with details hidden in production.
 

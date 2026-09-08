@@ -9,7 +9,15 @@ public static class HealthEndpoints
 
     public static void Map(IEndpointRouteBuilder app)
     {
-        app.MapHealthChecks(LivePath, new HealthCheckOptions { Predicate = _ => false });
-        app.MapHealthChecks(ReadyPath);
+        app.MapHealthChecks(LivePath, new HealthCheckOptions
+        {
+            Predicate = _ => false,
+            ResponseWriter = HealthCheckResponseWriter.WriteAsync
+        });
+
+        app.MapHealthChecks(ReadyPath, new HealthCheckOptions
+        {
+            ResponseWriter = HealthCheckResponseWriter.WriteAsync
+        });
     }
 }
