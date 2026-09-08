@@ -20,7 +20,7 @@ namespace IntegrationTests.Tests.Api.ApiBehaviourTests
     [Collection(nameof(DevelopmentApiCollectionFixture))]
     public class BadRequestTests(TestFixture testFixture) : Test(testFixture)
     {
-        [SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "More sense here")]
+        [SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "Needs to be public and I want it here, so no possible fix.")]
         public class BadRequestCase
         {
             public object Id;
