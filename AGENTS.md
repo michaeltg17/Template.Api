@@ -202,7 +202,7 @@ DI is composed via `DependencyConfigurator` classes: each project exposes `Add*D
     │   │   ├── WebApplicationFactory.cs
     │   │   ├── DevelopmentWebApplicationFactory.cs
     │   │   ├── ProductionWebApplicationFactory.cs
-    │   │   ├── UnhealthyWebApplicationFactory.cs
+    │   │   ├── UnhealthyTestFixture.cs
     │   │   └── TestFixture.cs
     │   ├── Infrastructure/
     │   │   ├── ApiMock.cs          # WireMock base for external APIs
