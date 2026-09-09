@@ -48,6 +48,17 @@ namespace Core.Testing.Builders
             return this;
         }
 
+        public ProblemDetailsBuilder WithUnauthorizedException(string instance, string detail)
+        {
+            Item.Type = "https://tools.ietf.org/html/rfc9110#section-15.5.2";
+            Item.Title = "UnauthorizedException";
+            Item.Status = (int)HttpStatusCode.Unauthorized;
+            Item.Detail = detail;
+            Item.Instance = instance;
+
+            return this;
+        }
+
         public ProblemDetailsBuilder WithBadHttpRequestException()
         {
             Item.Type = "https://tools.ietf.org/html/rfc9110#section-15.5.1";

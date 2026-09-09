@@ -1,10 +1,16 @@
 ﻿using Api.Extensions;
 using Api.Features.Images;
 using Api.Features.Products;
+using Api.Options;
 using CrossCutting;
 using CrossCutting.Settings;
 using Domain;
+using Domain.Models;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Persistence;
 using Serilog;
 using System.Linq.Expressions;
@@ -14,6 +20,8 @@ namespace Api
 {
     public static class DependencyConfigurator
     {
+        public const string CorsPolicyName = "frontend";
+
         public static WebApplicationBuilder AddDependencies(this WebApplicationBuilder builder)
         {
             builder.Services.Configure<RouteHandlerOptions>(options => options.ThrowOnBadRequest = true);
@@ -22,7 +30,7 @@ namespace Api
 
             builder.Services
                 .AddMainDependencies()
-                .AddHealthCheckDependencies()
+                .AddAuthDependencies()
                 .AddProblemDetails();
 
             return builder;
@@ -45,6 +53,28 @@ namespace Api
                 .AddDomainDependencies()
                 .AddCrossCuttingDependencies()
                 .AddPersistanceDependencies();
+        }
+
+        public static IServiceCollection AddAuthDependencies(this IServiceCollection services)
+        {
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+                {
+                    options.User.RequireUniqueEmail = true;
+                })
+                .AddEntityFrameworkStores<AppDbContext>();
+
+            services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer();
+
+            services.AddSingleton<IPostConfigureOptions<JwtBearerOptions>, JwtBearerOptionsConfigurator>();
+
+            services.AddAuthorization();
+
+            services.AddCors();
+            services.AddSingleton<IPostConfigureOptions<CorsOptions>, CorsOptionsConfigurator>();
+
+            return services;
         }
 
         public static WebApplicationBuilder AddSerilog(this WebApplicationBuilder builder)
@@ -71,6 +101,10 @@ namespace Api
         {
             //Exception middleware first to catch exceptions
             app.UseExceptionHandler().UseStatusCodePages();
+
+            app.UseCors(CorsPolicyName);
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapEndpoints();
 

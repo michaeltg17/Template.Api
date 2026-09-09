@@ -34,7 +34,8 @@ internal partial class UpdateProductEndpoint
             LogProductUpdated(logger, product.Id);
             return Results.Ok(product);
         })
-        .DisableAntiforgery();
+        .DisableAntiforgery()
+        .RequireAuthorization();
     }
 
     [LoggerMessage(Level = LogLevel.Information, Message = "Product with id '{id}' updated successfully.")]

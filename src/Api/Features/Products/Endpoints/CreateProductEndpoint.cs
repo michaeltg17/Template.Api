@@ -32,7 +32,8 @@ internal partial class CreateProductEndpoint
                 $"{EndpointExtensions.ProductsPath}/{product.Id}",
                 product);
         })
-        .DisableAntiforgery();
+        .DisableAntiforgery()
+        .RequireAuthorization();
     }
 
     [LoggerMessage(Level = LogLevel.Information, Message = "Product with id '{id}' created successfully.")]

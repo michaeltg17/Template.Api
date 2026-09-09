@@ -50,7 +50,8 @@ internal partial class DeleteProductsEndpoint
             }
 
             return new DeleteProductsResponse([], notFoundIds);
-        });
+        })
+        .RequireAuthorization();
     }
 
     [LoggerMessage(Level = LogLevel.Information, Message = "Products with ids '{ids}' deleted successfully.")]

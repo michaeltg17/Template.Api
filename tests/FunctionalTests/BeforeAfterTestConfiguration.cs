@@ -6,12 +6,13 @@ namespace FunctionalTests
 {
     public class BeforeAfterTestConfiguration(ITestSettings testSettings) : BeforeAfterTest
     {
-        public override void Before(object? testClassInstance, MethodInfo methodUnderTest)
+        public override async ValueTask BeforeAsync(object? testClassInstance, MethodInfo methodUnderTest)
         {
             if (testClassInstance is Test test)
             {
                 test.TestSettings = testSettings;
                 test.Initialize();
+                await test.LoginAsync();
             }
         }
     }

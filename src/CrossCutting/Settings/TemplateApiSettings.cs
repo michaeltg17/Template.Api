@@ -7,5 +7,7 @@ namespace CrossCutting.Settings
         public required string PostgreSqlConnectionString { get; set; }
         public required Uri ImageApiUrl { get; set; }
         public required string ImageApiKey { get; set; }
+        public required TemplateApiJwtSettings Jwt { get; set; }
+        public required IEnumerable<string> CorsOrigins { get; set; }
     }
 }

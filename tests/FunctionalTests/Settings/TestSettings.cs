@@ -6,5 +6,7 @@ namespace FunctionalTests.Settings
     {
         [Required]
         public required Uri TemplateApiUrl { get; init; }
+        public string? LoginEmail { get; init; }
+        public string? LoginPassword { get; init; }
     }
 }

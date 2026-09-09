@@ -56,6 +56,15 @@ namespace IntegrationTests.Fixtures
                     templateSettings.PostgreSqlConnectionString = database!.ConnectionString;
                     templateSettings.ImageApiUrl = imageApiMock!.Server.Uri;
                     templateSettings.ImageApiKey = Test.ApiKey;
+                    templateSettings.Jwt = new TemplateApiJwtSettings
+                    {
+                        Issuer = Test.Issuer,
+                        Audience = Test.Audience,
+                        Key = Test.JwtKey,
+                        ExpirationMinutes = 4320,
+                        CookieName = Test.CookieName
+                    };
+                    templateSettings.CorsOrigins = [];
                 });
 
                 if (testSettings.EnableSqlLogging)

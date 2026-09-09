@@ -25,6 +25,7 @@ namespace Api.Extensions
                 {
                     BadHttpRequestException => (int)HttpStatusCode.BadRequest,
                     ValidationException => (int)HttpStatusCode.BadRequest,
+                    UnauthorizedException => (int)HttpStatusCode.Unauthorized,
                     NotFoundException => (int)HttpStatusCode.NotFound,
                     NotAllFoundException => (int)HttpStatusCode.NotFound,
                     TemplateApiException => (int)HttpStatusCode.BadRequest,
@@ -56,6 +57,7 @@ namespace Api.Extensions
             var typeUri = httpContext.Response.StatusCode switch
             {
                 (int)HttpStatusCode.BadRequest => "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+                (int)HttpStatusCode.Unauthorized => "https://tools.ietf.org/html/rfc9110#section-15.5.2",
                 (int)HttpStatusCode.NotFound => "https://tools.ietf.org/html/rfc9110#section-15.5.5",
                 _ => "https://tools.ietf.org/html/rfc9110#section-15.6.1",
             };

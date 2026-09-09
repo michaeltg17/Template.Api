@@ -8,5 +8,7 @@ namespace CrossCutting.Settings
         public string ImageApiKey { get; }
         public long MaxImageSizeMb { get; }
         public IEnumerable<string> AllowedImageExtensions { get; }
+        public TemplateApiJwtSettings Jwt { get; }
+        public IEnumerable<string> CorsOrigins { get; }
     }
 }

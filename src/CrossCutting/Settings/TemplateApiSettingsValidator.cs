@@ -17,6 +17,22 @@ namespace CrossCutting.Settings
             if (string.IsNullOrWhiteSpace(templateApiSettings.ImageApiKey))
                 validationErrors.Add($"The '{nameof(templateApiSettings.ImageApiKey)}' setting is required");
 
+            if (templateApiSettings.Jwt is null)
+            {
+                validationErrors.Add($"The '{nameof(templateApiSettings.Jwt)}' settings section is required");
+            }
+            else
+            {
+                if (string.IsNullOrWhiteSpace(templateApiSettings.Jwt.Issuer))
+                    validationErrors.Add($"The '{nameof(templateApiSettings.Jwt.Issuer)}' setting is required");
+
+                if (string.IsNullOrWhiteSpace(templateApiSettings.Jwt.Audience))
+                    validationErrors.Add($"The '{nameof(templateApiSettings.Jwt.Audience)}' setting is required");
+
+                if (string.IsNullOrWhiteSpace(templateApiSettings.Jwt.Key))
+                    validationErrors.Add($"The '{nameof(templateApiSettings.Jwt.Key)}' setting is required");
+            }
+
             return validationErrors.Count > 0 ? ValidateOptionsResult.Fail(validationErrors) : ValidateOptionsResult.Success;
         }
     }

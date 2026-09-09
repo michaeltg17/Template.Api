@@ -24,6 +24,13 @@ namespace Core.Testing.Assertions
             await Assert(response, builder, HttpStatusCode.NotFound);
         }
 
+        public static async Task AssertUnauthorizedException(
+            HttpResponseMessage response, string instance, string detail)
+        {
+            var builder = new ProblemDetailsBuilder().WithUnauthorizedException(instance, detail);
+            await Assert(response, builder, HttpStatusCode.Unauthorized);
+        }
+
         public static async Task AssertValidationException(
             HttpResponseMessage response,
             string instance,

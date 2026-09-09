@@ -1,10 +1,11 @@
 ﻿using CrossCutting.Settings;
 using Domain.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence
 {
-    public class AppDbContext(DbContextOptions<AppDbContext> options, ITemplateApiSettings templateSettings) : DbContext(options)
+    public class AppDbContext(DbContextOptions<AppDbContext> options, ITemplateApiSettings templateSettings) : IdentityDbContext<ApplicationUser>(options)
     {
         public virtual DbSet<Product> Products { get; set; }
 
@@ -15,10 +16,10 @@ namespace Persistence
                 .UseSnakeCaseNamingConvention();
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
-            base.OnModelCreating(modelBuilder);
+            builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+            base.OnModelCreating(builder);
         }
     }
 }

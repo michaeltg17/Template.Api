@@ -44,6 +44,10 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - TemplateApi__PostgreSqlConnectionString=${TemplateApi__PostgreSqlConnectionString}
       - TemplateApi__ImageApiKey=${TemplateApi__ImageApiKey}
+      - TemplateApi__Jwt__Issuer=${TemplateApi__Jwt__Issuer}
+      - TemplateApi__Jwt__Audience=${TemplateApi__Jwt__Audience}
+      - TemplateApi__Jwt__Key=${TemplateApi__Jwt__Key}
+      - TemplateApi__CorsOrigins__0=${TemplateApi__CorsOrigins__0}
     networks:
       - app-network
 
