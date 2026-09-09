@@ -24,7 +24,12 @@ namespace IntegrationTests.Fixtures
 
         public async ValueTask InitializeAsync()
         {
-            Database = await databaseFactory.Create();
+            Database = await CreateDatabase();
+        }
+
+        protected virtual Task<Database> CreateDatabase()
+        {
+            return databaseFactory.Create();
         }
 
         [SuppressMessage("Style", "IDE0045:Convert to conditional expression", Justification = "Cleaner")]
@@ -33,16 +38,7 @@ namespace IntegrationTests.Fixtures
             if (WebApplicationFactory != null) return;
 
             WebApplicationFactory webApplicationFactory;
-            if (collectionFixtureName == nameof(DevelopmentApiCollectionFixture))
-            {
-                webApplicationFactory = new DevelopmentWebApplicationFactory(
-                    testSettings,
-                    InMemorySink,
-                    InjectableTestOutputSink,
-                    ImageApiMock,
-                    Database);
-            }
-            else if (collectionFixtureName == nameof(ProductionApiCollectionFixture))
+            if (collectionFixtureName == nameof(ProductionApiCollectionFixture))
             {
                 webApplicationFactory = new ProductionWebApplicationFactory(
                     testSettings,
@@ -51,19 +47,14 @@ namespace IntegrationTests.Fixtures
                     ImageApiMock,
                     Database);
             }
-            else if (collectionFixtureName == nameof(UnhealthyApiCollectionFixture))
+            else
             {
-                webApplicationFactory = new UnhealthyWebApplicationFactory(
+                webApplicationFactory = new DevelopmentWebApplicationFactory(
                     testSettings,
                     InMemorySink,
                     InjectableTestOutputSink,
                     ImageApiMock,
                     Database);
-            }
-            else
-            {
-                throw new IntegrationTestsException(
-                    $"Expected value '{collectionFixtureName}' to be development, production or unhealthy collection name.");
             }
 
             WebApplicationFactory = webApplicationFactory;

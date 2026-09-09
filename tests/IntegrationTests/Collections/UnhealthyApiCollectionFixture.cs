@@ -4,6 +4,6 @@ using Xunit;
 namespace IntegrationTests.Collections;
 
 [CollectionDefinition(nameof(UnhealthyApiCollectionFixture))]
-public class UnhealthyApiCollectionFixture : ICollectionFixture<TestFixture>
+public class UnhealthyApiCollectionFixture : ICollectionFixture<UnhealthyTestFixture>
 {
 }

@@ -15,10 +15,12 @@ using Xunit;
 namespace IntegrationTests.Tests.Api.Endpoints.Health
 {
     [Collection(nameof(UnhealthyApiCollectionFixture))]
-    public class UnhealthyHealthEndpointsTests(TestFixture testFixture) : Test(testFixture)
+    public class UnhealthyHealthEndpointsTests(UnhealthyTestFixture testFixture) : Test(testFixture)
     {
+        protected override bool UsesDatabase => false;
+
         [Fact]
-        public async Task HealthReady_WhenUnhealthyCheck_ReturnsServiceUnavailable()
+        public async Task HealthReady_WhenDbCheckFails_ReturnsServiceUnavailable()
         {
             //When
             var response = await ApiClient.Health.GetHealthReady();
@@ -37,7 +39,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Health
         }
 
         [Fact]
-        public async Task HealthLive_WhenUnhealthyCheck_ReturnsOk()
+        public async Task HealthLive_WhenDbCheckFails_ReturnsOk()
         {
             //When
             var response = await ApiClient.Health.GetHealthLive();

@@ -30,6 +30,8 @@ namespace IntegrationTests
             return ValueTask.CompletedTask;
         }
 
+        protected virtual bool UsesDatabase => true;
+
         Task<int> DeleteEntitiesFromDb()
         {
             var sql = "TRUNCATE TABLE products RESTART IDENTITY;";
@@ -38,7 +40,11 @@ namespace IntegrationTests
 
         public async ValueTask DisposeAsync()
         {
-            await DeleteEntitiesFromDb();
+            if (UsesDatabase)
+            {
+                await DeleteEntitiesFromDb();
+            }
+
             await Scope.DisposeAsync();
             TestFixture.InMemorySink.Dispose();
             FlushLoggerAndValidateLogDone();
