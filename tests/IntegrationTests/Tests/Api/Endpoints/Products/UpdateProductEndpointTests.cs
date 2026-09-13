@@ -49,12 +49,12 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
 
             product.Should().BeEquivalentTo(expected);
             ImageApiMock.AssertPostAndSetGetMock($"{product.Id}.jpg", Image2);
-            var productImage = await HttpClient.GetByteArrayAsync(productImageUrl);
+            var productImage = await HttpClient.GetByteArrayAsync(productImageUrl, TestContext.Current.CancellationToken);
             productImage.Should().BeEquivalentTo(Image2);
             ImageApiMock.AssertGetRequest($"{product.Id}.jpg");
 
             //Then: expected product in db
-            var dbProduct = await Context.Products.FindAsync(product.Id);
+            var dbProduct = await Context.Products.FindAsync([product.Id], TestContext.Current.CancellationToken);
             dbProduct.Should().BeEquivalentTo(expected, o => o.Excluding(p => p.Image!.Url));
 
             //Then: expected logging
