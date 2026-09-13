@@ -1,4 +1,4 @@
-using Serilog.Sinks.InMemory.Assertions;
+using DragoAnt.Assertions.Serilog;
 
 namespace IntegrationTests.Extensions
 {

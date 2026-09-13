@@ -8,8 +8,8 @@
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" />
 		<PackageReference Include="Microsoft.TestPlatform.TestHost" />
-		<PackageReference Include="Serilog.Sinks.InMemory" />
-		<PackageReference Include="Serilog.Sinks.InMemory.Assertions" />
+		<PackageReference Include="DragoAnt.Serilog.Sinks.InMemory" />
+		<PackageReference Include="DragoAnt.Serilog.Sinks.InMemory.Assertions" />
 		<PackageReference Include="Serilog.Sinks.Map" />
 		<PackageReference Include="Serilog.Sinks.XUnit.Injectable" />
 		<PackageReference Include="Testcontainers.PostgreSql" />
