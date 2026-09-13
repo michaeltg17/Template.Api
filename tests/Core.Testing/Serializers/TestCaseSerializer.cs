@@ -155,6 +155,6 @@ namespace Core.Testing.Serializers
             return Activator.CreateInstance(type, vals)!;
         }
 
-        static bool IsValueTuple(Type type) => type.Namespace == "System" && type.Name.StartsWith("ValueTuple`");
+        static bool IsValueTuple(Type type) => type.Namespace == "System" && type.Name.StartsWith("ValueTuple`", StringComparison.Ordinal);
     }
 }
