@@ -10,8 +10,8 @@
 		<PackageReference Include="Microsoft.TestPlatform.TestHost" />
 		<PackageReference Include="Npgsql" />
 		<PackageReference Include="Serilog.Extensions.Logging" />
-		<PackageReference Include="Serilog.Sinks.InMemory" />
-		<PackageReference Include="Serilog.Sinks.InMemory.Assertions" />
+		<PackageReference Include="DragoAnt.Serilog.Sinks.InMemory" />
+		<PackageReference Include="DragoAnt.Serilog.Sinks.InMemory.Assertions" />
 		<PackageReference Include="Serilog.Sinks.XUnit.Injectable" />
 		<PackageReference Include="Testcontainers.PostgreSql" />
 		<PackageReference Include="xunit.v3" />
