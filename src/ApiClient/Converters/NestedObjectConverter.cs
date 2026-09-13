@@ -60,11 +60,22 @@ namespace ApiClient.Converters
                         {
                             switch (reader.TokenType)
                             {
+                                case JsonTokenType.EndArray:
+                                    return list;
+                                case JsonTokenType.None:
+                                case JsonTokenType.Comment:
+                                case JsonTokenType.False:
+                                case JsonTokenType.True:
+                                case JsonTokenType.Null:
+                                case JsonTokenType.String:
+                                case JsonTokenType.Number:
+                                case JsonTokenType.StartObject:
+                                case JsonTokenType.PropertyName:
+                                case JsonTokenType.EndObject:
+                                case JsonTokenType.StartArray:
                                 default:
                                     list.Add(Read(ref reader, typeof(object), options));
                                     break;
-                                case JsonTokenType.EndArray:
-                                    return list;
                             }
                         }
                         throw new JsonException();
@@ -82,11 +93,26 @@ namespace ApiClient.Converters
                                 reader.Read();
                                 dict.Add(key, Read(ref reader, typeof(object), options));
                                 break;
+                            case JsonTokenType.None:
+                            case JsonTokenType.Comment:
+                            case JsonTokenType.False:
+                            case JsonTokenType.True:
+                            case JsonTokenType.Null:
+                            case JsonTokenType.String:
+                            case JsonTokenType.Number:
+                            case JsonTokenType.StartObject:
+                            case JsonTokenType.EndArray:
+                            case JsonTokenType.StartArray:
                             default:
                                 throw new JsonException();
                         }
                     }
                     throw new JsonException();
+                case JsonTokenType.None:
+                case JsonTokenType.Comment:
+                case JsonTokenType.PropertyName:
+                case JsonTokenType.EndObject:
+                case JsonTokenType.EndArray:
                 default:
                     throw new JsonException(string.Format("Unknown token {0}", reader.TokenType));
             }

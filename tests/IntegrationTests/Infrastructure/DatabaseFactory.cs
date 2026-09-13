@@ -69,8 +69,7 @@ namespace IntegrationTests.Infrastructure
             return postgreSqlContainer;
         }
 
-        static string DockerHost => 
-            Environment.GetEnvironmentVariable("TESTCONTAINERS_HOST_OVERRIDE") ?? "localhost";
+        static string DockerHost => Environment.GetEnvironmentVariable("TESTCONTAINERS_HOST_OVERRIDE") ?? "localhost";
 
         static string GetConnectionString(PostgreSqlContainer? container = null, int? port = null)
         {

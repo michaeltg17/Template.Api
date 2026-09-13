@@ -398,4 +398,5 @@ FodyWeavers.xsd
 *.sln.iml
 /.mcp
 /.opencode
+opencode.json
 .env

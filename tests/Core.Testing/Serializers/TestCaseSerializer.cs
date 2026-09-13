@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
@@ -10,7 +11,7 @@ namespace Core.Testing.Serializers
     {
         static readonly ConcurrentDictionary<string, Type> TypeCache = new();
 
-        public bool IsSerializable(Type type, object? value, out string? reason)
+        public bool IsSerializable(Type type, object? value, [NotNullWhen(false)] out string? reason)
         {
             reason = null;
             return true;
@@ -69,7 +70,7 @@ namespace Core.Testing.Serializers
         {
             // Prefer public constructor if available, fall back to uninitialized
             var ctor = type.GetConstructor(Type.EmptyTypes);
-            return ctor != null ? Activator.CreateInstance(type) : RuntimeHelpers.GetUninitializedObject(type);
+            return ctor != null ? Activator.CreateInstance(type)! : RuntimeHelpers.GetUninitializedObject(type);
         }
 
         static Dictionary<string, string?> ToJsonEntry(Type type, object? value)
@@ -137,12 +138,9 @@ namespace Core.Testing.Serializers
             }
 
             // Single ValueTuple: construct manually
-            if (IsValueTuple(resolved))
-            {
-                return DeserializeValueTuple(resolved, JsonSerializer.Deserialize<JsonElement>(entry["v"]!));
-            }
-
-            return JsonSerializer.Deserialize(entry["v"]!, resolved)!;
+            return IsValueTuple(resolved)
+                ? DeserializeValueTuple(resolved, JsonSerializer.Deserialize<JsonElement>(entry["v"]!))
+                : JsonSerializer.Deserialize(entry["v"]!, resolved)!;
         }
 
         static object DeserializeValueTuple(Type type, JsonElement value)
@@ -154,6 +152,6 @@ namespace Core.Testing.Serializers
             return Activator.CreateInstance(type, vals)!;
         }
 
-        static bool IsValueTuple(Type type) => type.Namespace == "System" && type.Name.StartsWith("ValueTuple`");
+        static bool IsValueTuple(Type type) => type.Namespace == "System" && type.Name.StartsWith("ValueTuple`", StringComparison.Ordinal);
     }
 }

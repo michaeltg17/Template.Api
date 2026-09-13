@@ -48,7 +48,7 @@ namespace IntegrationTests.Tests.Api.Endpoints.Products
 
             //Verify uploads and register GET stub
             ImageApiMock.AssertPostAndSetGetMock(initialProduct.Image!.FileName, InitialImage);
-            var productImage = await HttpClient.GetByteArrayAsync(productImageUrl);
+            var productImage = await HttpClient.GetByteArrayAsync(productImageUrl, TestContext.Current.CancellationToken);
             productImage.Should().BeEquivalentTo(InitialImage);
             ImageApiMock.AssertGetRequest(initialProduct.Image!.FileName);
 
