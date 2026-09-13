@@ -138,12 +138,9 @@ namespace Core.Testing.Serializers
             }
 
             // Single ValueTuple: construct manually
-            if (IsValueTuple(resolved))
-            {
-                return DeserializeValueTuple(resolved, JsonSerializer.Deserialize<JsonElement>(entry["v"]!));
-            }
-
-            return JsonSerializer.Deserialize(entry["v"]!, resolved)!;
+            return IsValueTuple(resolved)
+                ? DeserializeValueTuple(resolved, JsonSerializer.Deserialize<JsonElement>(entry["v"]!))
+                : JsonSerializer.Deserialize(entry["v"]!, resolved)!;
         }
 
         static object DeserializeValueTuple(Type type, JsonElement value)
