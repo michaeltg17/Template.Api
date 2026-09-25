@@ -57,6 +57,7 @@ namespace IntegrationTests
 
         public static void FlushLoggerAndValidateLogDone()
         {
+            //Maybe now is fixed in latest version //Thread.Sleep(10); //Still needed to flush (InjectableTestOutputSink bug)
             TestContext.Current.TestOutputHelper!.Output.Should().NotBeNullOrWhiteSpace();
         }
     }
