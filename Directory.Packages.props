@@ -19,19 +19,19 @@
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.12" />
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.12" />
     <PackageVersion Include="Microsoft.Extensions.Options.DataAnnotations" Version="10.0.12" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.10.0" />
-    <PackageVersion Include="Microsoft.TestPlatform.TestHost" Version="18.10.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
+    <PackageVersion Include="Microsoft.TestPlatform.TestHost" Version="18.10.1" />
     <PackageVersion Include="Serilog" Version="4.4.0" />
     <PackageVersion Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageVersion Include="Serilog.Expressions" Version="5.0.0" />
     <PackageVersion Include="Serilog.Extensions.Logging" Version="10.0.0" />
     <PackageVersion Include="Serilog.Sinks.Console" Version="6.1.1" />
-	<PackageVersion Include="DragoAnt.Serilog.Sinks.InMemory" Version="3.2.1" />
-	<PackageVersion Include="DragoAnt.Serilog.Sinks.InMemory.Assertions" Version="3.2.1" />
-	<PackageVersion Include="Serilog.Sinks.Map" Version="2.0.0" />
-    <PackageVersion Include="Serilog.Sinks.XUnit.Injectable" Version="4.0.264" />
+    <PackageVersion Include="DragoAnt.Serilog.Sinks.InMemory" Version="3.2.1" />
+    <PackageVersion Include="DragoAnt.Serilog.Sinks.InMemory.Assertions" Version="3.2.1" />
+    <PackageVersion Include="Serilog.Sinks.Map" Version="2.0.0" />
+    <PackageVersion Include="Serilog.Sinks.XUnit.Injectable" Version="4.0.276" />
     <PackageVersion Include="Testcontainers.PostgreSql" Version="4.15.0" />
-    <PackageVersion Include="WireMock.Net" Version="2.15.0" />
+    <PackageVersion Include="WireMock.Net" Version="2.18.0" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.0" />
     <PackageVersion Include="xunit.v3" Version="4.0.1" />
     <PackageVersion Include="xunit.v3.common" Version="4.0.1" />
