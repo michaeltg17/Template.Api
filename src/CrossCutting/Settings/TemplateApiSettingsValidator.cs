@@ -2,7 +2,7 @@ using Microsoft.Extensions.Options;
 
 namespace CrossCutting.Settings
 {
-    internal class TemplateApiSettingsValidator : IValidateOptions<TemplateApiSettings>
+    public class TemplateApiSettingsValidator : IValidateOptions<TemplateApiSettings>
     {
         public ValidateOptionsResult Validate(string? name, TemplateApiSettings templateApiSettings)
         {
