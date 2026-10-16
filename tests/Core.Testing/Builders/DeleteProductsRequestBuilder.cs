@@ -8,7 +8,7 @@ public sealed class DeleteProductsRequestBuilder : Builder<DeleteProductsRequest
     protected override DeleteProductsRequest Item { get; set; }
 
     long[] ids = [];
-    bool ignoreNotFound = false;
+    bool ignoreNotFound;
 
     public DeleteProductsRequestBuilder()
     {
