@@ -19,8 +19,8 @@ public class TestCaseSerializerTests
     {
         public string Label { get; init; } = "";
         public int Value { get; init; }
-        public int[] Numbers { get; init; } = [];
-        public bool IsValid => Numbers.Length == 0;
+        public IReadOnlyList<int> Numbers { get; init; } = [];
+        public bool IsValid => Numbers.Count == 0;
     }
 
     public class Mixed
@@ -35,7 +35,7 @@ public class TestCaseSerializerTests
     public class ContainsArrayAndNullable
     {
         public string? Name;
-        public string[] Tags { get; init; } = [];
+        public IReadOnlyList<string> Tags { get; init; } = [];
     }
 
     [Fact]
@@ -140,7 +140,10 @@ public class TestCaseSerializerTests
 
     public class ClassWithTupleArray
     {
+        // Must stay an array (not IReadOnlyList) to exercise the serializer's array-of-ValueTuple path.
+#pragma warning disable CA1819 // Properties should not return arrays
         public (string Property, string Message)[] Errors { get; init; } = [];
+#pragma warning restore CA1819
     }
 
     [Fact]
