@@ -5,7 +5,7 @@
 
 Full description of the architecture there: [ARCH.md](https://github.com/michaeltg17/Template.Api/blob/main/ARCH.md)
 
-Built with the help of local AI using https://github.com/michaeltg17/best-model-dual-3090 and [OpenCode](https://github.com/anomalyco/opencode).
+Built with [my AI setup](https://github.com/michaeltg17/my-AI-setup).
 
 ## Tech stack
 API:
